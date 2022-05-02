@@ -27,11 +27,18 @@ class TransactionsStack extends Stack {
       entry: path.resolve(__dirname, "lambda", "transaction-get.js"),
     });
 
-    transactionsTable.grantReadWriteData(lambdaTransactionGet)
+    const lambdaTransactionCreate = new NodejsFunction(this, "TransactionCreate", {
+      runtime: lambda.Runtime.NODEJS_14_X,
+      handler: "handler",
+      entry: path.resolve(__dirname, "lambda", "transaction-create.js"),
+    });
+
+    transactionsTable.grantReadData(lambdaTransactionGet);
+    transactionsTable.grantWriteData(lambdaTransactionCreate);
 
     const api = new apigateway.RestApi(this, "transactions");
-    const integration = new apigateway.LambdaIntegration(lambdaTransactionGet)
-    api.root.addMethod("GET", integration);
+    api.root.addMethod("GET", new apigateway.LambdaIntegration(lambdaTransactionGet));
+    api.root.addMethod("POST", new apigateway.LambdaIntegration(lambdaTransactionCreate));
   }
 }
 
