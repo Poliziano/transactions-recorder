@@ -32,7 +32,7 @@ class TransactionEntity {
     return {
       ...this.key(),
       Name: { S: this.name },
-      Amount: { N: this.amount },
+      Amount: { N: `${this.amount}` },
       Type: { S: this.type },
       Date: { S: this.date }
     }

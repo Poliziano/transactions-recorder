@@ -7,7 +7,7 @@
 	},
   "scripts": {
     "test": "DYNAMO_ENDPOINT=\"http://localhost:8090\" jest --watch",
-    "cdk:boostrap": "cdk bootstrap --app bin/transactions.js",
+    "cdk:bootstrap": "cdk bootstrap --app bin/transactions.js",
     "cdk:deploy": "cdk deploy --app bin/transactions.js"
   },
   "engines": {
