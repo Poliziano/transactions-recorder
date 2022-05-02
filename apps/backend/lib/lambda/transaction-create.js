@@ -32,18 +32,33 @@ exports.handler = async function(event) {
       await createTransaction(entity);
     
       return {
-        statusCode: 200
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET"
+        }
       };
     } else {
       return {
-        statusCode: 400
+        statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET"
+        }
       };
     }
   } catch (err) {
     console.error("failed to parse payload", JSON.stringify(err, null, 2));
 
     return {
-      statusCode: 400
+      statusCode: 400,
+      headers: {
+        "Access-Control-Allow-Headers" : "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET"
+      }
     };
   }
 };
