@@ -37,8 +37,13 @@ class TransactionsStack extends Stack {
     transactionsTable.grantWriteData(lambdaTransactionCreate);
 
     const api = new apigateway.RestApi(this, "transactions");
-    api.root.addMethod("GET", new apigateway.LambdaIntegration(lambdaTransactionGet));
-    api.root.addMethod("POST", new apigateway.LambdaIntegration(lambdaTransactionCreate));
+    const transactionsResource = api.root
+      .addResource("users")
+      .addResource("{userId}")
+      .addResource("transactions");
+    
+    transactionsResource.addMethod("GET", new apigateway.LambdaIntegration(lambdaTransactionGet));
+    transactionsResource.addMethod("POST", new apigateway.LambdaIntegration(lambdaTransactionCreate));
   }
 }
 

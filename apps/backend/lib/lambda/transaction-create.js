@@ -20,8 +20,12 @@ const schema = {
 const validate = ajv.compile(schema);
 
 exports.handler = async function(event) {
+  console.log("event", JSON.stringify(event, null, 2));
+  
   try {
-    const payload = JSON.parse(event.body);
+    const payload = Object.assign(JSON.parse(event.body), {
+      userId: event.pathParameters.userId
+    });
 
     if (validate(payload)) {
       const entity = new TransactionEntity(payload);

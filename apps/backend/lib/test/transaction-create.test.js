@@ -11,10 +11,9 @@ test("transaction-create should throw when invalid payload", async () => {
 test("transaction-create should throw when partial payload", async () => {
   const result = await handler({
     body: JSON.stringify({
-      userId: "user_idq",
       date: new Date(2021, 1, 1),
       name: "McDonalds",
-    })
+    }),
   });
 
   expect(result).toStrictEqual({
@@ -25,12 +24,14 @@ test("transaction-create should throw when partial payload", async () => {
 test("transaction-create should not thrown when valid payload", async () => {
   const result = await handler({
     body: JSON.stringify({
-      userId: "user_idq",
       date: new Date(2021, 1, 1),
       name: "McDonalds",
       amount: 12.50,
       type: "expenditure",
-    })
+    }),
+    pathParameters: {
+      userId: "user_id"
+    }
   });
 
   expect(result).toStrictEqual({
