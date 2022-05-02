@@ -18,7 +18,7 @@ class TransactionEntity {
     this.type = type;
     this.date = date
 
-    this.#uuid = KSUID.randomSync(this.date);
+    this.#uuid = KSUID.randomSync(this.date).string;
   }
 
   key() {

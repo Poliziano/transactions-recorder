@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "bin": {
-		"meta": "bin/transactions.js"
-	},
+    "meta": "bin/transactions.js"
+  },
   "scripts": {
     "test": "DYNAMO_ENDPOINT=\"http://localhost:8090\" jest --watch",
     "cdk:bootstrap": "cdk bootstrap --app bin/transactions.js",
@@ -26,6 +26,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.81.0",
     "@aws-sdk/util-dynamodb": "^3.81.0",
+    "ajv": "^8.11.0",
     "ksuid": "^3.0.0"
   }
 }
