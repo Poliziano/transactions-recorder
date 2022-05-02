@@ -1,20 +1,45 @@
 const { createTransaction } = require("../data/transactions");
 const { TransactionEntity } = require("../entity/transaction-entity");
 
-exports.handler = async function(event) {
-  const payload = JSON.parse(event.body);
-  const entity = new TransactionEntity({
-    userId: "abc",
-    date: new Date(2021, 1, 1),
-    name: "McDonalds",
-    amount: 12.50,
-    type: "expenditure",
-  });
-  
-  await createTransaction(entity);
+const Ajv = require("ajv");
+const ajv = new Ajv();
 
-  return {
-    statusCode: 200,
-    body: ""
+const schema = {
+  type: "object",
+  properties: {
+    userId: { type: "string" },
+    date: { type: "string" },
+    name: { type: "string" },
+    amount: { type: "number" },
+    type: { type: "string" }
+  },
+  required: ["userId", "date", "name", "amount", "type"],
+  additionalProperties: false
+}
+
+const validate = ajv.compile(schema);
+
+exports.handler = async function(event) {
+  try {
+    const payload = JSON.parse(event.body);
+
+    if (validate(payload)) {
+      const entity = new TransactionEntity(payload);
+      await createTransaction(entity);
+    
+      return {
+        statusCode: 200
+      };
+    } else {
+      return {
+        statusCode: 400
+      };
+    }
+  } catch (err) {
+    console.error("failed to parse payload", JSON.stringify(err, null, 2));
+
+    return {
+      statusCode: 400
+    };
   }
 };
