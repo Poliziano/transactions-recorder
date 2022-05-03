@@ -60,7 +60,7 @@ test("should delete transaction", async () => {
   });
 
   await createTransaction(entityA);
-  await deleteTransaction(entityA);
+  await deleteTransaction(entityA.userId, entityA.uuid);
 
   const transactions = await listTransactions({ userId: "abcd" });
   expect(transactions).toStrictEqual([]);

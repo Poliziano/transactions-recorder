@@ -32,10 +32,13 @@ async function createTransaction(entity) {
   await db.send(command);
 }
 
-async function deleteTransaction(entity) {
+async function deleteTransaction(userId, transactionId) {
   const command = new DeleteItemCommand({
     TableName: "Transactions",
-    Key: entity.key(),
+    Key: {
+      PK: { S: `USER#${userId.toLowerCase()}` },
+      SK: { S: `ID#${transactionId}` },
+    },
   });
 
   await db.send(command);
@@ -44,5 +47,5 @@ async function deleteTransaction(entity) {
 module.exports = {
   listTransactions,
   createTransaction,
-  deleteTransaction
+  deleteTransaction,
 };
