@@ -33,8 +33,15 @@ class TransactionsStack extends Stack {
       "transaction-create.js"
     );
 
+    const lambdaTransactionDelete = new TransactionsNodejsFunction(
+      this,
+      "TransactionDelete",
+      "transaction-delete.js"
+    );
+
     transactionsTable.grantReadData(lambdaTransactionGet);
     transactionsTable.grantWriteData(lambdaTransactionCreate);
+    transactionsTable.grantWriteData(lambdaTransactionDelete);
 
     const api = new apigateway.RestApi(this, "transactions");
     const transactionsResource = api.root
@@ -50,6 +57,12 @@ class TransactionsStack extends Stack {
       "POST",
       new apigateway.LambdaIntegration(lambdaTransactionCreate)
     );
+    transactionsResource
+      .addResource("{transactionId}")
+      .addMethod(
+        "DELETE",
+        new apigateway.LambdaIntegration(lambdaTransactionDelete)
+      );
   }
 }
 
