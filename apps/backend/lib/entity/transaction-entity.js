@@ -1,31 +1,21 @@
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
-const KSUID = require('ksuid')
+const KSUID = require("ksuid");
 
 class TransactionEntity {
-
-  #uuid;
-
-  constructor({
-    userId,
-    date,
-    name,
-    amount,
-    type,
-  }) {
+  constructor({ uuid, userId, date, name, amount, type }) {
     this.userId = userId;
     this.name = name;
     this.amount = amount;
     this.type = type;
-    this.date = date
-
-    this.#uuid = KSUID.randomSync(this.date).string;
+    this.date = date;
+    this.uuid = uuid;
   }
 
   key() {
     return {
       PK: { S: `USER#${this.userId.toLowerCase()}` },
-      SK: { S: `ID#${this.#uuid}` }
-    }
+      SK: { S: `ID#${this.uuid}` },
+    };
   }
 
   toItem() {
@@ -34,20 +24,25 @@ class TransactionEntity {
       Name: { S: this.name },
       Amount: { N: `${this.amount}` },
       Type: { S: this.type },
-      Date: { S: this.date }
-    }
+      Date: { S: this.date },
+    };
   }
 
   static from(item) {
     const output = unmarshall(item);
 
     return new TransactionEntity({
+      uuid: output.SK.split("#")[1],
       userId: output.PK.split("#")[1],
       date: new Date(output.Date),
       name: output.Name,
       amount: output.Amount,
-      type: output.Type
-    })
+      type: output.Type,
+    });
+  }
+
+  static uuid(date = new Date()) {
+    return KSUID.randomSync(date).string;
   }
 }
 

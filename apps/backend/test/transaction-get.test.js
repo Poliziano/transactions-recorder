@@ -5,6 +5,7 @@ const { handler } = require("../lib/lambda/transaction-get");
 
 test("get transaction", async () => {
   const entity = new TransactionEntity({
+    uuid: TransactionEntity.uuid(new Date()),
     userId: "some_id",
     date: new Date(2020, 0, 1),
     name: "McDonalds",
@@ -30,6 +31,7 @@ test("get transaction", async () => {
           amount: 12.5,
           type: "expenditure",
           date: "2020-01-01T00:00:00.000Z",
+          uuid: entity.uuid,
         },
       ],
     }),
