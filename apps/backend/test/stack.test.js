@@ -1,7 +1,7 @@
 const { beforeAll, expect, test } = require("@jest/globals");
 const cdk = require("aws-cdk-lib");
 const { Template } = require("aws-cdk-lib/assertions");
-const { TransactionsStack } = require("../stack");
+const { TransactionsStack } = require("../lib/stack");
 
 let template;
 

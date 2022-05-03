@@ -1,8 +1,8 @@
 const { test, expect } = require('@jest/globals');
 const { ListTablesCommand } = require("@aws-sdk/client-dynamodb");
-const { db } = require("../data/dynamo");
-const { listTransactions, createTransaction } = require('../data/transactions');
-const { TransactionEntity } = require('../entity/transaction-entity');
+const { db } = require("../lib/data/dynamo");
+const { listTransactions, createTransaction } = require('../lib/data/transactions');
+const { TransactionEntity } = require('../lib/entity/transaction-entity');
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});

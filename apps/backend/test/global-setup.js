@@ -1,6 +1,6 @@
 const { CreateTableCommand } = require("@aws-sdk/client-dynamodb");
 const { GenericContainer } = require("testcontainers");
-const { db } = require("../data/dynamo");
+const { db } = require("../lib/data/dynamo");
 
 async function setupDynamoForTesting() {
   const tableConfig = {
