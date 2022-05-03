@@ -1,18 +1,22 @@
-const { test, expect } = require('@jest/globals');
+const { test, expect } = require("@jest/globals");
 const { ListTablesCommand } = require("@aws-sdk/client-dynamodb");
 const { db } = require("../lib/data/dynamo");
-const { listTransactions, createTransaction } = require('../lib/data/transactions');
-const { TransactionEntity } = require('../lib/entity/transaction-entity');
+const {
+  listTransactions,
+  createTransaction,
+  deleteTransaction,
+} = require("../lib/data/transactions");
+const { TransactionEntity } = require("../lib/entity/transaction-entity");
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});
   const result = await db.send(list);
 
   expect(result.TableNames).toStrictEqual(["Transactions"]);
-}); 
+});
 
 test("should respond with empty list of transactions", async () => {
-  const transactions = await listTransactions({ userId: "user_unknown"});
+  const transactions = await listTransactions({ userId: "user_unknown" });
   expect(transactions).toStrictEqual([]);
 });
 
@@ -21,7 +25,7 @@ test("should respond with list of transactions", async () => {
     userId: "abc",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
-    amount: 12.50,
+    amount: 12.5,
     type: "expenditure",
   });
 
@@ -41,4 +45,20 @@ test("should respond with list of transactions", async () => {
   // Take note of the 'date' of each entity. Entity A should come before Entity B
   // as the list is in descending order. The date forms part of the sort key.
   expect(transactions).toStrictEqual([entityA, entityB]);
+});
+
+test("should delete transaction", async () => {
+  const entityA = new TransactionEntity({
+    userId: "abcd",
+    date: new Date(2021, 1, 1),
+    name: "McDonalds",
+    amount: 12.5,
+    type: "expenditure",
+  });
+
+  await createTransaction(entityA);
+  await deleteTransaction(entityA);
+
+  const transactions = await listTransactions({ userId: "abcd" });
+  expect(transactions).toStrictEqual([]);
 });
