@@ -1,7 +1,7 @@
 const { createTransaction } = require("../data/transactions");
 const { TransactionEntity } = require("../entity/transaction-entity");
 
-const Ajv = require("ajv");
+const Ajv = require("ajv").default;
 const ajv = new Ajv();
 
 const schema = {
