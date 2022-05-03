@@ -1,5 +1,5 @@
 const { test, expect } = require("@jest/globals");
-const { handler } = require("../lib/lambda/transaction-create");
+const { handler } = require("../../lib/lambda/transaction-create");
 
 test("transaction-create should throw when invalid payload", async () => {
   const result = await handler();

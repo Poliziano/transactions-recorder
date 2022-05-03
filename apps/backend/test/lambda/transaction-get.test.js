@@ -1,7 +1,7 @@
 const { test, expect } = require("@jest/globals");
-const { createTransaction } = require("../lib/data/transactions");
-const { TransactionEntity } = require("../lib/entity/transaction-entity");
-const { handler } = require("../lib/lambda/transaction-get");
+const { createTransaction } = require("../../lib/data/transactions");
+const { TransactionEntity } = require("../../lib/entity/transaction-entity");
+const { handler } = require("../../lib/lambda/transaction-get");
 
 test("get transaction", async () => {
   const entity = new TransactionEntity({
