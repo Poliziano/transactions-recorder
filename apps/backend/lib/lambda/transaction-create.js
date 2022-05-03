@@ -28,7 +28,7 @@ exports.handler = async function (event) {
     });
 
     if (validate(payload)) {
-      const date = Date.parse(payload.date);
+      const date = new Date(payload.date);
       const entity = new TransactionEntity({
         ...payload,
         date: date,
