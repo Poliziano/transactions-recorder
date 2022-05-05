@@ -1,7 +1,8 @@
-const { test, expect } = require("@jest/globals");
-const { handler } = require("../../lib/lambda/transaction-create");
+import { test, expect } from "@jest/globals";
+import { handler } from "../../lib/lambda/transaction-create";
 
 test("transaction-create should throw when invalid payload", async () => {
+  // @ts-ignore
   const result = await handler();
   expect(result).toStrictEqual({
     statusCode: 400,

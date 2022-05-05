@@ -1,12 +1,16 @@
-const { db } = require("./dynamo");
-const {
+import { db } from "./dynamo";
+import {
   PutItemCommand,
   QueryCommand,
   DeleteItemCommand,
-} = require("@aws-sdk/client-dynamodb");
-const { TransactionEntity } = require("../entity/transaction-entity");
+} from "@aws-sdk/client-dynamodb";
+import { TransactionEntity } from "../entity/transaction-entity";
 
-async function listTransactions({ userId }) {
+type ListTransactionsParams = {
+  userId: string;
+};
+
+export async function listTransactions({ userId }: ListTransactionsParams) {
   const command = new QueryCommand({
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK",
@@ -23,16 +27,16 @@ async function listTransactions({ userId }) {
   return items.map(TransactionEntity.from);
 }
 
-async function createTransaction(entity) {
+export async function createTransaction(entity: TransactionEntity) {
   const command = new PutItemCommand({
     TableName: "Transactions",
-    Item: entity.toItem(),
+    Item: entity.toItem() as any,
   });
 
   await db.send(command);
 }
 
-async function deleteTransaction(userId, transactionId) {
+export async function deleteTransaction(userId: string, transactionId: string) {
   const command = new DeleteItemCommand({
     TableName: "Transactions",
     Key: {
@@ -43,9 +47,3 @@ async function deleteTransaction(userId, transactionId) {
 
   await db.send(command);
 }
-
-module.exports = {
-  listTransactions,
-  createTransaction,
-  deleteTransaction,
-};

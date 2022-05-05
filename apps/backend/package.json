@@ -7,8 +7,8 @@
   },
   "scripts": {
     "test": "DYNAMO_ENDPOINT=\"http://localhost:8090\" jest --watch",
-    "cdk:bootstrap": "cdk bootstrap --app bin/transactions.js",
-    "cdk:deploy": "cdk deploy --app bin/transactions.js"
+    "cdk:bootstrap": "cdk bootstrap",
+    "cdk:deploy": "cdk deploy"
   },
   "engines": {
     "node": ">=14"
@@ -17,11 +17,19 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/preset-typescript": "^7.16.7",
     "@jest/globals": "^28.0.3",
+    "@tsconfig/node16": "^1.0.2",
+    "@types/jest": "^27.5.0",
+    "@types/node": "16",
     "aws-cdk-lib": "^2.22.0",
     "constructs": "^10.0.130",
     "jest": "^28.0.3",
-    "testcontainers": "^8.9.0"
+    "testcontainers": "^8.9.0",
+    "ts-jest": "^28.0.1",
+    "ts-node": "^10.7.0",
+    "typescript": "~4.6.2"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.81.0",

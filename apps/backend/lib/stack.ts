@@ -1,12 +1,13 @@
-const { Stack } = require("aws-cdk-lib");
-const { NodejsFunction } = require("aws-cdk-lib/aws-lambda-nodejs");
-const lambda = require("aws-cdk-lib/aws-lambda");
-const apigateway = require("aws-cdk-lib/aws-apigateway");
-const dynamodb = require("aws-cdk-lib/aws-dynamodb");
-const path = require("path");
+import { App } from "aws-cdk-lib";
+import { Stack } from "aws-cdk-lib";
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import path from "path";
 
-class TransactionsStack extends Stack {
-  constructor(scope, id, props) {
+export class TransactionsStack extends Stack {
+  constructor(scope: App, id: string, props?: any) {
     super(scope, id, props);
 
     const transactionsTable = new dynamodb.Table(this, "Transactions", {
@@ -24,19 +25,19 @@ class TransactionsStack extends Stack {
     const lambdaTransactionGet = new TransactionsNodejsFunction(
       this,
       "TransactionGet",
-      "transaction-get.js"
+      "transaction-get.ts"
     );
 
     const lambdaTransactionCreate = new TransactionsNodejsFunction(
       this,
       "TransactionCreate",
-      "transaction-create.js"
+      "transaction-create.ts"
     );
 
     const lambdaTransactionDelete = new TransactionsNodejsFunction(
       this,
       "TransactionDelete",
-      "transaction-delete.js"
+      "transaction-delete.ts"
     );
 
     transactionsTable.grantReadData(lambdaTransactionGet);
@@ -67,7 +68,7 @@ class TransactionsStack extends Stack {
 }
 
 class TransactionsNodejsFunction extends NodejsFunction {
-  constructor(scope, id, filename) {
+  constructor(scope: any, id: string, filename: string) {
     super(scope, id, {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: "handler",
@@ -75,5 +76,3 @@ class TransactionsNodejsFunction extends NodejsFunction {
     });
   }
 }
-
-module.exports = { TransactionsStack };

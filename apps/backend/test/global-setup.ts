@@ -1,6 +1,6 @@
-const { CreateTableCommand } = require("@aws-sdk/client-dynamodb");
-const { GenericContainer } = require("testcontainers");
-const { db } = require("../lib/data/dynamo");
+import { CreateTableCommand } from "@aws-sdk/client-dynamodb";
+import { GenericContainer } from "testcontainers";
+import { db } from "../lib/data/dynamo";
 
 async function setupDynamoForTesting() {
   const tableConfig = {
@@ -34,10 +34,11 @@ async function setupDynamoForTesting() {
   await db.send(new CreateTableCommand(tableConfig));
 }
 
-module.exports = async function() {
+module.exports = async function () {
+  // @ts-ignore
   globalThis.container = await new GenericContainer("amazon/dynamodb-local")
     .withExposedPorts({ container: 8000, host: 8090 })
     .start();
-  
-   await setupDynamoForTesting();
-}
+
+  await setupDynamoForTesting();
+};

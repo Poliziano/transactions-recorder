@@ -1,6 +1,6 @@
-const { deleteTransaction } = require("../data/transactions");
+import { deleteTransaction } from "../data/transactions";
 
-exports.handler = async function (event) {
+export async function handler(event: any) {
   console.log("event", JSON.stringify(event, null, 2));
 
   await deleteTransaction(
@@ -16,4 +16,4 @@ exports.handler = async function (event) {
       "Access-Control-Allow-Methods": "GET",
     },
   };
-};
+}

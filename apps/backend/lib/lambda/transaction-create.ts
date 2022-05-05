@@ -1,5 +1,5 @@
-const { createTransaction } = require("../data/transactions");
-const { TransactionEntity } = require("../entity/transaction-entity");
+import { createTransaction } from "../data/transactions";
+import { TransactionEntity } from "../entity/transaction-entity";
 
 const Ajv = require("ajv").default;
 const ajv = new Ajv();
@@ -19,7 +19,7 @@ const schema = {
 
 const validate = ajv.compile(schema);
 
-exports.handler = async function (event) {
+export async function handler(event: any) {
   console.log("event", JSON.stringify(event, null, 2));
 
   try {
@@ -66,4 +66,4 @@ exports.handler = async function (event) {
       },
     };
   }
-};
+}

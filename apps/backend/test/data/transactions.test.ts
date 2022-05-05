@@ -1,12 +1,12 @@
-const { test, expect } = require("@jest/globals");
-const { ListTablesCommand } = require("@aws-sdk/client-dynamodb");
-const { db } = require("../../lib/data/dynamo");
-const {
+import { test, expect } from "@jest/globals";
+import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
+import { db } from "../../lib/data/dynamo";
+import {
   listTransactions,
   createTransaction,
   deleteTransaction,
-} = require("../../lib/data/transactions");
-const { TransactionEntity } = require("../../lib/entity/transaction-entity");
+} from "../../lib/data/transactions";
+import { TransactionEntity } from "../../lib/entity/transaction-entity";
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});

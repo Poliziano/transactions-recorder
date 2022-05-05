@@ -1,7 +1,15 @@
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
-const KSUID = require("ksuid");
+import { unmarshall } from "@aws-sdk/util-dynamodb";
+import KSUID from "ksuid";
 
-class TransactionEntity {
+export class TransactionEntity {
+  userId: string;
+  name: string;
+  amount: number;
+  type: string;
+  date: Date;
+  uuid: string;
+
+  // @ts-ignore
   constructor({ uuid, userId, date, name, amount, type }) {
     this.userId = userId;
     this.name = name;
@@ -28,7 +36,7 @@ class TransactionEntity {
     };
   }
 
-  static from(item) {
+  static from(item: any) {
     const output = unmarshall(item);
 
     return new TransactionEntity({
@@ -45,5 +53,3 @@ class TransactionEntity {
     return KSUID.randomSync(date).string;
   }
 }
-
-module.exports = { TransactionEntity };
