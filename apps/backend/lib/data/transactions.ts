@@ -1,9 +1,5 @@
 import { db } from "./dynamo";
-import {
-  PutItemCommand,
-  QueryCommand,
-  DeleteItemCommand,
-} from "@aws-sdk/client-dynamodb";
+import { PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { TransactionEntity } from "../entity/transaction-entity";
 
 type ListTransactionsParams = {
@@ -15,9 +11,7 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK",
     ExpressionAttributeValues: {
-      ":PK": {
-        S: `USER#${userId}`,
-      },
+      ":PK": `USER#${userId}`,
     },
     ScanIndexForward: false,
   });
@@ -28,7 +22,7 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
 }
 
 export async function createTransaction(entity: TransactionEntity) {
-  const command = new PutItemCommand({
+  const command = new PutCommand({
     TableName: "Transactions",
     Item: entity.toItem() as any,
   });
@@ -37,11 +31,11 @@ export async function createTransaction(entity: TransactionEntity) {
 }
 
 export async function deleteTransaction(userId: string, transactionId: string) {
-  const command = new DeleteItemCommand({
+  const command = new DeleteCommand({
     TableName: "Transactions",
     Key: {
-      PK: { S: `USER#${userId.toLowerCase()}` },
-      SK: { S: `ID#${transactionId}` },
+      PK: `USER#${userId.toLowerCase()}`,
+      SK: `ID#${transactionId}`,
     },
   });
 

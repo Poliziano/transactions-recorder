@@ -21,31 +21,29 @@ export class TransactionEntity {
 
   key() {
     return {
-      PK: { S: `USER#${this.userId.toLowerCase()}` },
-      SK: { S: `ID#${this.uuid}` },
+      PK: `USER#${this.userId.toLowerCase()}`,
+      SK: `ID#${this.uuid}`,
     };
   }
 
   toItem() {
     return {
       ...this.key(),
-      Name: { S: this.name },
-      Amount: { N: `${this.amount}` },
-      Type: { S: this.type },
-      Date: { S: this.date },
+      Name: this.name,
+      Amount: this.amount,
+      Type: this.type,
+      Date: this.date.toISOString(),
     };
   }
 
   static from(item: any) {
-    const output = unmarshall(item);
-
     return new TransactionEntity({
-      uuid: output.SK.split("#")[1],
-      userId: output.PK.split("#")[1],
-      date: new Date(output.Date),
-      name: output.Name,
-      amount: output.Amount,
-      type: output.Type,
+      uuid: item.SK.split("#")[1],
+      userId: item.PK.split("#")[1],
+      date: new Date(item.Date),
+      name: item.Name,
+      amount: item.Amount,
+      type: item.Type,
     });
   }
 
