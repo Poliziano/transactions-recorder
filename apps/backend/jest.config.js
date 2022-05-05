@@ -4,12 +4,13 @@
  */
 
 module.exports = {
-  preset: "ts-jest",
+  preset: "jest-dynalite",
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
-  globalSetup: "./test/global-setup.ts",
-  globalTeardown: "./test/global-teardown.ts",
   verbose: true,
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+  },
 };
