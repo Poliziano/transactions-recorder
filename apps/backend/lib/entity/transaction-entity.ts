@@ -1,6 +1,15 @@
 import { NativeAttributeValue, unmarshall } from "@aws-sdk/util-dynamodb";
 import KSUID from "ksuid";
 
+type TransactionEntityParam = {
+  userId: string;
+  name: string;
+  amount: number;
+  type: string;
+  date: Date;
+  uuid: string;
+};
+
 export class TransactionEntity {
   userId: string;
   name: string;
@@ -9,8 +18,14 @@ export class TransactionEntity {
   date: Date;
   uuid: string;
 
-  // @ts-ignore
-  constructor({ uuid, userId, date, name, amount, type }) {
+  constructor({
+    uuid,
+    userId,
+    date,
+    name,
+    amount,
+    type,
+  }: TransactionEntityParam) {
     this.userId = userId;
     this.name = name;
     this.amount = amount;

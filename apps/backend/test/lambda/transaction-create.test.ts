@@ -1,5 +1,6 @@
 import { test, expect } from "@jest/globals";
 import { handler } from "../../lib/lambda/transaction-create";
+import { apiGatewayProxyEventFactory } from "./factory";
 
 test("transaction-create should throw when invalid payload", async () => {
   // @ts-ignore
@@ -15,12 +16,13 @@ test("transaction-create should throw when invalid payload", async () => {
 });
 
 test("transaction-create should throw when partial payload", async () => {
-  const result = await handler({
+  const event = apiGatewayProxyEventFactory.build({
     body: JSON.stringify({
       date: new Date(2021, 1, 1),
       name: "McDonalds",
     }),
   });
+  const result = await handler(event);
 
   expect(result).toStrictEqual({
     statusCode: 400,
@@ -33,7 +35,7 @@ test("transaction-create should throw when partial payload", async () => {
 });
 
 test("transaction-create should not thrown when valid payload", async () => {
-  const result = await handler({
+  const event = apiGatewayProxyEventFactory.build({
     body: JSON.stringify({
       date: new Date(2021, 1, 1),
       name: "McDonalds",
@@ -44,6 +46,7 @@ test("transaction-create should not thrown when valid payload", async () => {
       userId: "user_id",
     },
   });
+  const result = await handler(event);
 
   expect(result).toStrictEqual({
     statusCode: 200,

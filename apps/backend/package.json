@@ -26,6 +26,7 @@
     "@types/node": "16",
     "aws-cdk-lib": "^2.22.0",
     "constructs": "^10.0.130",
+    "fishery": "^2.2.2",
     "jest": "^28.0.3",
     "testcontainers": "^8.9.0",
     "ts-jest": "^28.0.1",
