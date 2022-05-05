@@ -16,6 +16,7 @@ importers:
       '@babel/preset-typescript': ^7.16.7
       '@jest/globals': ^28.0.3
       '@tsconfig/node16': ^1.0.2
+      '@types/aws-lambda': ^8.10.95
       '@types/jest': ^27.5.0
       '@types/node': '16'
       ajv: ^8.11.0
@@ -42,6 +43,7 @@ importers:
       '@babel/preset-typescript': 7.16.7_@babel+core@7.17.10
       '@jest/globals': 28.0.3
       '@tsconfig/node16': 1.0.2
+      '@types/aws-lambda': 8.10.95
       '@types/jest': 27.5.0
       '@types/node': 16.11.33
       aws-cdk-lib: 2.22.0_constructs@10.0.130
@@ -1970,6 +1972,10 @@ packages:
     resolution: {integrity: sha512-wKYZaSXaDvTZuInAWjCeGG7BEAgTWG2zZW0/f7IYFcoHB2X2d9lkVFnrOlXl3W6NrvO6Ml3FLLu8Uksyymcpnw==}
     dependencies:
       '@types/glob': 7.2.0
+    dev: true
+
+  /@types/aws-lambda/8.10.95:
+    resolution: {integrity: sha512-wGtzLbd04EmqhFjTZmXgLzvmhDdyVU7AMo/JkiPmA2VUdBFQfUBQFCEzaVVK+f1PP5aWx1ejnb7K/8MXYI/frQ==}
     dev: true
 
   /@types/babel__core/7.1.19:

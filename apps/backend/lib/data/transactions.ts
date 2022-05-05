@@ -24,7 +24,7 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
 export async function createTransaction(entity: TransactionEntity) {
   const command = new PutCommand({
     TableName: "Transactions",
-    Item: entity.toItem() as any,
+    Item: entity.toItem(),
   });
 
   await db.send(command);

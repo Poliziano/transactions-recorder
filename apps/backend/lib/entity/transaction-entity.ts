@@ -1,4 +1,4 @@
-import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { NativeAttributeValue, unmarshall } from "@aws-sdk/util-dynamodb";
 import KSUID from "ksuid";
 
 export class TransactionEntity {
@@ -36,7 +36,7 @@ export class TransactionEntity {
     };
   }
 
-  static from(item: any) {
+  static from(item: { [index: string]: NativeAttributeValue }) {
     return new TransactionEntity({
       uuid: item.SK.split("#")[1],
       userId: item.PK.split("#")[1],

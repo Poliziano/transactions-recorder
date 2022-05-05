@@ -1,5 +1,6 @@
 import { createTransaction } from "../data/transactions";
 import { TransactionEntity } from "../entity/transaction-entity";
+import type { APIGatewayProxyEvent } from "aws-lambda";
 
 const Ajv = require("ajv").default;
 const ajv = new Ajv();
@@ -19,12 +20,12 @@ const schema = {
 
 const validate = ajv.compile(schema);
 
-export async function handler(event: any) {
+export async function handler(event: APIGatewayProxyEvent) {
   console.log("event", JSON.stringify(event, null, 2));
 
   try {
-    const payload = Object.assign(JSON.parse(event.body), {
-      userId: event.pathParameters.userId,
+    const payload = Object.assign(JSON.parse(event.body ?? "{}"), {
+      userId: event.pathParameters?.userId,
     });
 
     if (validate(payload)) {
