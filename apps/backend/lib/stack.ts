@@ -1,5 +1,5 @@
-import { App } from "aws-cdk-lib";
-import { Stack } from "aws-cdk-lib";
+import { Stack, StackProps } from "aws-cdk-lib";
+import { Construct } from "constructs";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
@@ -7,7 +7,7 @@ import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import path from "path";
 
 export class TransactionsStack extends Stack {
-  constructor(scope: App, id: string, props?: any) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const transactionsTable = new dynamodb.Table(this, "Transactions", {

@@ -1,4 +1,4 @@
-import { NativeAttributeValue, unmarshall } from "@aws-sdk/util-dynamodb";
+import type { NativeAttributeValue } from "@aws-sdk/util-dynamodb";
 import KSUID from "ksuid";
 
 type TransactionEntityParam = {

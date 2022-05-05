@@ -3,7 +3,7 @@ import { handler } from "../../lib/lambda/transaction-create";
 import { apiGatewayProxyEventFactory } from "./factory";
 
 test("transaction-create should throw when invalid payload", async () => {
-  // @ts-ignore
+  // @ts-expect-error intentionally testing invalid event.
   const result = await handler();
   expect(result).toStrictEqual({
     statusCode: 400,
