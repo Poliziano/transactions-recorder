@@ -22,7 +22,7 @@ test("should respond with empty list of transactions", async () => {
 
 test("should respond with list of transactions", async () => {
   const entityA = new TransactionEntity({
-    uuid: TransactionEntity.uuid(new Date()),
+    uuid: TransactionEntity.uuid(new Date(2021, 1, 1)),
     userId: "abc",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
@@ -31,7 +31,7 @@ test("should respond with list of transactions", async () => {
   });
 
   const entityB = new TransactionEntity({
-    uuid: TransactionEntity.uuid(new Date()),
+    uuid: TransactionEntity.uuid(new Date(2020, 1, 1)),
     userId: "abc",
     date: new Date(2020, 1, 1),
     name: "Waterstones",
