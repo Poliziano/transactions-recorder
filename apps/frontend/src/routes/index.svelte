@@ -1,5 +1,7 @@
 <script lang="ts">
-	let result = 'pending';
+	import Transaction from '$lib/transaction.svelte';
+
+	let transactions: { name: string }[] = [];
 
 	(async function () {
 		const url =
@@ -9,12 +11,14 @@
 		});
 
 		if (response.ok) {
-			const transactions = await response.json();
-			result = JSON.stringify(transactions, null, 2);
-		} else {
-			result = 'Failed to get';
+			const json = await response.json();
+			transactions = json.transactions;
 		}
 	})();
 </script>
 
-<p>{result}</p>
+<ul>
+	{#each transactions as { name }}
+		<li><Transaction {name} /></li>
+	{/each}
+</ul>
