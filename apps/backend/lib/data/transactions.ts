@@ -1,11 +1,13 @@
 import { db } from "./dynamo";
 import { PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
-import { TransactionEntity } from "../entity/transaction-entity";
+import {
+  fromTransactionItem,
+  toTransactionItem,
+  Transaction,
+} from "../entity/transaction";
+import KSUID from "ksuid";
 
-type ListTransactionsParams = {
-  userId: string;
-};
-
+type ListTransactionsParams = { userId: string };
 export async function listTransactions({ userId }: ListTransactionsParams) {
   const command = new QueryCommand({
     TableName: "Transactions",
@@ -18,16 +20,23 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
   const response = await db.send(command);
   const items = response.Items ?? [];
 
-  return items.map(TransactionEntity.from);
+  return items.map(fromTransactionItem);
 }
 
-export async function createTransaction(entity: TransactionEntity) {
+export type TransactionCreateParams = Omit<Transaction, "uuid">;
+export async function createTransaction(params: TransactionCreateParams) {
+  const transaction: Transaction = {
+    ...params,
+    uuid: ksuid(params.date),
+  };
+
   const command = new PutCommand({
     TableName: "Transactions",
-    Item: entity.toItem(),
+    Item: toTransactionItem(transaction),
   });
 
   await db.send(command);
+  return transaction;
 }
 
 export async function deleteTransaction(userId: string, transactionId: string) {
@@ -40,4 +49,8 @@ export async function deleteTransaction(userId: string, transactionId: string) {
   });
 
   await db.send(command);
+}
+
+function ksuid(date = new Date()) {
+  return KSUID.randomSync(date).string;
 }

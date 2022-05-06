@@ -5,8 +5,8 @@ import {
   listTransactions,
   createTransaction,
   deleteTransaction,
+  TransactionCreateParams,
 } from "../../lib/data/transactions";
-import { TransactionEntity } from "../../lib/entity/transaction-entity";
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});
@@ -21,46 +21,43 @@ test("should respond with empty list of transactions", async () => {
 });
 
 test("should respond with list of transactions", async () => {
-  const entityA = new TransactionEntity({
-    uuid: TransactionEntity.uuid(new Date(2021, 1, 1)),
+  const createParamsA: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
-  });
+  };
 
-  const entityB = new TransactionEntity({
-    uuid: TransactionEntity.uuid(new Date(2020, 1, 1)),
+  const createParamsB: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2020, 1, 1),
     name: "Waterstones",
     amount: 7.99,
     type: "expenditure",
-  });
+  };
 
-  await createTransaction(entityA);
-  await createTransaction(entityB);
+  const transactionA = await createTransaction(createParamsA);
+  const transactionB = await createTransaction(createParamsB);
 
   const transactions = await listTransactions({ userId: "abc" });
 
   // Take note of the 'date' of each entity. Entity A should come before Entity B
   // as the list is in descending order. The date forms part of the sort key.
-  expect(transactions).toStrictEqual([entityA, entityB]);
+  expect(transactions).toStrictEqual([transactionA, transactionB]);
 });
 
 test("should delete transaction", async () => {
-  const entityA = new TransactionEntity({
-    uuid: TransactionEntity.uuid(new Date()),
+  const createParams: TransactionCreateParams = {
     userId: "abcd",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
-  });
+  };
 
-  await createTransaction(entityA);
-  await deleteTransaction(entityA.userId, entityA.uuid);
+  const transaction = await createTransaction(createParams);
+  await deleteTransaction(createParams.userId, transaction.uuid);
 
   const transactions = await listTransactions({ userId: "abcd" });
   expect(transactions).toStrictEqual([]);

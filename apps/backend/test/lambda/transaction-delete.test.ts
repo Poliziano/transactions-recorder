@@ -1,24 +1,26 @@
 import { test, expect } from "@jest/globals";
-import { createTransaction } from "../../lib/data/transactions";
-import { TransactionEntity } from "../../lib/entity/transaction-entity";
+import {
+  createTransaction,
+  TransactionCreateParams,
+} from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-delete";
 import { apiGatewayProxyEventFactory } from "./factory";
 
 test("delete transaction for user", async () => {
-  const entityA = new TransactionEntity({
-    uuid: "uuid_of_item_to_delete",
+  const createParams: TransactionCreateParams = {
     userId: "some_user_id",
     date: new Date(2021, 0, 1),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
-  });
-  await createTransaction(entityA);
+  };
+
+  const transaction = await createTransaction(createParams);
 
   const event = apiGatewayProxyEventFactory.build({
     pathParameters: {
-      userId: "some_id",
-      transactionId: "uuid_of_item_to_delete",
+      userId: transaction.userId,
+      transactionId: transaction.uuid,
     },
   });
   const response = await handler(event);
