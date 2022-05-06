@@ -40,18 +40,14 @@ export async function handler(event: APIGatewayProxyEvent) {
       return {
         statusCode: 200,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET",
         },
       };
     } else {
       return {
         statusCode: 400,
         headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
           "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET",
         },
       };
     }
@@ -61,9 +57,7 @@ export async function handler(event: APIGatewayProxyEvent) {
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET",
       },
     };
   }

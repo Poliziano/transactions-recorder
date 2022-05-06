@@ -28,9 +28,7 @@ test("get transaction", async () => {
     statusCode: 200,
     body: expect.any(String),
     headers: {
-      "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET",
     },
   });
   expect(JSON.parse(response.body)).toEqual({

@@ -8,8 +8,6 @@ test("transaction-create should throw when invalid payload", async () => {
   expect(result).toStrictEqual({
     statusCode: 400,
     headers: {
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "GET",
       "Access-Control-Allow-Origin": "*",
     },
   });
@@ -27,8 +25,6 @@ test("transaction-create should throw when partial payload", async () => {
   expect(result).toStrictEqual({
     statusCode: 400,
     headers: {
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "GET",
       "Access-Control-Allow-Origin": "*",
     },
   });
@@ -51,8 +47,6 @@ test("transaction-create should not thrown when valid payload", async () => {
   expect(result).toStrictEqual({
     statusCode: 200,
     headers: {
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "GET",
       "Access-Control-Allow-Origin": "*",
     },
   });
