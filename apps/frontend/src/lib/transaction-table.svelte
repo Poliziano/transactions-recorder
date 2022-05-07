@@ -15,14 +15,16 @@
 	{});
 </script>
 
-{#each Object.entries(transactionsByDate) as record}
-	<h2>{new Date(record[0]).toLocaleDateString()}</h2>
-	<div class="transactions">
-		{#each record[1] as transaction}
-			<Transaction {transaction} />
-		{/each}
-	</div>
-{/each}
+<div>
+	{#each Object.entries(transactionsByDate) as record}
+		<h2>{new Date(record[0]).toLocaleDateString()}</h2>
+		<div class="transactions">
+			{#each record[1] as transaction}
+				<Transaction {transaction} />
+			{/each}
+		</div>
+	{/each}
+</div>
 
 <style>
 	.transactions {

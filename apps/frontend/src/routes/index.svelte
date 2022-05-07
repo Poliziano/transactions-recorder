@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TransactionForm from '$lib/transaction-form.svelte';
 	import TransactionTable from '$lib/transaction-table.svelte';
 	import type { TransactionEntity } from 'src/api/transaction';
 
@@ -18,4 +19,13 @@
 	})();
 </script>
 
-<TransactionTable {transactions} />
+<div class="layout">
+	<TransactionTable {transactions} />
+	<TransactionForm />
+</div>
+
+<style>
+	.layout {
+		display: flex;
+	}
+</style>
