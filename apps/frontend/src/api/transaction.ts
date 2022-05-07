@@ -6,3 +6,5 @@ export type TransactionEntity = {
 	date: string;
 	uuid: string;
 };
+
+export type TransactionEntityCreateParams = Omit<TransactionEntity, 'userId' | 'uuid'>;

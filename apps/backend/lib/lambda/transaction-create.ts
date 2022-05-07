@@ -35,10 +35,12 @@ export async function handler(event: APIGatewayProxyEvent) {
         ...payload,
         date: new Date(payload.date),
       };
-      await createTransaction(entity);
+
+      const transaction = await createTransaction(entity);
 
       return {
         statusCode: 200,
+        body: JSON.stringify(transaction),
         headers: {
           "Access-Control-Allow-Origin": "*",
         },

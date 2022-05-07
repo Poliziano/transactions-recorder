@@ -39,15 +39,24 @@ test("transaction-create should not thrown when valid payload", async () => {
       type: "expenditure",
     }),
     pathParameters: {
-      userId: "user_id",
+      userId: "a_user_id",
     },
   });
-  const result = await handler(event);
+  const response = await handler(event);
 
-  expect(result).toStrictEqual({
+  expect(response).toStrictEqual({
     statusCode: 200,
+    body: expect.any(String),
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
+  });
+  expect(JSON.parse(response.body!)).toEqual({
+    userId: "a_user_id",
+    name: "McDonalds",
+    amount: 12.5,
+    type: "expenditure",
+    date: "2021-02-01T00:00:00.000Z",
+    uuid: expect.any(String),
   });
 });
