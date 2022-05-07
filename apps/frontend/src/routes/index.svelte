@@ -1,7 +1,8 @@
 <script lang="ts">
-	import Transaction from '$lib/transaction.svelte';
+	import TransactionTable from '$lib/transaction-table.svelte';
+	import type { TransactionEntity } from 'src/api/transaction';
 
-	let transactions: { name: string }[] = [];
+	let transactions: TransactionEntity[] = [];
 
 	(async function () {
 		const url =
@@ -17,8 +18,4 @@
 	})();
 </script>
 
-<ul>
-	{#each transactions as { name }}
-		<li><Transaction {name} /></li>
-	{/each}
-</ul>
+<TransactionTable {transactions} />
