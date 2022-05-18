@@ -1,5 +1,5 @@
-import type { TransactionEntity, TransactionEntityCreateParams } from '../api/transaction';
 import { assign, createMachine } from 'xstate';
+import type { TransactionEntity, TransactionEntityCreateParams } from '../api/transaction';
 
 export type Context = {
 	transactions: TransactionEntity[];
@@ -55,7 +55,11 @@ export type CreateTransactionsMachineParams = {
 	) => Promise<TransactionEntity>;
 };
 
-export function createTransactionsMachine(params: CreateTransactionsMachineParams) {
+export function createTransactionsMachine({
+	fetchTransactions,
+	createTransaction,
+	deleteTransaction
+}: CreateTransactionsMachineParams) {
 	return createMachine<Context, Events>(
 		{
 			context: {
@@ -104,28 +108,27 @@ export function createTransactionsMachine(params: CreateTransactionsMachineParam
 		},
 		{
 			services: {
-				fetchTransactions: (context, event) =>
-					params.fetchTransactions(context, event as FetchTransactionsEvent),
-				createTransaction: (context, event) =>
-					params.createTransaction(context, event as CreateTransactionEvent),
-				deleteTransaction: (context, event) =>
-					params.deleteTransaction(context, event as DeleteTransactionEvent)
+				// @ts-expect-error xstate cannot know the event type.
+				fetchTransactions,
+				// @ts-expect-error xstate cannot know the event type.
+				createTransaction,
+				// @ts-expect-error xstate cannot know the event type.
+				deleteTransaction
 			},
 			actions: {
-				assignTransactions: assign((_context, event) => {
-					console.log(JSON.stringify(event));
-					return {
-						transactions: (event as FetchTransactionsDoneEvent).data
-					};
+				// @ts-expect-error xstate cannot know the event type.
+				assignTransactions: assign<Context, FetchTransactionsDoneEvent>({
+					transactions: (_, event) => event.data
 				}),
-				appendTransaction: assign((context, event) => ({
-					transactions: [...context.transactions, (event as CreateTransactionDoneEvent).data]
-				})),
-				removeTransaction: assign((context, event) => ({
-					transactions: context.transactions.filter(
-						(value) => value.uuid !== (event as DeleteTransactionEvent).data.uuid
-					)
-				}))
+				// @ts-expect-error xstate cannot know the event type.
+				appendTransaction: assign<Context, CreateTransactionDoneEvent>({
+					transactions: (context, event) => [...context.transactions, event.data]
+				}),
+				// @ts-expect-error xstate cannot know the event type.
+				removeTransaction: assign<Context, DeleteTransactionDoneEvent>({
+					transactions: (context, event) =>
+						context.transactions.filter((value) => value.uuid !== event.data.uuid)
+				})
 			}
 		}
 	);
