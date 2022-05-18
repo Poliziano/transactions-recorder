@@ -27,6 +27,7 @@
     "aws-cdk-lib": "^2.22.0",
     "aws-sdk": "^2.7.0",
     "constructs": "^10.0.130",
+    "esbuild": "^0.14.38",
     "fishery": "^2.2.2",
     "jest": "^28.0.3",
     "jest-dynalite": "^3.5.1",
@@ -41,7 +42,6 @@
     "@aws-sdk/types": "^3.78.0",
     "@aws-sdk/util-dynamodb": "^3.81.0",
     "ajv": "^8.11.0",
-    "esbuild": "^0.14.38",
     "ksuid": "^3.0.0"
   }
 }

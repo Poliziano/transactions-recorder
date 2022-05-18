@@ -3,8 +3,8 @@
 	import { readable, type Readable } from 'svelte/store';
 	import Transaction from './transaction.svelte';
 
-	export let transactions: Readable<TransactionEntity[]> = readable([]);
-	$: transactionsByDate = $transactions.reduce(function (previousValue, currentValue) {
+	export let transactions: TransactionEntity[] = [];
+	$: transactionsByDate = transactions.reduce(function (previousValue, currentValue) {
 		const groupedTransactions = previousValue[currentValue.date] ?? [];
 		previousValue[currentValue.date] = [...groupedTransactions, currentValue];
 		return previousValue;
