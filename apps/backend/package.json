@@ -18,7 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.17.10",
-    "@babel/preset-typescript": "^7.16.7",
+    "@babel/preset-typescript": "^7.17.12",
     "@jest/globals": "^28.0.3",
     "@tsconfig/node16": "^1.0.2",
     "@types/aws-lambda": "^8.10.95",
@@ -27,7 +27,7 @@
     "aws-cdk-lib": "^2.22.0",
     "aws-sdk": "^2.7.0",
     "constructs": "^10.0.130",
-    "esbuild": "^0.14.38",
+    "esbuild": "^0.14.39",
     "fishery": "^2.2.2",
     "jest": "^28.0.3",
     "jest-dynalite": "^3.5.1",
