@@ -2,7 +2,6 @@
 	import TransactionForm from '$lib/transaction-form.svelte';
 	import TransactionTable from '$lib/transaction-table.svelte';
 	import { interpret } from 'xstate';
-	import { endpoint } from '../api/api';
 	import type { TransactionEntity, TransactionEntityCreateParams } from '../api/transaction';
 	import { createTransactionsMachine } from '../state/transactions.machine';
 	import {

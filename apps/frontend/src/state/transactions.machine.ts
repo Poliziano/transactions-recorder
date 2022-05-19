@@ -60,10 +60,15 @@ export function createTransactionsMachine({
 	createTransaction,
 	deleteTransaction
 }: CreateTransactionsMachineParams) {
-	return createMachine<Context, Events>(
+	return createMachine(
 		{
 			context: {
 				transactions: []
+			},
+			tsTypes: {} as import("./transactions.machine.typegen").Typegen0,
+			schema: {
+				context: {} as Context,
+				events: {} as Events
 			},
 			initial: 'waiting',
 			states: {
@@ -108,24 +113,18 @@ export function createTransactionsMachine({
 		},
 		{
 			services: {
-				// @ts-expect-error xstate cannot know the event type.
 				fetchTransactions,
-				// @ts-expect-error xstate cannot know the event type.
 				createTransaction,
-				// @ts-expect-error xstate cannot know the event type.
 				deleteTransaction
 			},
 			actions: {
-				// @ts-expect-error xstate cannot know the event type.
-				assignTransactions: assign<Context, FetchTransactionsDoneEvent>({
+				assignTransactions: assign({
 					transactions: (_, event) => event.data
 				}),
-				// @ts-expect-error xstate cannot know the event type.
-				appendTransaction: assign<Context, CreateTransactionDoneEvent>({
+				appendTransaction: assign({
 					transactions: (context, event) => [...context.transactions, event.data]
 				}),
-				// @ts-expect-error xstate cannot know the event type.
-				removeTransaction: assign<Context, DeleteTransactionDoneEvent>({
+				removeTransaction: assign({
 					transactions: (context, event) =>
 						context.transactions.filter((value) => value.uuid !== event.data.uuid)
 				})
