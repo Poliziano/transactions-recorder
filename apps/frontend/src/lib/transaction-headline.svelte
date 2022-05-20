@@ -10,14 +10,13 @@
   h2 {
     padding: 0;
     margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+    font: var(--font-h1);
   }
   .card {
     width: 100%;
     display: grid;
     grid-template-columns: min-content auto 24px;
-    gap: 20px;
+    gap: var(--grid-gap-0);
     align-items: center;
     box-sizing: border-box;
     padding: 15px 20px;

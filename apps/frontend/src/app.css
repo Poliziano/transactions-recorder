@@ -1,5 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Chivo:wght@300;400&display=swap");
 
+:root {
+	--font-body-1: 300 1rem/1.25rem 'Chivo';
+	--font-h1: 300 1.5rem/1.5rem 'Chivo';
+  --font-h2: 400 1rem/1rem 'Chivo';
+
+  --grid-gap-0: 1.5em;
+  --grid-transaction-column-template: 24px auto min-content 24px;
+}
+
 html,
 body,
 #svelte-body {
@@ -7,4 +16,5 @@ body,
   font-family: "Chivo";
   margin: 0;
   height: 100%;
+  font: var(--font-body-1);
 }

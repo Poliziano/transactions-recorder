@@ -17,14 +17,13 @@
   h2 {
     padding: 0;
     margin: 0;
-    font-size: 18px;
-    font-weight: 600;
+    font: var(--font-h2);
   }
   .card {
     width: 100%;
     display: grid;
-    grid-template-columns: 24px auto min-content 24px;
-    gap: 20px;
+    grid-template-columns: var(--grid-transaction-column-template);
+    gap: var(--grid-gap-0);
     align-items: center;
     box-sizing: border-box;
     padding: 10px 20px;
@@ -39,6 +38,6 @@
     width: 100%;
   }
   .amount {
-    font-weight: 600;
+    font: var(--font-h2);
   }
 </style>
