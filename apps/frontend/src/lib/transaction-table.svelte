@@ -50,6 +50,6 @@
     border-radius: 20px;
   }
   .transaction:not(:last-child) {
-    border-bottom: 1px solid #e4e4e4;
+    border-bottom: 1px solid #f1f1f1;
   }
 </style>
