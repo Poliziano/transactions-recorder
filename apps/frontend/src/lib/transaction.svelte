@@ -15,7 +15,7 @@
     <img class="actions" src="more_horizontal.svg" alt="Transaction options" />
   </div>
   <div>{transaction.name}</div>
-  <div>{transaction.amount}</div>
+  <div>£{transaction.amount}</div>
   <div class="user">J</div>
 </div>
 

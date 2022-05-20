@@ -1,5 +1,6 @@
 <script lang="ts">
   export let date: string;
+  export let amount: number;
 </script>
 
 <div class="card">
@@ -7,7 +8,7 @@
     <img class="dropdown" src="expand_more.svg" alt="Expand transactions" />
   </div>
   <h2>{new Date(date).toLocaleDateString()}</h2>
-  <div class="amount">Amount</div>
+  <div class="amount">£{amount}</div>
   <div>
     <img class="action" src="add.svg" alt="Add transaction" />
   </div>

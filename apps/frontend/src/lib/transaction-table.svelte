@@ -13,14 +13,21 @@
     return previousValue;
   },
   {} as Record<string, TransactionEntity[]>);
+
+  function aggregateTransactions(transactions: TransactionEntity[]): number {
+    return transactions.reduce(
+      (previous, current) => previous + current.amount,
+      0
+    );
+  }
 </script>
 
 <div class="content-scroll-wrap">
   <div class="container">
-    {#each Object.entries(transactionsByDate) as record}
-      <TransactionDate date={record[0]} />
+    {#each Object.entries(transactionsByDate) as [date, record]}
+      <TransactionDate {date} amount={aggregateTransactions(record)} />
       <div class="transactions">
-        {#each record[1] as transaction}
+        {#each record as transaction}
           <div class="transaction">
             <Transaction on:delete {transaction} />
           </div>
