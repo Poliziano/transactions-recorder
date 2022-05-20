@@ -15,7 +15,7 @@ export async function fetchTransactions(): Promise<TransactionEntity[]> {
     throw new Error();
   }
   const json = await response.json();
-  return json.transactions;
+  return [...json.transactions, ...json.transactions, ...json.transactions];
 }
 
 export async function createTransaction(

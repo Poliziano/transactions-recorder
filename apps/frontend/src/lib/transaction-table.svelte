@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { TransactionEntity } from "src/api/transaction";
-  import { readable, type Readable } from "svelte/store";
+  import TransactionDate from "./transaction-date.svelte";
   import Transaction from "./transaction.svelte";
 
   export let transactions: TransactionEntity[] = [];
@@ -15,26 +15,41 @@
   {} as Record<string, TransactionEntity[]>);
 </script>
 
-<div class="container">
-  {#each Object.entries(transactionsByDate) as record}
-    <h2>{new Date(record[0]).toLocaleDateString()}</h2>
-    <div class="transactions">
-      {#each record[1] as transaction}
-        <Transaction on:delete {transaction} />
-      {/each}
-    </div>
-  {/each}
+<div class="content-scroll-wrap">
+  <div class="container">
+    {#each Object.entries(transactionsByDate) as record}
+      <TransactionDate date={record[0]} />
+      <div class="transactions">
+        {#each record[1] as transaction}
+          <div class="transaction">
+            <Transaction on:delete {transaction} />
+          </div>
+        {/each}
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style>
+  .content-scroll-wrap {
+    position: relative;
+    height: 100%;
+  }
   .container {
     width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
   }
   .transactions {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     border-radius: 20px;
-    gap: 5px;
+  }
+  .transaction:not(:last-child) {
+    border-bottom: 1px solid #e4e4e4;
   }
 </style>

@@ -3,47 +3,44 @@
   import { createEventDispatcher } from "svelte";
 
   export let transaction: TransactionEntity;
-  const dispatch = createEventDispatcher<{ delete: TransactionEntity }>();
-  let hover = false;
 
+  const dispatch = createEventDispatcher<{ delete: TransactionEntity }>();
   function deleteClicked() {
     dispatch("delete", transaction);
   }
 </script>
 
-<div
-  class="card"
-  on:mouseenter={() => (hover = true)}
-  on:mouseleave={() => (hover = false)}
->
-  <div class="header">
-    <div>{transaction.name}</div>
-    <div class:income-highlight={transaction.type === "income"}>
-      {transaction.type === "income" ? "+" : ""}£{transaction.amount}
-    </div>
+<div class="card">
+  <div>
+    <img class="actions" src="more_horizontal.svg" alt="Transaction options" />
   </div>
-  <button on:click={deleteClicked} style:visibility={hover ? "" : "hidden"}
-    >X</button
-  >
+  <div>{transaction.name}</div>
+  <div>{transaction.amount}</div>
+  <div class="user">J</div>
 </div>
 
 <style>
   .card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-    width: 250px;
-    padding: 10px;
-    background-color: white;
-    border-radius: 8px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 24px auto min-content 24px;
+    gap: 20px;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px 20px;
   }
-  .header {
+  .actions {
     display: flex;
-    justify-content: space-between;
     width: 100%;
   }
-  .income-highlight {
-    font-weight: 600;
+  .user {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background-color: #464646;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
   }
 </style>

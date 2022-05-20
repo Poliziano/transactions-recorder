@@ -1,5 +1,6 @@
 <script lang="ts">
   import TransactionForm from "$lib/transaction-form.svelte";
+  import TransactionHeadline from "$lib/transaction-headline.svelte";
   import TransactionTable from "$lib/transaction-table.svelte";
   import { interpret } from "xstate";
   import type {
@@ -42,15 +43,18 @@
 </script>
 
 <div class="layout">
+  <TransactionHeadline />
   <TransactionTable
     transactions={context.transactions}
     on:delete={handleDeleteTransaction}
   />
-  <TransactionForm on:create={handleCreateTransaction} />
+  <!-- <TransactionForm on:create={handleCreateTransaction} /> -->
 </div>
 
 <style>
   .layout {
     display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 </style>
