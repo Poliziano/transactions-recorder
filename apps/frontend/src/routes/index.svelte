@@ -32,6 +32,7 @@
       type: "CREATE_TRANSACTION",
       data: event.detail,
     });
+    newTransactionForm = false;
   }
 
   async function handleDeleteTransaction(
@@ -57,7 +58,7 @@
   {#if newTransactionForm}
     <TransactionForm
       on:create={handleCreateTransaction}
-      on:cancel={() => (newTransactionForm = false)}
+      on:close={() => (newTransactionForm = false)}
     />
   {/if}
 </div>

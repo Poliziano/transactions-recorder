@@ -22,4 +22,9 @@
   input[type="button"] {
     background-color: white;
   }
+
+  input[type="submit"]:hover,
+  input[type="button"]:hover {
+    background-color: rgb(235, 235, 235);
+  }
 </style>

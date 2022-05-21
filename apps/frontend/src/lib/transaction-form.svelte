@@ -1,11 +1,12 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import type { TransactionEntityCreateParams } from "../api/transaction";
+  import Block from "./components/block.svelte";
   import FormField from "./components/form-field.svelte";
 
   const dispatch = createEventDispatcher<{
     create: TransactionEntityCreateParams;
-    cancel: void;
+    close: void;
   }>();
 
   function handleSubmit(event: SubmitEvent) {
@@ -19,12 +20,12 @@
     });
   }
 
-  function handleCancel() {
-    dispatch("cancel");
+  function handleClose() {
+    dispatch("close");
   }
 </script>
 
-<div class="blocker" on:click={handleCancel}>
+<Block on:click={handleClose}>
   <form
     class="new-transaction-form"
     on:click|stopPropagation
@@ -43,10 +44,10 @@
     </select>
     <div class="new-transaction-form-buttons">
       <FormField type="submit" value="Submit" />
-      <FormField type="button" value="Cancel" on:click={handleCancel} />
+      <FormField type="button" value="Cancel" on:click={handleClose} />
     </div>
   </form>
-</div>
+</Block>
 
 <style>
   select {
@@ -80,13 +81,5 @@
   .new-transaction-form-buttons {
     display: flex;
     justify-content: center;
-  }
-
-  .blocker {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
   }
 </style>

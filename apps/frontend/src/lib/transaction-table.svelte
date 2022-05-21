@@ -24,13 +24,13 @@
 
 <div class="content-scroll-wrap">
   <div class="container">
-    {#each Object.entries(transactionsByDate) as [date, record]}
+    {#each Object.entries(transactionsByDate) as [date, record] (date)}
       <TransactionDate
         {date}
         amount={aggregateTransactions(record)}
         on:openTransactionForm
       />
-      {#each record as transaction}
+      {#each record as transaction (transaction.uuid)}
         <div class="transaction">
           <Transaction on:delete {transaction} />
         </div>

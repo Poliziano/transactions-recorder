@@ -125,10 +125,10 @@ export function createTransactionsMachine({
           transactions: (_, event) => event.data,
         }),
         appendTransaction: assign({
-          transactions: (context, event) => [
-            ...context.transactions,
-            event.data,
-          ],
+          transactions: (context, event) =>
+            [event.data, ...context.transactions].sort((a, b) =>
+              b.uuid.localeCompare(a.uuid)
+            ),
         }),
         removeTransaction: assign({
           transactions: (context, event) =>

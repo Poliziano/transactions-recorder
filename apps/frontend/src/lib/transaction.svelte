@@ -1,19 +1,21 @@
 <script lang="ts">
   import type { TransactionEntity } from "src/api/transaction";
   import { createEventDispatcher } from "svelte";
+  import IconMenu from "./components/icon-menu.svelte";
 
   export let transaction: TransactionEntity;
 
   const dispatch = createEventDispatcher<{ delete: TransactionEntity }>();
-  function deleteClicked() {
-    dispatch("delete", transaction);
-  }
+  const actions = [
+    {
+      text: "Delete",
+      click: () => dispatch("delete", transaction),
+    },
+  ];
 </script>
 
 <div class="card">
-  <div>
-    <!-- <img class="actions" src="more_horizontal.svg" alt="Transaction options" /> -->
-  </div>
+  <IconMenu {actions} />
   <div>{transaction.name}</div>
   <div>£{transaction.amount}</div>
   <!-- <div class="user">J</div> -->
@@ -28,10 +30,6 @@
     align-items: center;
     box-sizing: border-box;
     padding: 15px 20px;
-  }
-  .actions {
-    display: flex;
-    width: 100%;
   }
   .user {
     display: flex;
