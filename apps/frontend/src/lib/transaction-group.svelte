@@ -37,13 +37,15 @@
   />
 </div>
 
-{#each records as transaction (transaction.uuid)}
-  {#if expanded}
-    <div class="transaction" transition:slide|local>
-      <Transaction on:delete {transaction} />
-    </div>
-  {/if}
-{/each}
+{#if expanded}
+  <div transition:slide|local>
+    {#each records as transaction (transaction.uuid)}
+      <div class="transaction" transition:slide|local>
+        <Transaction on:delete {transaction} />
+      </div>
+    {/each}
+  </div>
+{/if}
 
 <style>
   h2 {
