@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import IconButton from "./components/icon-button.svelte";
+  import type { TransactionFormParams } from "./transaction-form";
   const dispatch = createEventDispatcher<{
-    openTransactionForm: void;
+    openTransactionForm: Pick<TransactionFormParams, "date">;
   }>();
 </script>
 
@@ -13,7 +14,10 @@
     src="add_alt.svg"
     alt="Add transaction"
     type="primary"
-    on:click={() => dispatch("openTransactionForm")}
+    on:click={() =>
+      dispatch("openTransactionForm", {
+        date: new Date().toISOString().split("T")[0],
+      })}
   />
 </div>
 

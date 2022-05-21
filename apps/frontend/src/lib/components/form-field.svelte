@@ -3,7 +3,7 @@
   export let type: "text" | "number" | "date" | "submit" | "button";
   export let placeholder: string = "";
   export let required: boolean = true;
-  export let value: string = "";
+  export let value: string | number = "";
 </script>
 
 <input {name} {type} {placeholder} {value} {required} on:click />

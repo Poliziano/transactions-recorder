@@ -4,12 +4,13 @@
   import { slide } from "svelte/transition";
   import { createEventDispatcher } from "svelte";
   import IconButton from "./components/icon-button.svelte";
+  import type { TransactionFormParams } from "./transaction-form";
 
   export let date: string;
   export let records: TransactionEntity[];
 
   const dispatch = createEventDispatcher<{
-    openTransactionForm: void;
+    openTransactionForm: TransactionFormParams;
   }>();
 
   let expanded = true;
@@ -33,7 +34,10 @@
   <IconButton
     src="add.svg"
     alt="Add transaction"
-    on:click={() => dispatch("openTransactionForm")}
+    on:click={() =>
+      dispatch("openTransactionForm", {
+        date: new Date(date).toISOString().split("T")[0],
+      })}
   />
 </div>
 

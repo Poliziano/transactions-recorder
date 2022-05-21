@@ -1,9 +1,13 @@
 <script lang="ts">
+  import type { TransactionFormParams } from "./transaction-form";
+
   import { createEventDispatcher } from "svelte";
   import type { TransactionEntityCreateParams } from "../api/transaction";
   import Block from "./components/block.svelte";
   import FormField from "./components/form-field.svelte";
+  import { fly } from "svelte/transition";
 
+  export let transaction: TransactionFormParams;
   const dispatch = createEventDispatcher<{
     create: TransactionEntityCreateParams;
     close: void;
@@ -30,20 +34,33 @@
     class="new-transaction-form"
     on:click|stopPropagation
     on:submit|preventDefault={handleSubmit}
+    transition:fly={{ y: 25 }}
   >
-    <FormField name="name" type="text" placeholder="Name" />
-    <FormField name="amount" type="number" placeholder="Amount" />
     <FormField
-      name="date"
-      type="date"
-      value={new Date().toISOString().split("T")[0]}
+      name="name"
+      type="text"
+      placeholder="Name"
+      value={transaction?.name}
     />
+    <FormField
+      name="amount"
+      type="number"
+      placeholder="Amount"
+      value={transaction?.amount}
+    />
+    <FormField name="date" type="date" value={transaction.date} />
     <select name="type" required>
-      <option value="expenditure" default>Expenditure</option>
-      <option value="income">Income</option>
+      <option
+        value="expenditure"
+        default
+        selected={transaction?.type === "expenditure"}>Expenditure</option
+      >
+      <option value="income" selected={transaction?.type === "income"}
+        >Income</option
+      >
     </select>
     <div class="new-transaction-form-buttons">
-      <FormField type="submit" value="Submit" />
+      <FormField type="submit" value="Submit" on:click={handleClose} />
       <FormField type="button" value="Cancel" on:click={handleClose} />
     </div>
   </form>

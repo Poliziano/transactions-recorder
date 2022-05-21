@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { TransactionFormParams } from "$lib/transaction-form";
+
   import TransactionForm from "$lib/transaction-form.svelte";
   import TransactionHeadline from "$lib/transaction-headline.svelte";
   import TransactionTable from "$lib/transaction-table.svelte";
@@ -23,21 +25,18 @@
   service.send("FETCH_TRANSACTIONS");
   $: context = $service.context;
 
-  let newTransactionForm = false;
+  let transactionForm: TransactionFormParams | null = null;
 
-  async function handleCreateTransaction(
+  function handleCreateTransaction(
     event: CustomEvent<TransactionEntityCreateParams>
   ) {
     service.send({
       type: "CREATE_TRANSACTION",
       data: event.detail,
     });
-    newTransactionForm = false;
   }
 
-  async function handleDeleteTransaction(
-    event: CustomEvent<TransactionEntity>
-  ) {
+  function handleDeleteTransaction(event: CustomEvent<TransactionEntity>) {
     service.send({
       type: "DELETE_TRANSACTION",
       data: event.detail,
@@ -47,18 +46,19 @@
 
 <div class="layout">
   <TransactionHeadline
-    on:openTransactionForm={() => (newTransactionForm = true)}
+    on:openTransactionForm={(event) => (transactionForm = event.detail)}
   />
   <TransactionTable
     transactions={context.transactions}
     on:delete={handleDeleteTransaction}
-    on:openTransactionForm={() => (newTransactionForm = true)}
+    on:openTransactionForm={(event) => (transactionForm = event.detail)}
   />
 
-  {#if newTransactionForm}
+  {#if transactionForm}
     <TransactionForm
+      transaction={transactionForm}
       on:create={handleCreateTransaction}
-      on:close={() => (newTransactionForm = false)}
+      on:close={() => (transactionForm = null)}
     />
   {/if}
 </div>
