@@ -23,6 +23,8 @@
   service.send("FETCH_TRANSACTIONS");
   $: context = $service.context;
 
+  let newTransactionForm = false;
+
   async function handleCreateTransaction(
     event: CustomEvent<TransactionEntityCreateParams>
   ) {
@@ -43,12 +45,21 @@
 </script>
 
 <div class="layout">
-  <TransactionHeadline />
+  <TransactionHeadline
+    on:openTransactionForm={() => (newTransactionForm = true)}
+  />
   <TransactionTable
     transactions={context.transactions}
     on:delete={handleDeleteTransaction}
+    on:openTransactionForm={() => (newTransactionForm = true)}
   />
-  <!-- <TransactionForm on:create={handleCreateTransaction} /> -->
+
+  {#if newTransactionForm}
+    <TransactionForm
+      on:create={handleCreateTransaction}
+      on:cancel={() => (newTransactionForm = false)}
+    />
+  {/if}
 </div>
 
 <style>

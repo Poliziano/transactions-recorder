@@ -1,9 +1,16 @@
+<script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher<{
+    openTransactionForm: void;
+  }>();
+</script>
+
 <div class="card">
   <h2>Transactions</h2>
   <div />
-  <div class="action-container">
-    <img class="action" src="add.svg" alt="Add transaction" />
-  </div>
+  <button class="action" on:click={() => dispatch("openTransactionForm")}>
+    <img class="action-icon" src="add.svg" alt="Add transaction" />
+  </button>
 </div>
 
 <style>
@@ -21,9 +28,13 @@
     box-sizing: border-box;
     padding: 15px 20px;
   }
-  .action-container {
-  }
   .action {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: unset;
+  }
+  .action-icon {
     display: flex;
     width: 100%;
   }

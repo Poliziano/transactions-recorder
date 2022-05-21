@@ -1,6 +1,12 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   export let date: string;
   export let amount: number;
+
+  const dispatch = createEventDispatcher<{
+    openTransactionForm: void;
+  }>();
 </script>
 
 <div class="card">
@@ -9,9 +15,9 @@
   </div>
   <h2>{new Date(date).toLocaleDateString()}</h2>
   <div class="amount">£{amount}</div>
-  <div>
-    <img class="action" src="add.svg" alt="Add transaction" />
-  </div>
+  <button class="action" on:click={() => dispatch("openTransactionForm")}>
+    <img class="action-icon" src="add.svg" alt="Add transaction" />
+  </button>
 </div>
 
 <style>
@@ -35,6 +41,12 @@
     width: 100%;
   }
   .action {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: unset;
+  }
+  .action-icon {
     display: flex;
     width: 100%;
   }
