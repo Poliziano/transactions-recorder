@@ -27,7 +27,7 @@ export type TransactionCreateParams = Omit<Transaction, "uuid">;
 export async function createTransaction(params: TransactionCreateParams) {
   const transaction: Transaction = {
     ...params,
-    uuid: ksuid(params.date),
+    uuid: uuid(params.date),
   };
 
   const command = new PutCommand({
@@ -51,6 +51,9 @@ export async function deleteTransaction(userId: string, transactionId: string) {
   await db.send(command);
 }
 
-function ksuid(date = new Date()) {
-  return KSUID.randomSync(date).string;
+function uuid(date = new Date()) {
+  const orderedId = KSUID.randomSync(Date.now()).string;
+  const dateString = date.toISOString().split("T")[0];
+
+  return `${dateString}:${orderedId}`;
 }
