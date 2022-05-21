@@ -22,6 +22,7 @@
       date: new Date(formData.get("date") as string).toISOString(),
       type: formData.get("type") as "income" | "expenditure",
     });
+    handleClose();
   }
 
   function handleClose() {
@@ -60,7 +61,7 @@
       >
     </select>
     <div class="new-transaction-form-buttons">
-      <FormField type="submit" value="Submit" on:click={handleClose} />
+      <FormField type="submit" value="Submit" />
       <FormField type="button" value="Cancel" on:click={handleClose} />
     </div>
   </form>
