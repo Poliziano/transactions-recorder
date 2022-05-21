@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { TransactionEntity } from "src/api/transaction";
-  import TransactionDate from "./transaction-date.svelte";
-  import Transaction from "./transaction.svelte";
+  import TransactionGroup from "./transaction-group.svelte";
 
   export let transactions: TransactionEntity[] = [];
   $: transactionsByDate = transactions.reduce(function (
@@ -13,28 +12,12 @@
     return previousValue;
   },
   {} as Record<string, TransactionEntity[]>);
-
-  function aggregateTransactions(transactions: TransactionEntity[]): number {
-    return transactions.reduce(
-      (previous, current) => previous + current.amount,
-      0
-    );
-  }
 </script>
 
 <div class="content-scroll-wrap">
   <div class="container">
-    {#each Object.entries(transactionsByDate) as [date, record] (date)}
-      <TransactionDate
-        {date}
-        amount={aggregateTransactions(record)}
-        on:openTransactionForm
-      />
-      {#each record as transaction (transaction.uuid)}
-        <div class="transaction">
-          <Transaction on:delete {transaction} />
-        </div>
-      {/each}
+    {#each Object.entries(transactionsByDate) as [date, records] (date)}
+      <TransactionGroup {date} {records} on:openTransactionForm on:delete />
     {/each}
   </div>
 </div>
@@ -52,8 +35,5 @@
     left: 0;
     right: 0;
     overflow: auto;
-  }
-  .transaction:not(:last-child) {
-    border-bottom: 1px solid #f1f1f1;
   }
 </style>
