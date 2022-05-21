@@ -2,6 +2,8 @@
   import { createEventDispatcher } from "svelte";
   import IconButton from "./components/icon-button.svelte";
   import type { TransactionFormParams } from "./transaction-form";
+
+  export let total: number;
   const dispatch = createEventDispatcher<{
     openTransactionForm: Pick<TransactionFormParams, "date">;
   }>();
@@ -9,7 +11,7 @@
 
 <div class="card">
   <h2>Transactions</h2>
-  <div />
+  <div class="total">£{total}</div>
   <IconButton
     src="add_alt.svg"
     alt="Add transaction"
@@ -35,5 +37,9 @@
     align-items: center;
     box-sizing: border-box;
     padding: 15px 20px;
+  }
+  .total {
+    text-align: right;
+    font: var(--font-h1);
   }
 </style>

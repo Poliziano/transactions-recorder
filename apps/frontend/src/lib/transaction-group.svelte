@@ -5,6 +5,7 @@
   import { createEventDispatcher } from "svelte";
   import IconButton from "./components/icon-button.svelte";
   import type { TransactionFormParams } from "./transaction-form";
+  import { aggregateTransactions } from "./transactions";
 
   export let date: string;
   export let records: TransactionEntity[];
@@ -14,13 +15,6 @@
   }>();
 
   let expanded = true;
-
-  function aggregateTransactions(transactions: TransactionEntity[]): number {
-    return transactions.reduce(
-      (previous, current) => previous + current.amount,
-      0
-    );
-  }
 </script>
 
 <div class="card">

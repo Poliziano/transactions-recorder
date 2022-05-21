@@ -10,6 +10,7 @@
 
 <style>
   button {
+    display: flex;
     margin: 0;
     padding: 0;
     border: none;
@@ -25,7 +26,6 @@
     background-color: rgb(215, 215, 215);
   }
   img {
-    display: flex;
     width: 100%;
   }
   .primary {

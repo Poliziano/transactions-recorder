@@ -4,6 +4,7 @@
   import TransactionForm from "$lib/transaction-form.svelte";
   import TransactionHeadline from "$lib/transaction-headline.svelte";
   import TransactionTable from "$lib/transaction-table.svelte";
+  import { aggregateTransactions } from "$lib/transactions";
   import { interpret } from "xstate";
   import type {
     TransactionEntity,
@@ -46,6 +47,7 @@
 
 <div class="layout">
   <TransactionHeadline
+    total={aggregateTransactions(context.transactions)}
     on:openTransactionForm={(event) => (transactionForm = event.detail)}
   />
   <TransactionTable
