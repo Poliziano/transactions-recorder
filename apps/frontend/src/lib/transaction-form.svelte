@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import type { TransactionEntityCreateParams } from "../api/transaction";
+  import FormField from "./components/form-field.svelte";
 
   const dispatch = createEventDispatcher<{
     create: TransactionEntityCreateParams;
@@ -29,27 +30,25 @@
     on:click|stopPropagation
     on:submit|preventDefault={handleSubmit}
   >
-    <input name="name" type="text" placeholder="Name" required />
-    <input name="amount" type="number" placeholder="Amount" required />
-    <input
+    <FormField name="name" type="text" placeholder="Name" />
+    <FormField name="amount" type="number" placeholder="Amount" />
+    <FormField
       name="date"
       type="date"
       value={new Date().toISOString().split("T")[0]}
-      required
     />
     <select name="type" required>
       <option value="expenditure" default>Expenditure</option>
       <option value="income">Income</option>
     </select>
     <div class="new-transaction-form-buttons">
-      <input type="submit" value="Submit" />
-      <input type="button" value="Cancel" on:click={handleCancel} />
+      <FormField type="submit" value="Submit" />
+      <FormField type="button" value="Cancel" on:click={handleCancel} />
     </div>
   </form>
 </div>
 
 <style>
-  input,
   select {
     font: inherit;
     appearance: none;
@@ -57,11 +56,6 @@
     padding: 10px;
     border: 1px solid rgb(215, 215, 215);
     border-radius: 5px;
-  }
-
-  input[type="submit"],
-  input[type="button"] {
-    background-color: white;
   }
 
   .new-transaction-form {

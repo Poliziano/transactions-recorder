@@ -30,13 +30,11 @@
         amount={aggregateTransactions(record)}
         on:openTransactionForm
       />
-      <div class="transactions">
-        {#each record as transaction}
-          <div class="transaction">
-            <Transaction on:delete {transaction} />
-          </div>
-        {/each}
-      </div>
+      {#each record as transaction}
+        <div class="transaction">
+          <Transaction on:delete {transaction} />
+        </div>
+      {/each}
     {/each}
   </div>
 </div>
@@ -54,11 +52,6 @@
     left: 0;
     right: 0;
     overflow: auto;
-  }
-  .transactions {
-    display: flex;
-    flex-direction: column;
-    border-radius: 20px;
   }
   .transaction:not(:last-child) {
     border-bottom: 1px solid #f1f1f1;
