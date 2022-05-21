@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import IconButton from "./components/icon-button.svelte";
 
   export let date: string;
   export let amount: number;
@@ -15,9 +16,11 @@
   </div>
   <h2>{new Date(date).toLocaleDateString()}</h2>
   <div class="amount">£{amount}</div>
-  <button class="action" on:click={() => dispatch("openTransactionForm")}>
-    <img class="action-icon" src="add.svg" alt="Add transaction" />
-  </button>
+  <IconButton
+    src="add.svg"
+    alt="Add transaction"
+    on:click={() => dispatch("openTransactionForm")}
+  />
 </div>
 
 <style>
@@ -37,16 +40,6 @@
     background-color: white;
   }
   .dropdown {
-    display: flex;
-    width: 100%;
-  }
-  .action {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background-color: unset;
-  }
-  .action-icon {
     display: flex;
     width: 100%;
   }

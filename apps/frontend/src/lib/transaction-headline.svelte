@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import IconButton from "./components/icon-button.svelte";
   const dispatch = createEventDispatcher<{
     openTransactionForm: void;
   }>();
@@ -8,9 +9,11 @@
 <div class="card">
   <h2>Transactions</h2>
   <div />
-  <button class="action" on:click={() => dispatch("openTransactionForm")}>
-    <img class="action-icon" src="add.svg" alt="Add transaction" />
-  </button>
+  <IconButton
+    src="add.svg"
+    alt="Add transaction"
+    on:click={() => dispatch("openTransactionForm")}
+  />
 </div>
 
 <style>
@@ -27,15 +30,5 @@
     align-items: center;
     box-sizing: border-box;
     padding: 15px 20px;
-  }
-  .action {
-    margin: 0;
-    padding: 0;
-    border: none;
-    background-color: unset;
-  }
-  .action-icon {
-    display: flex;
-    width: 100%;
   }
 </style>
