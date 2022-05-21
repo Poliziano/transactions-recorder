@@ -10,8 +10,9 @@
   <h2>Transactions</h2>
   <div />
   <IconButton
-    src="add.svg"
+    src="add_alt.svg"
     alt="Add transaction"
+    type="primary"
     on:click={() => dispatch("openTransactionForm")}
   />
 </div>

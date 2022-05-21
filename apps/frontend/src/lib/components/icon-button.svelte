@@ -1,9 +1,10 @@
 <script lang="ts">
   export let src: string;
   export let alt: string;
+  export let type: "primary" | "secondary" = "secondary";
 </script>
 
-<button on:click>
+<button on:click class:primary={type === "primary"}>
   <img {src} {alt} />
 </button>
 
@@ -14,6 +15,8 @@
     border: none;
     border-radius: 5px;
     background-color: unset;
+    height: 24px;
+    width: 24px;
   }
   button:hover {
     background-color: rgb(235, 235, 235);
@@ -24,5 +27,14 @@
   img {
     display: flex;
     width: 100%;
+  }
+  .primary {
+    background-color: #464646;
+  }
+  .primary:hover {
+    background-color: #555555;
+  }
+  .primary:active {
+    background-color: #666666;
   }
 </style>
