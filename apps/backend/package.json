@@ -7,8 +7,7 @@
   },
   "scripts": {
     "test": "jest --watch",
-    "cdk:bootstrap": "cdk bootstrap",
-    "cdk:deploy": "cdk deploy"
+    "cdk": "cdk"
   },
   "engines": {
     "node": ">=14"
