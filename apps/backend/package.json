@@ -10,7 +10,7 @@
     "cdk": "cdk"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "keywords": [],
   "author": "",
