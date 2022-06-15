@@ -30,8 +30,7 @@
     "constructs": "^10.1.41",
     "esbuild": "^0.14.43",
     "fishery": "^2.2.2",
-    "jest": "^28.1.1",
-    "typescript": "^4.7.3"
+    "jest": "^28.1.1"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.110.0",
