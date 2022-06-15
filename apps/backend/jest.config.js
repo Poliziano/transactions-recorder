@@ -9,10 +9,10 @@ module.exports = {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   verbose: true,
+  injectGlobals: false,
   globalSetup: "<rootDir>/test/global-setup.ts",
-  globalTeardown: "<rootDir>/test/global-teardown.ts",
   setupFilesAfterEnv: ["<rootDir>/test/env-setup.ts"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(t|j)sx?$": "@swc/jest",
   },
 };

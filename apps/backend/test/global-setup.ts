@@ -2,6 +2,19 @@ import { CreateTableCommand } from "@aws-sdk/client-dynamodb";
 import { GenericContainer } from "testcontainers";
 import { db } from "../lib/data/dynamo";
 
+const originalExit = process.exit;
+// @ts-expect-error override the exit.
+process.exit = async function (code?: number) {
+  // @ts-expect-error
+  const container: StartedTestContainer = globalThis.__DYNAMODB__;
+  if (container) {
+    console.log("Shutting down test container");
+    await container.stop();
+  }
+
+  originalExit(code);
+};
+
 export default async function () {
   // @ts-expect-error
   if (globalThis.__DYNAMODB__) {
