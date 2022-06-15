@@ -1,6 +1,7 @@
 import {
   BatchWriteCommand,
   BatchWriteCommandInput,
+  DynamoDBDocumentClient,
   PutCommand,
   TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
@@ -23,7 +24,7 @@ type Item = {
  * Typically there are not many items created, so the operation is inexpensive. The other benefits is that
  * if not DynamoDB queries are made then there is no clean up. It only runs when something has been created.
  */
-const clientSpy = jest.spyOn(db, "send");
+const clientSpy = jest.spyOn(DynamoDBDocumentClient.prototype, "send");
 
 /**
  * Define the attributes that form the simple or composition primary key for a given table.
