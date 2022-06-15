@@ -42,6 +42,7 @@
     "@aws-sdk/types": "^3.110.0",
     "@aws-sdk/util-dynamodb": "^3.110.0",
     "ajv": "^8.11.0",
-    "ksuid": "^3.0.0"
+    "ksuid": "^3.0.0",
+    "testcontainers": "^8.10.1"
   }
 }
