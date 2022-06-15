@@ -12,7 +12,7 @@ export type Transaction = {
 
 export function toTransactionItem(transaction: Transaction) {
   return {
-    PK: `USER#${transaction.userId.toLowerCase()}`,
+    PK: transaction.userId,
     SK: transaction.uuid,
     Name: transaction.name,
     Amount: transaction.amount,
@@ -26,7 +26,7 @@ export function fromTransactionItem(item: {
 }): Transaction {
   return {
     uuid: item.SK,
-    userId: item.PK.split("#")[1],
+    userId: item.PK,
     date: new Date(item.Date),
     name: item.Name,
     amount: item.Amount,

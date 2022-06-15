@@ -13,7 +13,7 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK",
     ExpressionAttributeValues: {
-      ":PK": `USER#${userId}`,
+      ":PK": userId,
     },
     ScanIndexForward: false,
   });
@@ -43,7 +43,7 @@ export async function deleteTransaction(userId: string, transactionId: string) {
   const command = new DeleteCommand({
     TableName: "Transactions",
     Key: {
-      PK: `USER#${userId.toLowerCase()}`,
+      PK: userId,
       SK: transactionId,
     },
   });
