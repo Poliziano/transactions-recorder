@@ -4,8 +4,8 @@ import {
   fromTransactionItem,
   toTransactionItem,
   Transaction,
+  transactionUUID,
 } from "../entity/transaction";
-import KSUID from "ksuid";
 
 type ListTransactionsParams = { userId: string };
 export async function listTransactions({ userId }: ListTransactionsParams) {
@@ -27,7 +27,7 @@ export type TransactionCreateParams = Omit<Transaction, "uuid">;
 export async function createTransaction(params: TransactionCreateParams) {
   const transaction: Transaction = {
     ...params,
-    uuid: uuid(params.date),
+    uuid: transactionUUID(params.date),
   };
 
   const command = new PutCommand({
@@ -44,16 +44,9 @@ export async function deleteTransaction(userId: string, transactionId: string) {
     TableName: "Transactions",
     Key: {
       PK: `USER#${userId.toLowerCase()}`,
-      SK: `ID#${transactionId}`,
+      SK: transactionId,
     },
   });
 
   await db.send(command);
-}
-
-function uuid(date = new Date()) {
-  const orderedId = KSUID.randomSync(Date.now()).string;
-  const dateString = date.toISOString().split("T")[0];
-
-  return `${dateString}:${orderedId}`;
 }
