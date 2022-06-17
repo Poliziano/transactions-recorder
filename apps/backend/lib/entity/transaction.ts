@@ -34,9 +34,13 @@ export function fromTransactionItem(item: {
   };
 }
 
-export function transactionUUID(dateOfTransaction = new Date()) {
+export function transactionUUID(dateOfTransaction: Date | string = new Date()) {
   const orderedId = KSUID.randomSync(Date.now()).string;
-  const dateString = dateOfTransaction.toISOString().split("T")[0];
+  const dateString = (
+    dateOfTransaction instanceof Date
+      ? dateOfTransaction.toISOString()
+      : dateOfTransaction
+  ).split("T")[0];
 
   return `DATE#${dateString}#ID#${orderedId}`;
 }

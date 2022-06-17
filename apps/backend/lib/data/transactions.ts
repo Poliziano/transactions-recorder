@@ -23,10 +23,13 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
   return items.map(fromTransactionItem);
 }
 
-export type TransactionCreateParams = Omit<Transaction, "uuid">;
+export type TransactionCreateParams = Omit<Transaction, "uuid" | "date"> & {
+  date: string;
+};
 export async function createTransaction(params: TransactionCreateParams) {
   const transaction: Transaction = {
     ...params,
+    date: new Date(params.date),
     uuid: transactionUUID(params.date),
   };
 

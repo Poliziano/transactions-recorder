@@ -4,10 +4,10 @@ import {
 } from "../data/transactions";
 import type { APIGatewayProxyEvent } from "aws-lambda";
 
-import Ajv from "ajv";
+import Ajv, { JSONSchemaType } from "ajv";
 const ajv = new Ajv();
 
-const schema = {
+const schema: JSONSchemaType<TransactionCreateParams> = {
   type: "object",
   properties: {
     userId: { type: "string" },
@@ -31,12 +31,7 @@ export async function handler(event: APIGatewayProxyEvent) {
     });
 
     if (validate(payload)) {
-      const entity: TransactionCreateParams = {
-        ...payload,
-        date: new Date(payload.date),
-      };
-
-      const transaction = await createTransaction(entity);
+      const transaction = await createTransaction(payload);
 
       return {
         statusCode: 200,
