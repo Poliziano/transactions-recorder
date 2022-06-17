@@ -8,6 +8,7 @@ export const apiGatewayProxyEventFactory = Factory.define<APIGatewayProxyEvent>(
       headers: {
         "Content-Type": "application/json",
       },
+      httpMethod: "ANY",
     };
 
     return event as APIGatewayProxyEvent;

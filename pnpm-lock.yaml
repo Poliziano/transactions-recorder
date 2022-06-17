@@ -19,6 +19,7 @@ importers:
       '@jest/types': ^28.1.1
       '@middy/core': ^3.0.4
       '@middy/error-logger': ^3.0.4
+      '@middy/http-cors': ^3.0.4
       '@middy/http-error-handler': ^3.0.4
       '@middy/http-json-body-parser': ^3.0.4
       '@middy/http-security-headers': ^3.0.4
@@ -48,6 +49,7 @@ importers:
       '@aws-sdk/util-dynamodb': 3.110.0
       '@middy/core': 3.0.4
       '@middy/error-logger': 3.0.4
+      '@middy/http-cors': 3.0.4
       '@middy/http-error-handler': 3.0.4
       '@middy/http-json-body-parser': 3.0.4
       '@middy/http-security-headers': 3.0.4
@@ -1471,6 +1473,13 @@ packages:
   /@middy/error-logger/3.0.4:
     resolution: {integrity: sha512-FEyHRm1XM3nyorpWlNFWdSpis4o8UB9i9iyvOKZRrfeB/YzT+XN1MXgMxvMsAGkgEsHqe59g8i82o7ahFnHvGg==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@middy/http-cors/3.0.4:
+    resolution: {integrity: sha512-trnUvXqGHdWhiHSlbxTEnZ60I1OJcSIoQ8uLHWlwCDLDmdYMUXNcL0nRj9ZDiltO9qGotu76Lxmobq672pTllw==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@middy/util': 3.0.4
     dev: false
 
   /@middy/http-error-handler/3.0.4:

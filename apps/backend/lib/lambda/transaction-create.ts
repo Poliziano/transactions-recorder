@@ -11,6 +11,7 @@ import httpErrorHandler from "@middy/http-error-handler";
 import errorLogger from "@middy/error-logger";
 import inputOutputLogger from "@middy/input-output-logger";
 import httpSecurityHeaders from "@middy/http-security-headers";
+import cors from "@middy/http-cors";
 
 type TransactionCreateEvent = Omit<
   APIGatewayProxyEvent,
@@ -54,28 +55,21 @@ const schema: JSONSchemaType<
 const ajv = new Ajv();
 const validate = ajv.compile<TransactionCreateParams>(schema);
 async function transactionCreateHandler(event: TransactionCreateEvent) {
-  try {
-    const transaction = await createTransaction({
-      ...event.body,
-      userId: event.pathParameters?.userId,
-    });
+  const transaction = await createTransaction({
+    ...event.body,
+    userId: event.pathParameters?.userId,
+  });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(transaction),
-    };
-  } catch (err) {
-    console.error("failed to parse payload", JSON.stringify(err, null, 2));
-
-    return {
-      statusCode: 400,
-    };
-  }
+  return {
+    statusCode: 200,
+    body: JSON.stringify(transaction),
+  };
 }
 
 export const handler = middy(transactionCreateHandler)
   .use(httpErrorHandler())
   .use(errorLogger())
+  .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
