@@ -1,15 +1,14 @@
 import { test, expect } from "@jest/globals";
 import { handler } from "../../lib/lambda/transaction-create";
-import { apiGatewayProxyEventFactory } from "./factory";
+import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
+
+const context = lambdaContextFactory.build();
 
 test("transaction-create should throw when invalid payload", async () => {
-  // @ts-expect-error intentionally testing invalid event.
-  const result = await handler();
-  expect(result).toStrictEqual({
+  const event = apiGatewayProxyEventFactory.build();
+  const result = await handler(event, context);
+  expect(result).toMatchObject({
     statusCode: 400,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 });
 
@@ -20,13 +19,10 @@ test("transaction-create should throw when partial payload", async () => {
       name: "McDonalds",
     }),
   });
-  const result = await handler(event);
+  const result = await handler(event, context);
 
-  expect(result).toStrictEqual({
+  expect(result).toMatchObject({
     statusCode: 400,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 });
 
@@ -42,14 +38,11 @@ test("transaction-create should not thrown when valid payload", async () => {
       userId: "a_user_id",
     },
   });
-  const response = await handler(event);
+  const response = await handler(event, context);
 
-  expect(response).toStrictEqual({
+  expect(response).toMatchObject({
     statusCode: 200,
     body: expect.any(String),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
   expect(JSON.parse(response.body!)).toEqual({
     userId: "a_user_id",

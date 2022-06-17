@@ -38,6 +38,13 @@
     "@aws-sdk/smithy-client": "^3.110.0",
     "@aws-sdk/types": "^3.110.0",
     "@aws-sdk/util-dynamodb": "^3.110.0",
+    "@middy/core": "^3.0.4",
+    "@middy/error-logger": "^3.0.4",
+    "@middy/http-error-handler": "^3.0.4",
+    "@middy/http-json-body-parser": "^3.0.4",
+    "@middy/http-security-headers": "^3.0.4",
+    "@middy/input-output-logger": "^3.0.4",
+    "@middy/validator": "^3.0.4",
     "ajv": "^8.11.0",
     "ksuid": "^3.0.0",
     "testcontainers": "^8.10.1"

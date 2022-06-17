@@ -1,18 +1,20 @@
-import type { APIGatewayProxyEvent } from "aws-lambda";
+import { APIGatewayProxyEvent, Context } from "aws-lambda";
 import { Factory } from "fishery";
 
 export const apiGatewayProxyEventFactory = Factory.define<APIGatewayProxyEvent>(
-  () =>
-    ({
-      body: "",
-      headers: {},
-      multiValueHeaders: {},
-      isBase64Encoded: false,
-      httpMethod: "",
-      path: "",
-      pathParameters: null,
-      queryStringParameters: null,
-      multiValueQueryStringParameters: null,
-      stageVariables: null,
-    } as APIGatewayProxyEvent)
+  () => {
+    const event: Partial<APIGatewayProxyEvent> = {
+      body: "{}",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    return event as APIGatewayProxyEvent;
+  }
 );
+
+export const lambdaContextFactory = Factory.define<Context>(() => {
+  const context: Partial<Context> = {};
+  return context as Context;
+});
