@@ -1,5 +1,5 @@
 import { deleteTransaction } from "../data/transactions";
-import type { APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEvent, Context } from "aws-lambda";
 import middy from "@middy/core";
 import errorLogger from "@middy/error-logger";
 import httpErrorHandler from "@middy/http-error-handler";
@@ -55,4 +55,5 @@ export const handler = middy<APIGatewayProxyEvent>()
   .use(jsonBodyParser())
   .use(inputOutputLogger())
   .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+  // @ts-expect-error `.handler` exists but it missing from type definitions.
   .handler(transactionDeleteHandler);

@@ -74,4 +74,5 @@ export const handler = middy<APIGatewayProxyEvent>()
   .use(jsonBodyParser())
   .use(inputOutputLogger())
   .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+  // @ts-expect-error `.handler` exists but it missing from type definitions.
   .handler(transactionCreateHandler);
