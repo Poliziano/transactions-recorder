@@ -1,26 +1,57 @@
 import { deleteTransaction } from "../data/transactions";
 import type { APIGatewayProxyEvent } from "aws-lambda";
+import middy from "@middy/core";
+import errorLogger from "@middy/error-logger";
+import httpErrorHandler from "@middy/http-error-handler";
+import jsonBodyParser from "@middy/http-json-body-parser";
+import httpSecurityHeaders from "@middy/http-security-headers";
+import inputOutputLogger from "@middy/input-output-logger";
+import validator from "@middy/validator";
+import Ajv, { JSONSchemaType } from "ajv";
+import cors from "@middy/http-cors";
 
-export async function handler(event: APIGatewayProxyEvent) {
-  console.log("event", JSON.stringify(event, null, 2));
+type TransactionDeleteEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
+  pathParameters: {
+    userId: string;
+    transactionId: string;
+  };
+};
 
-  const userId = event.pathParameters?.userId;
-  const transactionId = event.pathParameters?.transactionId;
+const schema: JSONSchemaType<Pick<TransactionDeleteEvent, "pathParameters">> = {
+  type: "object",
+  properties: {
+    pathParameters: {
+      type: "object",
+      properties: {
+        userId: { type: "string" },
+        transactionId: { type: "string" },
+      },
+      required: ["userId"],
+      additionalProperties: false,
+    },
+  },
+  required: ["pathParameters"],
+};
 
-  if (userId == null) {
-    throw new Error("userId required");
-  }
+const ajv = new Ajv();
+const validate = ajv.compile<TransactionDeleteEvent>(schema);
 
-  if (transactionId == null) {
-    throw new Error("transactionId required");
-  }
-
-  await deleteTransaction(userId, transactionId);
+async function transactionDeleteHandler(event: TransactionDeleteEvent) {
+  await deleteTransaction(
+    event.pathParameters.userId,
+    event.pathParameters.transactionId
+  );
 
   return {
     statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   };
 }
+
+export const handler = middy(transactionDeleteHandler)
+  .use(httpErrorHandler())
+  .use(errorLogger())
+  .use(cors())
+  .use(httpSecurityHeaders())
+  .use(jsonBodyParser())
+  .use(inputOutputLogger())
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));

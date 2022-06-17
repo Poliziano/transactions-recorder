@@ -4,12 +4,14 @@ import {
   TransactionCreateParams,
 } from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-delete";
-import { apiGatewayProxyEventFactory } from "./factory";
+import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
+
+const context = lambdaContextFactory.build();
 
 test("delete transaction for user", async () => {
   const createParams: TransactionCreateParams = {
     userId: "some_user_id",
-    date: new Date(2021, 0, 1),
+    date: new Date(2021, 0, 1).toISOString(),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
@@ -23,12 +25,9 @@ test("delete transaction for user", async () => {
       transactionId: transaction.uuid,
     },
   });
-  const response = await handler(event);
+  const response = await handler(event, context);
 
-  expect(response).toEqual({
+  expect(response).toMatchObject({
     statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
 });

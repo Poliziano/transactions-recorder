@@ -4,12 +4,14 @@ import {
   TransactionCreateParams,
 } from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-get";
-import { apiGatewayProxyEventFactory } from "./factory";
+import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
+
+const context = lambdaContextFactory.build();
 
 test("get transaction", async () => {
   const createParams: TransactionCreateParams = {
     userId: "some_id",
-    date: new Date(2020, 0, 1),
+    date: new Date(2020, 0, 1).toISOString(),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
@@ -22,14 +24,11 @@ test("get transaction", async () => {
       userId: "some_id",
     },
   });
-  const response = await handler(event);
+  const response = await handler(event, context);
 
-  expect(response).toEqual({
+  expect(response).toMatchObject({
     statusCode: 200,
     body: expect.any(String),
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
   });
   expect(JSON.parse(response.body)).toEqual({
     transactions: [
