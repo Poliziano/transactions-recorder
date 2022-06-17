@@ -23,7 +23,7 @@ test("should respond with empty list of transactions", async () => {
 test("should respond with list of transactions", async () => {
   const createParamsA: TransactionCreateParams = {
     userId: "abc",
-    date: new Date(2021, 1, 1),
+    date: new Date(2021, 1, 1).toISOString(),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",
@@ -31,7 +31,7 @@ test("should respond with list of transactions", async () => {
 
   const createParamsB: TransactionCreateParams = {
     userId: "abc",
-    date: new Date(2020, 1, 1),
+    date: new Date(2020, 1, 1).toISOString(),
     name: "Waterstones",
     amount: 7.99,
     type: "expenditure",
@@ -50,7 +50,7 @@ test("should respond with list of transactions", async () => {
 test("should delete transaction", async () => {
   const createParams: TransactionCreateParams = {
     userId: "abcd",
-    date: new Date(2021, 1, 1),
+    date: new Date(2021, 1, 1).toISOString(),
     name: "McDonalds",
     amount: 12.5,
     type: "expenditure",

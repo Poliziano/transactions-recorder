@@ -47,11 +47,12 @@ async function transactionDeleteHandler(event: TransactionDeleteEvent) {
   };
 }
 
-export const handler = middy(transactionDeleteHandler)
+export const handler = middy<APIGatewayProxyEvent>()
   .use(httpErrorHandler())
   .use(errorLogger())
   .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }));
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+  .handler(transactionDeleteHandler);

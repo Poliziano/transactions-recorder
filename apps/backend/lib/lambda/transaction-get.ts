@@ -49,11 +49,12 @@ async function transactionGetHandler(event: TransactionGetEvent) {
   };
 }
 
-export const handler = middy(transactionGetHandler)
+export const handler = middy<APIGatewayProxyEvent>()
   .use(httpErrorHandler())
   .use(errorLogger())
   .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }));
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+  .handler(transactionGetHandler);
