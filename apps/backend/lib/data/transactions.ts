@@ -12,9 +12,11 @@ type ListTransactionsParams = { userId: string };
 export async function listTransactions({ userId }: ListTransactionsParams) {
   const command = new QueryCommand({
     TableName: "Transactions",
-    KeyConditionExpression: "PK = :PK",
+    IndexName: "GSI1",
+    KeyConditionExpression: "GSI1PK = :PK and begins_with(GSI1SK, :SK)",
     ExpressionAttributeValues: {
-      ":PK": userId,
+      ":PK": `USER#${userId}`,
+      ":SK": `TRANSACTION#`,
     },
     ScanIndexForward: false,
   });
@@ -31,7 +33,7 @@ export async function createTransaction(params: TransactionCreateParams) {
   const transaction: Transaction = {
     ...params,
     date: new Date(params.date),
-    uuid: transactionUUID(params.date),
+    uuid: transactionUUID(),
   };
 
   try {
@@ -51,8 +53,8 @@ export async function deleteTransaction(userId: string, transactionId: string) {
   const command = new DeleteCommand({
     TableName: "Transactions",
     Key: {
-      PK: userId,
-      SK: transactionId,
+      PK: `USER#${userId}`,
+      SK: `TRANSACTION#${transactionId}`,
     },
   });
 

@@ -12,12 +12,14 @@ export type Transaction = {
 
 export function toTransactionItem(transaction: Transaction) {
   return {
-    PK: transaction.userId,
-    SK: transaction.uuid,
+    PK: `USER#${transaction.userId}`,
+    SK: `TRANSACTION#${transaction.uuid}`,
     Name: transaction.name,
     Amount: transaction.amount,
     Type: transaction.type,
     Date: transaction.date.toISOString(),
+    GSI1PK: `USER#${transaction.userId}`,
+    GSI1SK: `TRANSACTION#${extractDate(transaction.date)}`,
   };
 }
 
@@ -25,8 +27,8 @@ export function fromTransactionItem(item: {
   [index: string]: NativeAttributeValue;
 }): Transaction {
   return {
-    uuid: item.SK,
-    userId: item.PK,
+    uuid: item.SK.split("#")[1],
+    userId: item.PK.split("#")[1],
     date: new Date(item.Date),
     name: item.Name,
     amount: item.Amount,
@@ -34,13 +36,10 @@ export function fromTransactionItem(item: {
   };
 }
 
-export function transactionUUID(dateOfTransaction: Date | string = new Date()) {
-  const orderedId = KSUID.randomSync(Date.now()).string;
-  const dateString = (
-    dateOfTransaction instanceof Date
-      ? dateOfTransaction.toISOString()
-      : dateOfTransaction
-  ).split("T")[0];
+export function transactionUUID() {
+  return KSUID.randomSync().string;
+}
 
-  return `DATE#${dateString}#ID#${orderedId}`;
+export function extractDate(date: Date) {
+  return date.toISOString().split("T")[0];
 }

@@ -42,9 +42,6 @@ test("should respond with list of transactions", async () => {
   const transactionB = await createTransaction(createParamsB);
 
   const transactions = await listTransactions({ userId: "abc" });
-
-  // Take note of the 'date' of each entity. Entity A should come before Entity B
-  // as the list is in descending order. The date forms part of the sort key.
   expect(transactions).toStrictEqual([transactionA, transactionB]);
 });
 

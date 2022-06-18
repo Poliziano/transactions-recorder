@@ -14,7 +14,7 @@ import {
 
 test("should prevent duplicate transactions being created", async () => {
   const transaction: Transaction = {
-    uuid: transactionUUID(new Date(2021, 1, 1)),
+    uuid: transactionUUID(),
     userId: "abc",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
@@ -38,7 +38,7 @@ test("should prevent duplicate transactions being created", async () => {
 
 test("should prevent duplicate transactions being updated", async () => {
   const transaction: Transaction = {
-    uuid: transactionUUID(new Date(2021, 1, 1)),
+    uuid: transactionUUID(),
     userId: "abc",
     date: new Date(2021, 1, 1),
     name: "McDonalds",
