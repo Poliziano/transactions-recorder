@@ -4,6 +4,7 @@ import {
   DynamoDBDocumentClient,
   PutCommand,
   TransactWriteCommand,
+  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeValue } from "@aws-sdk/util-dynamodb";
 import { afterEach, jest } from "@jest/globals";
@@ -43,6 +44,7 @@ async function deleteDynamoDBItems(commands: any[]) {
   for (const command of commands) {
     items.push(
       ...extractPutCommandKey(command),
+      ...extractUpdateCommandKey(command),
       ...extractTransactionCommandKeys(command),
       ...extractBatchWriteCommandKeys(command)
     );
@@ -93,6 +95,18 @@ function extractPutCommandKey(command: PutCommand): Item[] {
   ];
 }
 
+function extractUpdateCommandKey(command: UpdateCommand): Item[] {
+  if (command?.input?.Key == null) {
+    return [];
+  }
+  return [
+    {
+      attributes: command.input.Key,
+      tableName: command.input.TableName!,
+    },
+  ];
+}
+
 function extractTransactionCommandKeys(command: TransactWriteCommand): Item[] {
   const result: Item[] = [];
   for (const item of command?.input?.TransactItems ?? []) {
@@ -100,6 +114,12 @@ function extractTransactionCommandKeys(command: TransactWriteCommand): Item[] {
       result.push({
         attributes: item.Put.Item,
         tableName: item.Put.TableName!,
+      });
+    }
+    if (item.Update?.Key) {
+      result.push({
+        attributes: item.Update.Key,
+        tableName: item.Update.TableName!,
       });
     }
   }

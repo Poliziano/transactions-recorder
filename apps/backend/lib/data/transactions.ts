@@ -1,11 +1,12 @@
-import { db } from "./dynamo";
-import { PutCommand, QueryCommand, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { TransactionCanceledException } from "@aws-sdk/client-dynamodb";
+import { DeleteCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import {
   fromTransactionItem,
-  toTransactionItem,
   Transaction,
   transactionUUID,
 } from "../entity/transaction";
+import { NewTransactionCommand } from "./commands/new-transaction-command";
+import { db } from "./dynamo";
 
 type ListTransactionsParams = { userId: string };
 export async function listTransactions({ userId }: ListTransactionsParams) {
@@ -33,12 +34,16 @@ export async function createTransaction(params: TransactionCreateParams) {
     uuid: transactionUUID(params.date),
   };
 
-  const command = new PutCommand({
-    TableName: "Transactions",
-    Item: toTransactionItem(transaction),
-  });
+  try {
+    await db.send(new NewTransactionCommand({ transaction, update: true }));
+  } catch (err) {
+    if (!(err instanceof TransactionCanceledException)) {
+      console.log(JSON.stringify(err, null, 2));
+      throw err;
+    }
 
-  await db.send(command);
+    await db.send(new NewTransactionCommand({ transaction, update: false }));
+  }
   return transaction;
 }
 

@@ -1,4 +1,5 @@
 import { CreateTableCommand } from "@aws-sdk/client-dynamodb";
+import { ProjectionType } from "aws-cdk-lib/aws-dynamodb";
 import { GenericContainer } from "testcontainers";
 import { db } from "../lib/data/dynamo";
 
@@ -54,11 +55,41 @@ async function createDynamoTable() {
         AttributeType: "S",
         AttributeName: "SK",
       },
+      {
+        AttributeType: "S",
+        AttributeName: "GSI1PK",
+      },
+      {
+        AttributeType: "S",
+        AttributeName: "GSI1SK",
+      },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 5,
       WriteCapacityUnits: 5,
     },
+    GlobalSecondaryIndexes: [
+      {
+        IndexName: "GSI1",
+        KeySchema: [
+          {
+            KeyType: "HASH",
+            AttributeName: "GSI1PK",
+          },
+          {
+            KeyType: "RANGE",
+            AttributeName: "GSI1SK",
+          },
+        ],
+        Projection: {
+          ProjectionType: ProjectionType.ALL,
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 5,
+          WriteCapacityUnits: 5,
+        },
+      },
+    ],
   });
 
   await db.send(command);

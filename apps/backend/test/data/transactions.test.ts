@@ -1,10 +1,11 @@
-import { test, expect } from "@jest/globals";
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
+import { GetCommand } from "@aws-sdk/lib-dynamodb";
+import { expect, test } from "@jest/globals";
 import { db } from "../../lib/data/dynamo";
 import {
-  listTransactions,
   createTransaction,
   deleteTransaction,
+  listTransactions,
   TransactionCreateParams,
 } from "../../lib/data/transactions";
 
@@ -61,4 +62,52 @@ test("should delete transaction", async () => {
 
   const transactions = await listTransactions({ userId: "abcd" });
   expect(transactions).toStrictEqual([]);
+});
+
+test("should update transaction summation", async () => {
+  const createParamsA: TransactionCreateParams = {
+    userId: "abc",
+    date: new Date(2021, 1, 1).toISOString(),
+    name: "McDonalds",
+    amount: 12.5,
+    type: "expenditure",
+  };
+
+  const createParamsB: TransactionCreateParams = {
+    userId: "abc",
+    date: new Date(2021, 1, 1).toISOString(),
+    name: "Waterstones",
+    amount: 7.99,
+    type: "expenditure",
+  };
+
+  const createParamsC: TransactionCreateParams = {
+    userId: "abc",
+    date: new Date(2021, 11, 4).toISOString(),
+    name: "Waterstones",
+    amount: 25,
+    type: "expenditure",
+  };
+
+  await createTransaction(createParamsA);
+  await createTransaction(createParamsB);
+  await createTransaction(createParamsC);
+
+  const command = new GetCommand({
+    TableName: "Transactions",
+    Key: {
+      PK: "USER#abc",
+      SK: "SUM#2021",
+    },
+  });
+
+  const { Item } = await db.send(command);
+  expect(Item).toEqual({
+    PK: "USER#abc",
+    SK: "SUM#2021",
+    Entries: {
+      "2021-12-04": 25,
+      "2021-02-01": 20.49,
+    },
+  });
 });
