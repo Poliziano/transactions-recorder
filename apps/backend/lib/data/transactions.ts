@@ -8,7 +8,7 @@ import {
 import { NewTransactionCommand } from "./commands/new-transaction-command";
 import { db } from "./dynamo";
 
-type ListTransactionsParams = { userId: string };
+export type ListTransactionsParams = { userId: string };
 export async function listTransactions({ userId }: ListTransactionsParams) {
   const command = new QueryCommand({
     TableName: "Transactions",
@@ -49,7 +49,14 @@ export async function createTransaction(params: TransactionCreateParams) {
   return transaction;
 }
 
-export async function deleteTransaction(userId: string, transactionId: string) {
+export type DeleteTransactionParams = {
+  userId: string;
+  transactionId: string;
+};
+export async function deleteTransaction({
+  userId,
+  transactionId,
+}: DeleteTransactionParams) {
   const command = new DeleteCommand({
     TableName: "Transactions",
     Key: {

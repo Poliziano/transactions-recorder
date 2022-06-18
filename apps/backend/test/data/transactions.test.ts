@@ -55,7 +55,10 @@ test("should delete transaction", async () => {
   };
 
   const transaction = await createTransaction(createParams);
-  await deleteTransaction(createParams.userId, transaction.uuid);
+  await deleteTransaction({
+    userId: createParams.userId,
+    transactionId: transaction.uuid,
+  });
 
   const transactions = await listTransactions({ userId: "abcd" });
   expect(transactions).toStrictEqual([]);

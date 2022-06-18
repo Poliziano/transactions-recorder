@@ -37,10 +37,10 @@ const ajv = new Ajv();
 const validate = ajv.compile<TransactionDeleteEvent>(schema);
 
 async function transactionDeleteHandler(event: TransactionDeleteEvent) {
-  await deleteTransaction(
-    event.pathParameters.userId,
-    event.pathParameters.transactionId
-  );
+  await deleteTransaction({
+    userId: event.pathParameters.userId,
+    transactionId: event.pathParameters.transactionId,
+  });
 
   return {
     statusCode: 200,
