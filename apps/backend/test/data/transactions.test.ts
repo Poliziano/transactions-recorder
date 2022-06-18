@@ -5,6 +5,7 @@ import { db } from "../../lib/data/dynamo";
 import {
   createTransaction,
   deleteTransaction,
+  listDailyTransactionAggregations,
   listTransactions,
   TransactionCreateParams,
 } from "../../lib/data/transactions";
@@ -93,21 +94,18 @@ test("should update transaction summation", async () => {
   await createTransaction(createParamsB);
   await createTransaction(createParamsC);
 
-  const command = new GetCommand({
-    TableName: "Transactions",
-    Key: {
-      PK: "USER#abc",
-      SK: "SUM#2021",
-    },
+  const dailyAggregation = await listDailyTransactionAggregations({
+    userId: "abc",
   });
-
-  const { Item } = await db.send(command);
-  expect(Item).toEqual({
-    PK: "USER#abc",
-    SK: "SUM#2021",
-    Entries: {
-      "2021-12-04": 25,
-      "2021-02-01": 20.49,
+  expect(dailyAggregation).toEqual([
+    {
+      userId: "abc",
+      type: "SUM",
+      year: 2021,
+      entries: {
+        "2021-12-04": 25,
+        "2021-02-01": 20.49,
+      },
     },
-  });
+  ]);
 });

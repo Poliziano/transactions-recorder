@@ -25,7 +25,7 @@ export function fromTransactionAggregationItem<T>(item: {
   return {
     userId: item.PK.split("#")[1],
     type: item.SK.split("#")[0],
-    year: item.SK.split("#")[1],
+    year: +item.SK.split("#")[1],
     entries: item.Entries,
   };
 }

@@ -5,6 +5,7 @@ import {
   Transaction,
   transactionUUID,
 } from "../entity/transaction";
+import { fromTransactionAggregationItem } from "../entity/transaction-aggregation";
 import { NewTransactionCommand } from "./commands/new-transaction-command";
 import { db } from "./dynamo";
 
@@ -24,6 +25,24 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
   const items = response.Items ?? [];
 
   return items.map(fromTransactionItem);
+}
+
+export async function listDailyTransactionAggregations({
+  userId,
+}: ListTransactionsParams) {
+  const command = new QueryCommand({
+    TableName: "Transactions",
+    KeyConditionExpression: "PK = :PK and begins_with(SK, :SK)",
+    ExpressionAttributeValues: {
+      ":PK": `USER#${userId}`,
+      ":SK": `SUM#`,
+    },
+    ScanIndexForward: false,
+  });
+  const response = await db.send(command);
+  const items = response.Items ?? [];
+
+  return items.map(fromTransactionAggregationItem);
 }
 
 export type TransactionCreateParams = Omit<Transaction, "uuid" | "date"> & {
