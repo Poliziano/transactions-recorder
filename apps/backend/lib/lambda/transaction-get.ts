@@ -1,6 +1,10 @@
 import { listTransactions } from "../data/transactions";
-import type { APIGatewayProxyEvent } from "aws-lambda";
-import middy from "@middy/core";
+import type {
+  APIGatewayEvent,
+  APIGatewayProxyEvent,
+  Context,
+} from "aws-lambda";
+import middy, { MiddyfiedHandler } from "@middy/core";
 import errorLogger from "@middy/error-logger";
 import httpErrorHandler from "@middy/http-error-handler";
 import jsonBodyParser from "@middy/http-json-body-parser";
@@ -49,13 +53,11 @@ async function transactionGetHandler(event: TransactionGetEvent) {
   };
 }
 
-export const handler = middy<APIGatewayProxyEvent>()
+export const handler = middy(transactionGetHandler)
   .use(httpErrorHandler())
   .use(errorLogger())
   .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-  // @ts-expect-error `.handler` exists but it missing from type definitions.
-  .handler(transactionGetHandler);
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));

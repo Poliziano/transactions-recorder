@@ -66,13 +66,11 @@ async function transactionCreateHandler(event: TransactionCreateEvent) {
   };
 }
 
-export const handler = middy<APIGatewayProxyEvent>()
+export const handler = middy(transactionCreateHandler)
   .use(httpErrorHandler())
   .use(errorLogger())
   .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-  // @ts-expect-error `.handler` exists but it missing from type definitions.
-  .handler(transactionCreateHandler);
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));
