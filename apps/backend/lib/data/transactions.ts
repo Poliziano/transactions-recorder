@@ -48,9 +48,12 @@ export async function listTransactionsForDate({
   return items.map(fromTransactionItem);
 }
 
+export type ListDailyTransactionAggregationsParams = {
+  userId: string;
+};
 export async function listDailyTransactionAggregations({
   userId,
-}: ListTransactionsParams) {
+}: ListDailyTransactionAggregationsParams) {
   const command = new QueryCommand({
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK and begins_with(SK, :SK)",
