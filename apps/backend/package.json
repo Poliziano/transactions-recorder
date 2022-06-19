@@ -28,7 +28,7 @@
     "aws-cdk-lib": "^2.28.1",
     "aws-sdk": "^2.1157.0",
     "constructs": "^10.1.42",
-    "esbuild": "^0.14.45",
+    "esbuild": "^0.14.46",
     "fishery": "^2.2.2",
     "jest": "^28.1.1"
   },
