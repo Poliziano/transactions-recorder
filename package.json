@@ -1,6 +1,9 @@
 {
   "name": "transactions-recorder",
   "version": "1.0.0",
+  "engines": {
+    "pnpm": "7.3"
+  },
   "devDependencies": {
     "typescript": "^4.7.4"
   }
