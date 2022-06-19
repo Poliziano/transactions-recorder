@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/transactions.ts",
+  "app": "pnpm swc bin/transactions.ts",
   "watch": {
     "include": [
       "**"

@@ -25,12 +25,14 @@ importers:
       '@middy/http-security-headers': ^3.0.4
       '@middy/input-output-logger': ^3.0.4
       '@middy/validator': ^3.0.4
+      '@swc/cli': ^0.1.57
       '@swc/core': ^1.2.204
       '@swc/jest': ^0.2.21
       '@tsconfig/node16': ^1.0.3
       '@types/aws-lambda': ^8.10.100
       '@types/jest': ^28.1.2
       '@types/node': ^18.0.0
+      '@types/source-map-support': ^0.5.4
       ajv: ^8.11.0
       aws-cdk: 2.28.1
       aws-cdk-lib: ^2.28.1
@@ -40,6 +42,7 @@ importers:
       fishery: ^2.2.2
       jest: ^28.1.1
       ksuid: ^3.0.0
+      source-map-support: ^0.5.21
       testcontainers: ^8.10.1
     dependencies:
       '@aws-sdk/client-dynamodb': 3.113.0
@@ -57,16 +60,19 @@ importers:
       '@middy/validator': 3.0.4
       ajv: 8.11.0
       ksuid: 3.0.0
+      source-map-support: 0.5.21
       testcontainers: 8.10.1
     devDependencies:
       '@jest/globals': 28.1.1
       '@jest/types': 28.1.1
+      '@swc/cli': 0.1.57_@swc+core@1.2.204
       '@swc/core': 1.2.204
       '@swc/jest': 0.2.21_@swc+core@1.2.204
       '@tsconfig/node16': 1.0.3
       '@types/aws-lambda': 8.10.100
       '@types/jest': 28.1.2
       '@types/node': 18.0.0
+      '@types/source-map-support': 0.5.4
       aws-cdk: 2.28.1
       aws-cdk-lib: 2.28.1_constructs@10.1.42
       aws-sdk: 2.1157.0
@@ -1661,6 +1667,24 @@ packages:
       - supports-color
     dev: true
 
+  /@swc/cli/0.1.57_@swc+core@1.2.204:
+    resolution: {integrity: sha512-HxM8TqYHhAg+zp7+RdTU69bnkl4MWdt1ygyp6BDIPjTiaJVH6Dizn2ezbgDS8mnFZI1FyhKvxU/bbaUs8XhzQg==}
+    engines: {node: '>= 12.13'}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': ^1.2.66
+      chokidar: ^3.5.1
+    peerDependenciesMeta:
+      chokidar:
+        optional: true
+    dependencies:
+      '@swc/core': 1.2.204
+      commander: 7.2.0
+      fast-glob: 3.2.11
+      slash: 3.0.0
+      source-map: 0.7.4
+    dev: true
+
   /@swc/core-android-arm-eabi/1.2.204:
     resolution: {integrity: sha512-7f5wtQlTvqr1aW3Umb9juxE8zlAxk6i3m34Mr1wlfJlh7DkkFAxRXiPSz8Uleb7sGmdY7hukUu/o8ex5o/aCzg==}
     engines: {node: '>=10'}
@@ -1924,6 +1948,12 @@ packages:
     resolution: {integrity: sha512-BPdoIt1lfJ6B7rw35ncdwBZrAssjcwzI5LByIrYs+tpXlj/CAkuVdRsgZDdP4lq5EjyWzwxZCqAoFyHKFwp32g==}
     dependencies:
       '@types/node': 18.0.0
+    dev: true
+
+  /@types/source-map-support/0.5.4:
+    resolution: {integrity: sha512-9zGujX1sOPg32XLyfgEB/0G9ZnrjthL/Iv1ZfuAjj8LEilHZEpQSQs1scpRXPhHzGYgWiLz9ldF1cI8JhL+yMw==}
+    dependencies:
+      source-map: 0.6.1
     dev: true
 
   /@types/ssh2-streams/0.1.9:
@@ -2508,7 +2538,6 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: true
 
   /buffer/4.9.2:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
@@ -2664,6 +2693,11 @@ packages:
   /commander/2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
     dev: false
+
+  /commander/7.2.0:
+    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
+    engines: {node: '>= 10'}
+    dev: true
 
   /compress-commons/4.1.1:
     resolution: {integrity: sha512-QLdDLCKNV2dtoTorqgxngQCMA+gWXkM/Nwu7FpeBhk/RdkzimqC3jueb/FDmaZeXh+uby1jkBqE3xArsLBE5wQ==}
@@ -5070,9 +5104,20 @@ packages:
       source-map: 0.6.1
     dev: true
 
+  /source-map-support/0.5.21:
+    resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
+    dependencies:
+      buffer-from: 1.1.2
+      source-map: 0.6.1
+    dev: false
+
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+
+  /source-map/0.7.4:
+    resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
+    engines: {node: '>= 8'}
     dev: true
 
   /sourcemap-codec/1.4.8:
