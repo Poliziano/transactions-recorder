@@ -27,6 +27,27 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
   return items.map(fromTransactionItem);
 }
 
+export type ListTransactionsForDateParams = { userId: string; date: string };
+export async function listTransactionsForDate({
+  userId,
+  date,
+}: ListTransactionsForDateParams) {
+  const command = new QueryCommand({
+    TableName: "Transactions",
+    IndexName: "GSI1",
+    KeyConditionExpression: "GSI1PK = :PK and GSI1SK = :SK",
+    ExpressionAttributeValues: {
+      ":PK": `USER#${userId}`,
+      ":SK": `TRANSACTION#${date}`,
+    },
+    ScanIndexForward: false,
+  });
+  const response = await db.send(command);
+  const items = response.Items ?? [];
+
+  return items.map(fromTransactionItem);
+}
+
 export async function listDailyTransactionAggregations({
   userId,
 }: ListTransactionsParams) {

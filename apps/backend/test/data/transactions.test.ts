@@ -7,6 +7,7 @@ import {
   deleteTransaction,
   listDailyTransactionAggregations,
   listTransactions,
+  listTransactionsForDate,
   TransactionCreateParams,
 } from "../../lib/data/transactions";
 
@@ -44,6 +45,33 @@ test("should respond with list of transactions", async () => {
 
   const transactions = await listTransactions({ userId: "abc" });
   expect(transactions).toStrictEqual([transactionA, transactionB]);
+});
+
+test("should respond with list of transactions for date", async () => {
+  const createParamsA: TransactionCreateParams = {
+    userId: "abc",
+    date: new Date(2021, 1, 1).toISOString(),
+    name: "McDonalds",
+    amount: 12.5,
+    type: "expenditure",
+  };
+
+  const createParamsB: TransactionCreateParams = {
+    userId: "abc",
+    date: new Date(2020, 1, 1).toISOString(),
+    name: "Waterstones",
+    amount: 7.99,
+    type: "expenditure",
+  };
+
+  const transactionA = await createTransaction(createParamsA);
+  await createTransaction(createParamsB);
+
+  const transactions = await listTransactionsForDate({
+    userId: "abc",
+    date: "2021-02-01",
+  });
+  expect(transactions).toStrictEqual([transactionA]);
 });
 
 test("should delete transaction", async () => {
