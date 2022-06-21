@@ -9,6 +9,7 @@ import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import cors from "@middy/http-cors";
+import { ApiGatewayLambda } from "./types";
 
 type TransactionDeleteEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
@@ -47,11 +48,13 @@ async function transactionDeleteHandler(event: TransactionDeleteEvent) {
   };
 }
 
-export const handler = middy(transactionDeleteHandler)
-  .use(httpErrorHandler())
-  .use(errorLogger())
-  .use(cors())
-  .use(httpSecurityHeaders())
-  .use(jsonBodyParser())
-  .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }));
+export const handler: ApiGatewayLambda<typeof transactionDeleteHandler> =
+  middy()
+    .use(httpErrorHandler())
+    .use(errorLogger())
+    .use(cors())
+    .use(httpSecurityHeaders())
+    .use(jsonBodyParser())
+    .use(inputOutputLogger())
+    .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+    .handler(transactionDeleteHandler);

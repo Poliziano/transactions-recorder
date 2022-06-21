@@ -5,9 +5,7 @@ import {
 } from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-get";
 import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
-import { convertToApiGatewayLambda } from "./lambda-execute";
 
-const transactionGetHandler = convertToApiGatewayLambda(handler);
 const context = lambdaContextFactory.build();
 
 test("get transaction", async () => {
@@ -27,7 +25,7 @@ test("get transaction", async () => {
     },
   });
 
-  const response = await transactionGetHandler(event, context);
+  const response = await handler(event, context);
 
   expect(response).toMatchObject({
     statusCode: 200,

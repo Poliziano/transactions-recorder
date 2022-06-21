@@ -17,14 +17,14 @@ importers:
       '@aws-sdk/util-dynamodb': ^3.113.0
       '@jest/globals': ^28.1.1
       '@jest/types': ^28.1.1
-      '@middy/core': ^3.0.4
-      '@middy/error-logger': ^3.0.4
-      '@middy/http-cors': ^3.0.4
-      '@middy/http-error-handler': ^3.0.4
-      '@middy/http-json-body-parser': ^3.0.4
-      '@middy/http-security-headers': ^3.0.4
-      '@middy/input-output-logger': ^3.0.4
-      '@middy/validator': ^3.0.4
+      '@middy/core': ^3.1.0
+      '@middy/error-logger': ^3.1.0
+      '@middy/http-cors': ^3.1.0
+      '@middy/http-error-handler': ^3.1.0
+      '@middy/http-json-body-parser': ^3.1.0
+      '@middy/http-security-headers': ^3.1.0
+      '@middy/input-output-logger': ^3.1.0
+      '@middy/validator': ^3.1.0
       '@swc/cli': ^0.1.57
       '@swc/core': ^1.2.204
       '@swc/jest': ^0.2.21
@@ -50,14 +50,14 @@ importers:
       '@aws-sdk/smithy-client': 3.110.0
       '@aws-sdk/types': 3.110.0
       '@aws-sdk/util-dynamodb': 3.113.0
-      '@middy/core': 3.0.4
-      '@middy/error-logger': 3.0.4
-      '@middy/http-cors': 3.0.4
-      '@middy/http-error-handler': 3.0.4
-      '@middy/http-json-body-parser': 3.0.4
-      '@middy/http-security-headers': 3.0.4
-      '@middy/input-output-logger': 3.0.4
-      '@middy/validator': 3.0.4
+      '@middy/core': 3.1.0
+      '@middy/error-logger': 3.1.0
+      '@middy/http-cors': 3.1.0
+      '@middy/http-error-handler': 3.1.0
+      '@middy/http-json-body-parser': 3.1.0
+      '@middy/http-security-headers': 3.1.0
+      '@middy/input-output-logger': 3.1.0
+      '@middy/validator': 3.1.0
       ajv: 8.11.0
       ksuid: 3.0.0
       source-map-support: 0.5.21
@@ -1471,66 +1471,67 @@ packages:
       - supports-color
     dev: true
 
-  /@middy/core/3.0.4:
-    resolution: {integrity: sha512-rMLdd7Sesi4ViiRVjPnOIKDIEY945p0/aEYkLZewqs69V2KKEAcDf59RmNN459ys0HUdFJqxDssXwnFKs56/vw==}
+  /@middy/core/3.1.0:
+    resolution: {integrity: sha512-JhUIFi8zMjcMEk5VeZwU8vJKaaikrB2fnZKAZfrCKYhkXWaFtV6S6szP6q+jvOR/0Jq9RgsLTIou8/gGMJwc5w==}
     engines: {node: '>=14'}
     dev: false
 
-  /@middy/error-logger/3.0.4:
-    resolution: {integrity: sha512-FEyHRm1XM3nyorpWlNFWdSpis4o8UB9i9iyvOKZRrfeB/YzT+XN1MXgMxvMsAGkgEsHqe59g8i82o7ahFnHvGg==}
+  /@middy/error-logger/3.1.0:
+    resolution: {integrity: sha512-lBriI4yQvitEdAprw1YEt/5uiEcqtZI7M6c07g/pA5IDGI9WMg5k/U1Vkom8jAO+N6+kci67YUdZa9pYZXwgdw==}
     engines: {node: '>=14'}
     dev: false
 
-  /@middy/http-cors/3.0.4:
-    resolution: {integrity: sha512-trnUvXqGHdWhiHSlbxTEnZ60I1OJcSIoQ8uLHWlwCDLDmdYMUXNcL0nRj9ZDiltO9qGotu76Lxmobq672pTllw==}
+  /@middy/http-cors/3.1.0:
+    resolution: {integrity: sha512-PWKhNQ9feK4hDB7XI1AM+iCgY7+IETre9zM3fBkZCSPGnSos79rZ325OEYgbHqUWwDIMoDWbDlYfAxzWyQO0tw==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
     dev: false
 
-  /@middy/http-error-handler/3.0.4:
-    resolution: {integrity: sha512-x+VXqG5yxACjGJZ5qnjW/sIGa2WalyV7wFiDSFonQcT9OfW/uRLo+g3z/drHVSiBW+aXK1Gcbri8tsiNptMOMg==}
+  /@middy/http-error-handler/3.1.0:
+    resolution: {integrity: sha512-AY4R8dsCTJCOZ+v0/5qW13vzOlyVJfJ5AlZoe2vSFOI//kPsBAcxo4OLPs6hID9+98nd7Ug67ZIvCfru1VN6ng==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
     dev: false
 
-  /@middy/http-json-body-parser/3.0.4:
-    resolution: {integrity: sha512-kHEJKcV9PQ00pI0Vtu788XP4J01o8x3dhEFt7XaIcO5m+mN08jO55rojwFB3sUnb2bB57LDmbvB2OSSbbT152Q==}
+  /@middy/http-json-body-parser/3.1.0:
+    resolution: {integrity: sha512-zV+g9vVCHaTO4zm/R0PjJFtFFgZh118RcsBuiTwZM9j+2L2JXRQf8pX1sMof+Czexf5j1V5TWS/sAwEKk2M1kQ==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
     dev: false
 
-  /@middy/http-security-headers/3.0.4:
-    resolution: {integrity: sha512-MkN+aJQevWi5U2FOYmet9vXe5DbJ4ZOs9bNFbt/39A9ZHuWzkdslOnOSEh0Ia+tvWOFratdaGRxcH5jGDGwI8Q==}
+  /@middy/http-security-headers/3.1.0:
+    resolution: {integrity: sha512-nsPaTTE9v3N6eTtOrZydvS6ZXlY87Wh6iwgEcJt+tlU3PAqtmccTHfhzNaR0QCDvlXMhEfNfMah037vc2tp5dw==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
     dev: false
 
-  /@middy/input-output-logger/3.0.4:
-    resolution: {integrity: sha512-i/nIKCPVvYlyXNuh37SaTzyKDV28a8cmIZzgrzctseDozilOsMbFo4th426B1iplvuQ1z2H93FHUp7t8V9363A==}
+  /@middy/input-output-logger/3.1.0:
+    resolution: {integrity: sha512-mmP3oPhULZQKDmav4/LX+gcBl/29iNeu4CNxIYYCS5XrZZ1YsjpsMYJ83doE/Ap8ihR4qWY4CScFr/5lF6+vZg==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
     dev: false
 
-  /@middy/util/3.0.4:
-    resolution: {integrity: sha512-NPJ/429n8+coUCpHS8LMIL06FQPBJ8x7oqAtCRDALkR9OvAIJDci4BAYEZDVcnIVq7f3Ee0+a6s1bFmJySCFxA==}
+  /@middy/util/3.1.0:
+    resolution: {integrity: sha512-cexFyBQIG0j71pjaknFcJYtjctoxxAvwVAAEjA2ySNIwKlk1BiJo0IRLf0k4grbRoqYjXQ8SLLa8I0M1kS6UEw==}
     engines: {node: '>=14'}
     dev: false
 
-  /@middy/validator/3.0.4:
-    resolution: {integrity: sha512-96v2b0Idh1sM8PKnJDOVg1mAziG/Ed4pmFmWBWiip/4L9kHVQEiAp9RdG7o8tV2MaqkfzmXHaaZfScozNEl5Og==}
+  /@middy/validator/3.1.0:
+    resolution: {integrity: sha512-8RfytHOZmDHY0nLq6X3YKyKTnVF175hLddUJwf+zpUc+INTVJT7LxajM7aWYSfHffbyz166uZ7xPcrYZbq6v4w==}
     engines: {node: '>=14'}
     dependencies:
-      '@middy/util': 3.0.4
+      '@middy/util': 3.1.0
       ajv: 8.11.0
       ajv-formats: 2.1.1
       ajv-formats-draft2019: 1.6.1_ajv@8.11.0
       ajv-i18n: 4.2.0_ajv@8.11.0
       ajv-keywords: 5.1.0_ajv@8.11.0
+      fast-uri: 2.1.0
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -3357,6 +3358,10 @@ packages:
   /fast-levenshtein/2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dev: true
+
+  /fast-uri/2.1.0:
+    resolution: {integrity: sha512-qKRta6N7BWEFVlyonVY/V+BMLgFqktCUV0QjT259ekAIlbVrMaFnFLxJ4s/JPl4tou56S1BzPufI60bLe29fHA==}
+    dev: false
 
   /fast-xml-parser/3.19.0:
     resolution: {integrity: sha512-4pXwmBplsCPv8FOY1WRakF970TjNGnGnfbOnLqjlYvMiF1SR3yOHyxMR/YCXpPTOspNF5gwudqktIP4VsWkvBg==}

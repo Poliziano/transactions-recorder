@@ -1,14 +1,12 @@
 import { test, expect } from "@jest/globals";
 import { handler } from "../../lib/lambda/transaction-create";
 import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
-import { convertToApiGatewayLambda } from "./lambda-execute";
 
-const transactionCreateHandler = convertToApiGatewayLambda(handler);
 const context = lambdaContextFactory.build();
 
 test("transaction-create should throw when invalid payload", async () => {
   const event = apiGatewayProxyEventFactory.build();
-  const result = await transactionCreateHandler(event, context);
+  const result = await handler(event, context);
   expect(result).toMatchObject({
     statusCode: 400,
   });
@@ -21,7 +19,7 @@ test("transaction-create should throw when partial payload", async () => {
       name: "McDonalds",
     }),
   });
-  const result = await transactionCreateHandler(event, context);
+  const result = await handler(event, context);
 
   expect(result).toMatchObject({
     statusCode: 400,
@@ -40,7 +38,7 @@ test("transaction-create should not thrown when valid payload", async () => {
       userId: "a_user_id",
     },
   });
-  const response = await transactionCreateHandler(event, context);
+  const response = await handler(event, context);
 
   expect(response).toMatchObject({
     statusCode: 200,

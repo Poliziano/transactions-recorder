@@ -5,9 +5,7 @@ import {
 } from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-delete";
 import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
-import { convertToApiGatewayLambda } from "./lambda-execute";
 
-const transactionDeleteHandler = convertToApiGatewayLambda(handler);
 const context = lambdaContextFactory.build();
 
 test("delete transaction for user", async () => {
@@ -27,7 +25,7 @@ test("delete transaction for user", async () => {
       transactionId: transaction.uuid,
     },
   });
-  const response = await transactionDeleteHandler(event, context);
+  const response = await handler(event, context);
 
   expect(response).toMatchObject({
     statusCode: 200,

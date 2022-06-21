@@ -1,18 +1,15 @@
-import { listTransactions } from "../data/transactions";
-import type {
-  APIGatewayEvent,
-  APIGatewayProxyEvent,
-  Context,
-} from "aws-lambda";
-import middy, { MiddyfiedHandler } from "@middy/core";
+import middy from "@middy/core";
 import errorLogger from "@middy/error-logger";
+import cors from "@middy/http-cors";
 import httpErrorHandler from "@middy/http-error-handler";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import httpSecurityHeaders from "@middy/http-security-headers";
 import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
-import cors from "@middy/http-cors";
+import type { APIGatewayProxyEvent } from "aws-lambda";
+import { listTransactions } from "../data/transactions";
+import { ApiGatewayLambda } from "./types";
 
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
@@ -53,11 +50,12 @@ async function transactionGetHandler(event: TransactionGetEvent) {
   };
 }
 
-export const handler = middy(transactionGetHandler)
+export const handler: ApiGatewayLambda<typeof transactionGetHandler> = middy()
   .use(httpErrorHandler())
   .use(errorLogger())
   .use(cors())
   .use(httpSecurityHeaders())
   .use(jsonBodyParser())
   .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }));
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+  .handler(transactionGetHandler);
