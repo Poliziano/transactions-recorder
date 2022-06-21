@@ -1,11 +1,4 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": ["node_modules", "cdk.out"],
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "lib": ["ES2021"],
-    "target": "ES2021"
-  }
+  "exclude": ["node_modules", "cdk.out"]
 }

@@ -1,5 +1,5 @@
 {
-  "app": "pnpm swc bin/transactions.ts",
+  "app": "node -r @swc-node/register bin/transactions.ts",
   "watch": {
     "include": [
       "**"
