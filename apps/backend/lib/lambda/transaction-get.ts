@@ -14,7 +14,6 @@ import { ApiGatewayLambda } from "./types";
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
     userId: string;
-    transactionId: string;
   };
 };
 
@@ -25,7 +24,6 @@ const schema: JSONSchemaType<Pick<TransactionGetEvent, "pathParameters">> = {
       type: "object",
       properties: {
         userId: { type: "string" },
-        transactionId: { type: "string" },
       },
       required: ["userId"],
       additionalProperties: false,
