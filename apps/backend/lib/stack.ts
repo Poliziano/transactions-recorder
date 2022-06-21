@@ -28,6 +28,12 @@ export class TransactionsStack extends Stack {
       "transaction-get.ts"
     );
 
+    const lambdaTransactionAggregationGet = new TransactionsNodejsFunction(
+      this,
+      "TransactionAggregationGet",
+      "transaction-aggregation-get.ts"
+    );
+
     const lambdaTransactionCreate = new TransactionsNodejsFunction(
       this,
       "TransactionCreate",
@@ -41,6 +47,7 @@ export class TransactionsStack extends Stack {
     );
 
     transactionsTable.grantReadData(lambdaTransactionGet);
+    transactionsTable.grantReadData(lambdaTransactionAggregationGet);
     transactionsTable.grantWriteData(lambdaTransactionCreate);
     transactionsTable.grantWriteData(lambdaTransactionDelete);
 
@@ -58,6 +65,12 @@ export class TransactionsStack extends Stack {
       "POST",
       new apigateway.LambdaIntegration(lambdaTransactionCreate)
     );
+    transactionsResource
+      .addResource("aggregations")
+      .addMethod(
+        "GET",
+        new apigateway.LambdaIntegration(lambdaTransactionAggregationGet)
+      );
     transactionsResource
       .addResource("{transactionId}")
       .addMethod(

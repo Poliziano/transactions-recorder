@@ -66,7 +66,7 @@ export async function listDailyTransactionAggregations({
   const response = await db.send(command);
   const items = response.Items ?? [];
 
-  return items.map(fromTransactionAggregationItem);
+  return items.map(fromTransactionAggregationItem<number>);
 }
 
 export type TransactionCreateParams = Omit<Transaction, "uuid" | "date"> & {
