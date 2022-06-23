@@ -2,7 +2,7 @@ import { test, expect } from "@jest/globals";
 import {
   createTransaction,
   TransactionCreateInput,
-} from "../../lib/data/transactions";
+} from "../../lib/data/transaction-repository";
 import { handler } from "../../lib/lambda/transaction-delete";
 import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
 

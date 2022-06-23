@@ -1,7 +1,7 @@
 import {
   createTransaction,
   TransactionCreateInput,
-} from "../data/transactions";
+} from "../data/transaction-repository";
 import type { APIGatewayProxyEvent, Context } from "aws-lambda";
 import Ajv, { JSONSchemaType } from "ajv";
 import middy from "@middy/core";

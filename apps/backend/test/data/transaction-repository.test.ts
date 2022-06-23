@@ -9,7 +9,7 @@ import {
   listTransactions,
   listTransactionsForDate,
   TransactionCreateInput,
-} from "../../lib/data/transactions";
+} from "../../lib/data/transaction-repository";
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});

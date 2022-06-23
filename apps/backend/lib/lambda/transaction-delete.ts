@@ -1,4 +1,4 @@
-import { deleteTransaction } from "../data/transactions";
+import { deleteTransaction } from "../data/transaction-repository";
 import type { APIGatewayProxyEvent, Context } from "aws-lambda";
 import middy from "@middy/core";
 import errorLogger from "@middy/error-logger";
