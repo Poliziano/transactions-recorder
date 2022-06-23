@@ -27,7 +27,7 @@ test("should respond with list of transactions", async () => {
   const createParamsA: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
-    name: "McDonalds",
+    name: "Tesco",
     amount: 12.5,
     type: "expenditure",
   };
@@ -35,7 +35,7 @@ test("should respond with list of transactions", async () => {
   const createParamsB: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2020, 1, 1).toISOString(),
-    name: "Waterstones",
+    name: "Sainsburys",
     amount: 7.99,
     type: "expenditure",
   };
@@ -51,7 +51,7 @@ test("should respond with list of transactions for date", async () => {
   const createParamsA: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
-    name: "McDonalds",
+    name: "KFC",
     amount: 12.5,
     type: "expenditure",
   };
@@ -59,7 +59,7 @@ test("should respond with list of transactions for date", async () => {
   const createParamsB: TransactionCreateParams = {
     userId: "abc",
     date: new Date(2020, 1, 1).toISOString(),
-    name: "Waterstones",
+    name: "Arc Cinema",
     amount: 7.99,
     type: "expenditure",
   };

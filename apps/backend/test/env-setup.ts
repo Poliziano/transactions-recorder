@@ -46,7 +46,8 @@ async function deleteDynamoDBItems(commands: any[]) {
       ...extractPutCommandKey(command),
       ...extractUpdateCommandKey(command),
       ...extractTransactionCommandKeys(command),
-      ...extractBatchWriteCommandKeys(command)
+      ...extractBatchWriteCommandKeys(command),
+      ...extractTransctWriteCommandKeys(command)
     );
   }
 
@@ -146,6 +147,19 @@ function extractBatchWriteCommandKeys(command: BatchWriteCommand): Item[] {
     }
   }
 
+  return result;
+}
+
+function extractTransctWriteCommandKeys(command: TransactWriteCommand): Item[] {
+  const result: Item[] = [];
+  for (const item of command?.input?.TransactItems ?? []) {
+    if (item.Put?.Item) {
+      result.push({
+        attributes: item.Put.Item,
+        tableName: item.Put.TableName!,
+      });
+    }
+  }
   return result;
 }
 
