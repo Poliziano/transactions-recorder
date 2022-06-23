@@ -8,7 +8,7 @@ import {
   listDailyTransactionAggregations,
   listTransactions,
   listTransactionsForDate,
-  TransactionCreateParams,
+  TransactionCreateInput,
 } from "../../lib/data/transactions";
 
 test("should have table named Transactions", async () => {
@@ -24,7 +24,7 @@ test("should respond with empty list of transactions", async () => {
 });
 
 test("should respond with list of transactions", async () => {
-  const createParamsA: TransactionCreateParams = {
+  const createParamsA: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
     name: "Tesco",
@@ -32,7 +32,7 @@ test("should respond with list of transactions", async () => {
     type: "expenditure",
   };
 
-  const createParamsB: TransactionCreateParams = {
+  const createParamsB: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2020, 1, 1).toISOString(),
     name: "Sainsburys",
@@ -48,7 +48,7 @@ test("should respond with list of transactions", async () => {
 });
 
 test("should respond with list of transactions for date", async () => {
-  const createParamsA: TransactionCreateParams = {
+  const createParamsA: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
     name: "KFC",
@@ -56,7 +56,7 @@ test("should respond with list of transactions for date", async () => {
     type: "expenditure",
   };
 
-  const createParamsB: TransactionCreateParams = {
+  const createParamsB: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2020, 1, 1).toISOString(),
     name: "Arc Cinema",
@@ -75,7 +75,7 @@ test("should respond with list of transactions for date", async () => {
 });
 
 test("should delete transaction", async () => {
-  const createParams: TransactionCreateParams = {
+  const createParams: TransactionCreateInput = {
     userId: "abcd",
     date: new Date(2021, 1, 1).toISOString(),
     name: "McDonalds",
@@ -94,7 +94,7 @@ test("should delete transaction", async () => {
 });
 
 test("should update transaction summation", async () => {
-  const createParamsA: TransactionCreateParams = {
+  const createParamsA: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
     name: "McDonalds",
@@ -102,7 +102,7 @@ test("should update transaction summation", async () => {
     type: "expenditure",
   };
 
-  const createParamsB: TransactionCreateParams = {
+  const createParamsB: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2021, 1, 1).toISOString(),
     name: "Waterstones",
@@ -110,7 +110,7 @@ test("should update transaction summation", async () => {
     type: "expenditure",
   };
 
-  const createParamsC: TransactionCreateParams = {
+  const createParamsC: TransactionCreateInput = {
     userId: "abc",
     date: new Date(2021, 11, 4).toISOString(),
     name: "Waterstones",
@@ -118,22 +118,26 @@ test("should update transaction summation", async () => {
     type: "expenditure",
   };
 
+  const createParamsD: TransactionCreateInput = {
+    userId: "abc",
+    date: new Date(2020, 0, 1).toISOString(),
+    name: "Waterstones",
+    amount: 42,
+    type: "expenditure",
+  };
+
   await createTransaction(createParamsA);
   await createTransaction(createParamsB);
   await createTransaction(createParamsC);
+  await createTransaction(createParamsD);
 
   const dailyAggregation = await listDailyTransactionAggregations({
     userId: "abc",
   });
-  expect(dailyAggregation).toEqual([
-    {
-      userId: "abc",
-      type: "SUM",
-      year: 2021,
-      entries: {
-        "2021-12-04": 25,
-        "2021-02-01": 20.49,
-      },
-    },
-  ]);
+
+  expect(dailyAggregation).toEqual({
+    "2021-12-04": 25,
+    "2021-02-01": 20.49,
+    "2020-01-01": 42,
+  });
 });

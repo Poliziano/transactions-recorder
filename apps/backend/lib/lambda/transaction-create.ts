@@ -1,6 +1,6 @@
 import {
   createTransaction,
-  TransactionCreateParams,
+  TransactionCreateInput,
 } from "../data/transactions";
 import type { APIGatewayProxyEvent, Context } from "aws-lambda";
 import Ajv, { JSONSchemaType } from "ajv";
@@ -19,7 +19,7 @@ type TransactionCreateEvent = Omit<
   "body" | "pathParameters"
 > & {
   rawBody: string;
-  body: Omit<TransactionCreateParams, "userId">;
+  body: Omit<TransactionCreateInput, "userId">;
   pathParameters: {
     userId: string;
   };
@@ -54,7 +54,7 @@ const schema: JSONSchemaType<
 };
 
 const ajv = new Ajv();
-const validate = ajv.compile<TransactionCreateParams>(schema);
+const validate = ajv.compile<TransactionCreateInput>(schema);
 async function transactionCreateHandler(event: TransactionCreateEvent) {
   const transaction = await createTransaction({
     ...event.body,

@@ -9,8 +9,8 @@ import { fromTransactionAggregationItem } from "../entity/transaction-aggregatio
 import { NewTransactionCommand } from "./commands/new-transaction-command";
 import { db } from "./dynamo";
 
-export type ListTransactionsParams = { userId: string };
-export async function listTransactions({ userId }: ListTransactionsParams) {
+export type ListTransactionsInput = { userId: string };
+export async function listTransactions({ userId }: ListTransactionsInput) {
   const command = new QueryCommand({
     TableName: "Transactions",
     IndexName: "GSI1",
@@ -27,11 +27,11 @@ export async function listTransactions({ userId }: ListTransactionsParams) {
   return items.map(fromTransactionItem);
 }
 
-export type ListTransactionsForDateParams = { userId: string; date: string };
+export type ListTransactionsForDateInput = { userId: string; date: string };
 export async function listTransactionsForDate({
   userId,
   date,
-}: ListTransactionsForDateParams) {
+}: ListTransactionsForDateInput) {
   const command = new QueryCommand({
     TableName: "Transactions",
     IndexName: "GSI1",
@@ -48,12 +48,13 @@ export async function listTransactionsForDate({
   return items.map(fromTransactionItem);
 }
 
-export type ListDailyTransactionAggregationsParams = {
+export type ListDailyTransactionAggregationsInput = {
   userId: string;
 };
+export type ListDailyTransactionAggregationsOutput = Record<string, number>;
 export async function listDailyTransactionAggregations({
   userId,
-}: ListDailyTransactionAggregationsParams) {
+}: ListDailyTransactionAggregationsInput): Promise<ListDailyTransactionAggregationsOutput> {
   const command = new QueryCommand({
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK and begins_with(SK, :SK)",
@@ -66,13 +67,21 @@ export async function listDailyTransactionAggregations({
   const response = await db.send(command);
   const items = response.Items ?? [];
 
-  return items.map(fromTransactionAggregationItem<number>);
+  const aggregationsByYear = items.map(fromTransactionAggregationItem<number>);
+  return aggregationsByYear
+    .flatMap((year) =>
+      Object.entries(year.entries).map(([key, value]) => ({ [key]: value }))
+    )
+    .reduce((previous, current) => ({
+      ...previous,
+      ...current,
+    }));
 }
 
-export type TransactionCreateParams = Omit<Transaction, "uuid" | "date"> & {
+export type TransactionCreateInput = Omit<Transaction, "uuid" | "date"> & {
   date: string;
 };
-export async function createTransaction(params: TransactionCreateParams) {
+export async function createTransaction(params: TransactionCreateInput) {
   const transaction: Transaction = {
     ...params,
     date: new Date(params.date),
@@ -92,14 +101,14 @@ export async function createTransaction(params: TransactionCreateParams) {
   return transaction;
 }
 
-export type DeleteTransactionParams = {
+export type DeleteTransactionInput = {
   userId: string;
   transactionId: string;
 };
 export async function deleteTransaction({
   userId,
   transactionId,
-}: DeleteTransactionParams) {
+}: DeleteTransactionInput) {
   const command = new DeleteCommand({
     TableName: "Transactions",
     Key: {

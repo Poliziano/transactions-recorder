@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import {
   createTransaction,
-  TransactionCreateParams,
+  TransactionCreateInput,
 } from "../../lib/data/transactions";
 import { handler } from "../../lib/lambda/transaction-get";
 import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
@@ -9,7 +9,7 @@ import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
 const context = lambdaContextFactory.build();
 
 test("get transaction", async () => {
-  const createParams: TransactionCreateParams = {
+  const createParams: TransactionCreateInput = {
     userId: "some_id",
     date: new Date(2020, 0, 1).toISOString(),
     name: "McDonalds",

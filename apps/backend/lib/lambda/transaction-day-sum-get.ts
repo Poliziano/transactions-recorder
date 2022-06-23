@@ -35,7 +35,7 @@ const schema: JSONSchemaType<Pick<TransactionGetEvent, "pathParameters">> = {
 const ajv = new Ajv();
 const validate = ajv.compile<TransactionGetEvent>(schema);
 
-async function transactionGetHandler(event: TransactionGetEvent) {
+async function transactionDaySumGetHandler(event: TransactionGetEvent) {
   const aggregations = await listDailyTransactionAggregations({
     userId: event.pathParameters.userId,
   });
@@ -48,12 +48,13 @@ async function transactionGetHandler(event: TransactionGetEvent) {
   };
 }
 
-export const handler: ApiGatewayLambda<typeof transactionGetHandler> = middy()
-  .use(httpErrorHandler())
-  .use(errorLogger())
-  .use(cors())
-  .use(httpSecurityHeaders())
-  .use(jsonBodyParser())
-  .use(inputOutputLogger())
-  .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-  .handler(transactionGetHandler);
+export const handler: ApiGatewayLambda<typeof transactionDaySumGetHandler> =
+  middy()
+    .use(httpErrorHandler())
+    .use(errorLogger())
+    .use(cors())
+    .use(httpSecurityHeaders())
+    .use(jsonBodyParser())
+    .use(inputOutputLogger())
+    .use(validator({ inputSchema: validate, ajvInstance: ajv }))
+    .handler(transactionDaySumGetHandler);

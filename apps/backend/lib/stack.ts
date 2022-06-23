@@ -31,7 +31,7 @@ export class TransactionsStack extends Stack {
     const lambdaTransactionAggregationGet = new TransactionsNodejsFunction(
       this,
       "TransactionAggregationGet",
-      "transaction-aggregation-get.ts"
+      "transaction-day-sum-get.ts"
     );
 
     const lambdaTransactionCreate = new TransactionsNodejsFunction(
