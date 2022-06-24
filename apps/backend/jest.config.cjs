@@ -9,7 +9,7 @@ module.exports = {
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   verbose: true,
-  injectGlobals: false,
+  injectGlobals: true,
   globalSetup: "<rootDir>/test/global-setup.ts",
   setupFilesAfterEnv: ["<rootDir>/test/env-setup.ts"],
   transform: {

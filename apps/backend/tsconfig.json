@@ -1,4 +1,7 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": ["node_modules", "cdk.out"]
+  "exclude": ["node_modules", "cdk.out"],
+  "compilerOptions": {
+    "types": ["node", "jest"]
+  }
 }

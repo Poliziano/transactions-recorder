@@ -1,6 +1,4 @@
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
-import { GetCommand } from "@aws-sdk/lib-dynamodb";
-import { expect, test } from "@jest/globals";
 import { db } from "../../lib/data/dynamo";
 import {
   createTransaction,
@@ -94,42 +92,40 @@ test("should delete transaction", async () => {
 });
 
 test("should update transaction summation", async () => {
-  const createParamsA: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2021, 1, 1).toISOString(),
-    name: "McDonalds",
-    amount: 12.5,
-    type: "expenditure",
-  };
+  const createParams: TransactionCreateInput[] = [
+    {
+      userId: "abc",
+      date: new Date(2021, 1, 1).toISOString(),
+      name: "McDonalds",
+      amount: 12.5,
+      type: "expenditure",
+    },
+    {
+      userId: "abc",
+      date: new Date(2021, 1, 1).toISOString(),
+      name: "Waterstones",
+      amount: 7.99,
+      type: "expenditure",
+    },
+    {
+      userId: "abc",
+      date: new Date(2021, 11, 4).toISOString(),
+      name: "Waterstones",
+      amount: 25,
+      type: "expenditure",
+    },
+    {
+      userId: "abc",
+      date: new Date(2020, 0, 1).toISOString(),
+      name: "Waterstones",
+      amount: 42,
+      type: "expenditure",
+    },
+  ];
 
-  const createParamsB: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2021, 1, 1).toISOString(),
-    name: "Waterstones",
-    amount: 7.99,
-    type: "expenditure",
-  };
-
-  const createParamsC: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2021, 11, 4).toISOString(),
-    name: "Waterstones",
-    amount: 25,
-    type: "expenditure",
-  };
-
-  const createParamsD: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2020, 0, 1).toISOString(),
-    name: "Waterstones",
-    amount: 42,
-    type: "expenditure",
-  };
-
-  await createTransaction(createParamsA);
-  await createTransaction(createParamsB);
-  await createTransaction(createParamsC);
-  await createTransaction(createParamsD);
+  for (const params of createParams) {
+    await createTransaction(params);
+  }
 
   const dailyAggregation = await listDailyTransactionAggregations({
     userId: "abc",

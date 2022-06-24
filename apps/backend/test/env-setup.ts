@@ -7,8 +7,8 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { NativeAttributeValue } from "@aws-sdk/util-dynamodb";
-import { afterEach, jest } from "@jest/globals";
 import { db } from "../lib/data/dynamo";
+import "./jest-matchers/to-match-json";
 
 type Item = {
   attributes: NativeAttributeValue;

@@ -1,4 +1,3 @@
-import { expect, test } from "@jest/globals";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
 import { NewTransactionCommand } from "../../../lib/data/commands/new-transaction-command";
 import { db } from "../../../lib/data/dynamo";
