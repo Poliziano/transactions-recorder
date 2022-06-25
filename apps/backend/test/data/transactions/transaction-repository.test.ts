@@ -1,48 +1,18 @@
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
-import { db } from "../../lib/data/dynamo";
-import { deleteTransaction } from "../../lib/data/transactions/delete-transaction";
+import { db } from "../../../lib/data/dynamo";
+import { deleteTransaction } from "../../../lib/data/transactions/delete-transaction";
 import {
   createTransaction,
   TransactionCreateInput,
-} from "../../lib/data/transactions/create-transaction";
-import { listDailyTransactionAggregations } from "../../lib/data/transactions/list-transactions-daily-aggregation";
-import { listTransactionsForDate } from "../../lib/data/transactions/list-transactions-for-date";
-import { listTransactions } from "../../lib/data/transactions/list-transactions";
+} from "../../../lib/data/transactions/create-transaction";
+import { listDailyTransactionAggregations } from "../../../lib/data/transactions/list-transactions-daily-aggregation";
+import { listTransactionsForDate } from "../../../lib/data/transactions/list-transactions-for-date";
+import { listTransactions } from "../../../lib/data/transactions/list-transactions";
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});
   const result = await db.send(list);
-
   expect(result.TableNames).toStrictEqual(["Transactions"]);
-});
-
-test("should respond with empty list of transactions", async () => {
-  const transactions = await listTransactions({ userId: "user_unknown" });
-  expect(transactions).toStrictEqual([]);
-});
-
-test("should respond with list of transactions", async () => {
-  const createParamsA: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2021, 1, 1).toISOString(),
-    name: "Tesco",
-    amount: 12.5,
-    type: "expenditure",
-  };
-
-  const createParamsB: TransactionCreateInput = {
-    userId: "abc",
-    date: new Date(2020, 1, 1).toISOString(),
-    name: "Sainsburys",
-    amount: 7.99,
-    type: "expenditure",
-  };
-
-  const transactionA = await createTransaction(createParamsA);
-  const transactionB = await createTransaction(createParamsB);
-
-  const transactions = await listTransactions({ userId: "abc" });
-  expect(transactions).toStrictEqual([transactionA, transactionB]);
 });
 
 test("should respond with list of transactions for date", async () => {
