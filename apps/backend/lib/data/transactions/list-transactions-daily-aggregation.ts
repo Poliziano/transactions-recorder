@@ -26,8 +26,11 @@ export async function listDailyTransactionAggregations({
     .flatMap((year) =>
       Object.entries(year.entries).map(([key, value]) => ({ [key]: value }))
     )
-    .reduce((previous, current) => ({
-      ...previous,
-      ...current,
-    }));
+    .reduce(
+      (previous, current) => ({
+        ...previous,
+        ...current,
+      }),
+      {}
+    );
 }
