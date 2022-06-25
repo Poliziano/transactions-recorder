@@ -33,8 +33,8 @@ importers:
       '@types/node': ^18.0.0
       '@types/source-map-support': ^0.5.4
       ajv: ^8.11.0
-      aws-cdk: 2.29.0
-      aws-cdk-lib: ^2.29.0
+      aws-cdk: 2.29.1
+      aws-cdk-lib: ^2.29.1
       aws-sdk: ^2.1162.0
       constructs: ^10.1.42
       esbuild: ^0.14.47
@@ -63,7 +63,7 @@ importers:
       testcontainers: 8.11.0
     devDependencies:
       '@jest/types': 28.1.1
-      '@swc-node/register': 1.5.1_typescript@4.7.4
+      '@swc-node/register': 1.5.1
       '@swc/cli': 0.1.57_@swc+core@1.2.205
       '@swc/core': 1.2.205
       '@swc/jest': 0.2.21_@swc+core@1.2.205
@@ -71,8 +71,8 @@ importers:
       '@types/aws-lambda': 8.10.101
       '@types/node': 18.0.0
       '@types/source-map-support': 0.5.4
-      aws-cdk: 2.29.0
-      aws-cdk-lib: 2.29.0_constructs@10.1.42
+      aws-cdk: 2.29.1
+      aws-cdk-lib: 2.29.1_constructs@10.1.42
       aws-sdk: 2.1162.0
       constructs: 10.1.42
       esbuild: 0.14.47
@@ -1132,6 +1132,7 @@ packages:
 
   /@balena/dockerignore/1.0.2:
     resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
+    dev: false
 
   /@bcoe/v8-coverage/0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
@@ -1690,7 +1691,7 @@ packages:
       '@swc/core': 1.2.205
     dev: true
 
-  /@swc-node/register/1.5.1_typescript@4.7.4:
+  /@swc-node/register/1.5.1:
     resolution: {integrity: sha512-6IL5s4QShKGs08qAeNou3rDA3gbp2WHk6fo0XnJXQn/aC9k6FnVBbj/thGOIEDtgNhC/DKpZT8tCY1LpQnOZFg==}
     peerDependencies:
       typescript: '>= 4.3'
@@ -1701,7 +1702,6 @@ packages:
       debug: 4.3.4
       pirates: 4.0.5
       tslib: 2.4.0
-      typescript: 4.7.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2377,27 +2377,13 @@ packages:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
     dev: false
 
-  /at-least-node/1.0.0:
-    resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
-    engines: {node: '>= 4.0.0'}
-    dev: true
-
-  /aws-cdk-lib/2.29.0_constructs@10.1.42:
-    resolution: {integrity: sha512-twoxtVTdZoLn5iDfO8vZPFa/j0VAm3o+8wnyzRVYR/BHtTyxWoWvYDxwLLlUijvBJ3KZV+wvqgnjDOTy7vD0IQ==}
+  /aws-cdk-lib/2.29.1_constructs@10.1.42:
+    resolution: {integrity: sha512-tmWhsmSvNrJD9/SFAD0The7hON3VYUcFchKnjPg4vwvY89XzZv76IB24KLy3XoXF33WYvCUzDQPO/bCZQBF4LA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
     dependencies:
-      '@balena/dockerignore': 1.0.2
-      case: 1.6.3
       constructs: 10.1.42
-      fs-extra: 9.1.0
-      ignore: 5.2.0
-      jsonschema: 1.4.1
-      minimatch: 3.1.2
-      punycode: 2.1.1
-      semver: 7.3.7
-      yaml: 1.10.2
     dev: true
     bundledDependencies:
       - '@balena/dockerignore'
@@ -2410,8 +2396,8 @@ packages:
       - semver
       - yaml
 
-  /aws-cdk/2.29.0:
-    resolution: {integrity: sha512-NoFHoel2B2SgDsTH+J3LwWAbnfcdUFoKc9JAMXcBighkYecWPJK6lvPu00N2CGiFRWfkYGWwqU5BbfYJb1KgkQ==}
+  /aws-cdk/2.29.1:
+    resolution: {integrity: sha512-JRuxHfMPR7kpGrk5fA1NgBmTLPpVa2gIRf5Pz+T9XaHM0lB8QLOkjXD6O5UJvgQtx/rwYAyD8b+n3b1rKaEGRQ==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
     optionalDependencies:
@@ -2624,11 +2610,6 @@ packages:
 
   /caniuse-lite/1.0.30001354:
     resolution: {integrity: sha512-mImKeCkyGDAHNywYFA4bqnLAzTUvVkqPvhY4DV47X+Gl2c5Z8c3KNETnXp14GQt11LvxE8AwjzGxJ+rsikiOzg==}
-    dev: true
-
-  /case/1.6.3:
-    resolution: {integrity: sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==}
-    engines: {node: '>= 0.8.0'}
     dev: true
 
   /chalk/2.4.2:
@@ -3469,16 +3450,6 @@ packages:
     resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
     dev: false
 
-  /fs-extra/9.1.0:
-    resolution: {integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==}
-    engines: {node: '>=10'}
-    dependencies:
-      at-least-node: 1.0.0
-      graceful-fs: 4.2.10
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: true
-
   /fs-minipass/1.2.7:
     resolution: {integrity: sha512-GWSSJGFy4e9GUeCcbIkED+bgAoFyj7XF1mV8rma3QW4NIqX9Kyx79N/PF61H5udOV3aY1IaMLs6pGbH71nlCTA==}
     dependencies:
@@ -4289,18 +4260,6 @@ packages:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: true
-
-  /jsonfile/6.1.0:
-    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
-    dependencies:
-      universalify: 2.0.0
-    optionalDependencies:
-      graceful-fs: 4.2.10
-    dev: true
-
-  /jsonschema/1.4.1:
-    resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
     dev: true
 
   /kleur/3.0.3:
@@ -5597,11 +5556,6 @@ packages:
     hasBin: true
     dev: true
 
-  /universalify/2.0.0:
-    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
-    engines: {node: '>= 10.0.0'}
-    dev: true
-
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
@@ -5760,6 +5714,7 @@ packages:
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
+    dev: false
 
   /yargs-parser/21.0.1:
     resolution: {integrity: sha512-9BK1jFpLzJROCI5TzwZL/TU4gqjK5xiHV/RfWLOahrjAko/e4DJkRDZQXfvqAsiZzzYhgAzbgz6lg48jcm4GLg==}
