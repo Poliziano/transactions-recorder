@@ -1,3 +1,14 @@
+declare global {
+  namespace jest {
+    interface It {
+      func: <THandler extends (...args: any[]) => any>(
+        functionUnderTest: THandler,
+        cases: FuncTestCase<THandler>[]
+      ) => void;
+    }
+  }
+}
+
 export type FuncTestCase<
   THandler extends (...args: any[]) => any,
   TOutput = ReturnType<THandler> extends Promise<infer THandlerPromise>
@@ -14,7 +25,7 @@ export type FuncTestCase<
  * Small wrapper around `test.each` that faciliates building a table of tests
  * for a function, with appropriate inputs and outputs, and optional setup if necessary.
  */
-export function func<THandler extends (...args: any[]) => any>(
+function func<THandler extends (...args: any[]) => any>(
   functionUnderTest: THandler,
   cases: FuncTestCase<THandler>[]
 ) {
@@ -24,3 +35,5 @@ export function func<THandler extends (...args: any[]) => any>(
     expect(output).toMatchObject(expectedOutput);
   });
 }
+
+test.func = func;

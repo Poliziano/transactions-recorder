@@ -9,6 +9,7 @@ import {
 import { NativeAttributeValue } from "@aws-sdk/util-dynamodb";
 import { db } from "../lib/data/dynamo";
 import "./jest-matchers/to-match-json";
+import "./jest-matchers/func";
 
 type Item = {
   attributes: NativeAttributeValue;

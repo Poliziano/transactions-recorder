@@ -1,11 +1,10 @@
 import { putTransaction } from "../../../lib/data/transactions/create-transaction";
 import { listTransactions } from "../../../lib/data/transactions/list-transactions";
 import randomUserId from "../../factories/user-id";
-import { func } from "../../function-test";
 
 const userId = randomUserId();
 
-func(listTransactions, [
+test.func(listTransactions, [
   {
     name: "return empty list of transactions",
     input: [{ userId }],

@@ -5,11 +5,10 @@ import {
   lambdaContextFactory,
 } from "../factories/api-gateway";
 import randomUserId from "../factories/user-id";
-import { func } from "../function-test";
 
 const userId = randomUserId();
 
-func(handler, [
+test.func(handler, [
   {
     name: "delete transaction for user",
     input: [
