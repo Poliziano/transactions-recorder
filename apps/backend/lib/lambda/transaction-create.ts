@@ -1,18 +1,11 @@
+import middy from "@middy/core";
+import validator from "@middy/validator";
+import Ajv, { JSONSchemaType } from "ajv";
+import type { APIGatewayProxyEvent } from "aws-lambda";
 import {
   createTransaction,
   TransactionCreateInput,
 } from "../data/transactions/create-transaction";
-import type { APIGatewayProxyEvent, Context } from "aws-lambda";
-import Ajv, { JSONSchemaType } from "ajv";
-import middy from "@middy/core";
-import jsonBodyParser from "@middy/http-json-body-parser";
-import validator from "@middy/validator";
-import httpErrorHandler from "@middy/http-error-handler";
-import errorLogger from "@middy/error-logger";
-import inputOutputLogger from "@middy/input-output-logger";
-import httpSecurityHeaders from "@middy/http-security-headers";
-import cors from "@middy/http-cors";
-import { ApiGatewayLambda } from "./types";
 import middleware from "./middlware/common-middleware";
 
 type TransactionCreateEvent = Omit<
