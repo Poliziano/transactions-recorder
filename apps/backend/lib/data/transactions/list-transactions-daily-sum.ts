@@ -1,6 +1,7 @@
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { fromTransactionAggregationItem } from "../../entity/transaction-aggregation";
 import { db } from "../dynamo";
+import { ListTransactionsDailySum } from "transactions-schema";
 
 export type ListDailyTransactionAggregationsInput = {
   userId: string;
@@ -8,7 +9,7 @@ export type ListDailyTransactionAggregationsInput = {
 
 export async function listTrainsactionsDailySum({
   userId,
-}: ListDailyTransactionAggregationsInput): Promise<Record<string, number>> {
+}: ListDailyTransactionAggregationsInput): Promise<ListTransactionsDailySum> {
   const command = new QueryCommand({
     TableName: "Transactions",
     KeyConditionExpression: "PK = :PK and begins_with(SK, :SK)",

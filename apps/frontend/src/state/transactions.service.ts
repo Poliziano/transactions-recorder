@@ -1,21 +1,20 @@
 import { endpoint } from "../api/api";
-import type { TransactionEntity } from "../api/transaction";
 import type {
   Context,
   CreateTransactionEvent,
   DeleteTransactionEvent,
 } from "./transactions.machine";
+import type { ListTransactionsDailySumResponse } from "transactions-schema";
 
-export async function fetchTransactions(): Promise<TransactionEntity[]> {
-  const url = `${endpoint}/users/abc/transactions`;
+export async function fetchTransactions(): Promise<ListTransactionsDailySumResponse> {
+  const url = `${endpoint}/users/abc/transactions/aggregations`;
   const response = await fetch(url, {
     method: "GET",
   });
   if (!response.ok) {
     throw new Error();
   }
-  const json = await response.json();
-  return json.transactions;
+  return await response.json();
 }
 
 export async function createTransaction(

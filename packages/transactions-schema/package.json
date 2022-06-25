@@ -1,0 +1,11 @@
+{
+  "name": "transactions-schema",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "main": "./lib/index.js",
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3"
+  }
+}

@@ -32,7 +32,8 @@
     "constructs": "^10.1.42",
     "esbuild": "^0.14.47",
     "fishery": "^2.2.2",
-    "jest": "^28.1.1"
+    "jest": "^28.1.1",
+    "transactions-schema": "workspace:0.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.118.0",
