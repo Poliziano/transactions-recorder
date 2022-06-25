@@ -3,7 +3,7 @@ import { Template } from "aws-cdk-lib/assertions";
 import { BUNDLING_STACKS } from "aws-cdk-lib/cx-api";
 import { TransactionsStack } from "../lib/stack";
 
-let template: any;
+let template: Template;
 
 beforeAll(() => {
   const app = new cdk.App({
