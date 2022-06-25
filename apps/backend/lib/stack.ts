@@ -83,7 +83,7 @@ export class TransactionsStack extends Stack {
 class TransactionsNodejsFunction extends NodejsFunction {
   constructor(scope: any, id: string, filename: string) {
     super(scope, id, {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: "handler",
       entry: path.resolve(__dirname, "lambda", filename),
     });
