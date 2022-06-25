@@ -81,13 +81,16 @@ export async function listDailyTransactionAggregations({
 export type TransactionCreateInput = Omit<Transaction, "uuid" | "date"> & {
   date: string;
 };
-export async function createTransaction(params: TransactionCreateInput) {
+export function createTransaction(params: TransactionCreateInput) {
   const transaction: Transaction = {
     ...params,
     date: new Date(params.date),
     uuid: transactionUUID(),
   };
 
+  return putTransaction(transaction);
+}
+export async function putTransaction(transaction: Transaction) {
   try {
     await db.send(new NewTransactionCommand({ transaction, update: true }));
   } catch (err) {
@@ -114,6 +117,10 @@ export async function deleteTransaction({
     Key: {
       PK: `USER#${userId}`,
       SK: `TRANSACTION#${transactionId}`,
+    },
+    ConditionExpression: "attribute_exists(#pk)",
+    ExpressionAttributeNames: {
+      "#pk": "PK",
     },
   });
 

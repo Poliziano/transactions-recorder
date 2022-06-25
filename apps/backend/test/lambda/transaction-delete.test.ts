@@ -1,32 +1,38 @@
-import {
-  createTransaction,
-  TransactionCreateInput,
-} from "../../lib/data/transaction-repository";
+import { putTransaction } from "../../lib/data/transaction-repository";
 import { handler } from "../../lib/lambda/transaction-delete";
-import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
+import {
+  apiGatewayProxyEventFactory,
+  lambdaContextFactory,
+} from "../factories/api-gateway";
+import randomUserId from "../factories/user-id";
+import { func } from "../function-test";
 
-const context = lambdaContextFactory.build();
+const userId = randomUserId();
 
-test("delete transaction for user", async () => {
-  const createParams: TransactionCreateInput = {
-    userId: "some_user_id",
-    date: new Date(2021, 0, 1).toISOString(),
-    name: "McDonalds",
-    amount: 12.5,
-    type: "expenditure",
-  };
-
-  const transaction = await createTransaction(createParams);
-
-  const event = apiGatewayProxyEventFactory.build({
-    pathParameters: {
-      userId: transaction.userId,
-      transactionId: transaction.uuid,
+func(handler, [
+  {
+    name: "delete transaction for user",
+    input: [
+      apiGatewayProxyEventFactory.build({
+        pathParameters: {
+          userId,
+          transactionId: "transaction_uuid",
+        },
+      }),
+      lambdaContextFactory.build(),
+    ],
+    expectedOutput: {
+      statusCode: 200,
     },
-  });
-  const response = await handler(event, context);
-
-  expect(response).toMatchObject({
-    statusCode: 200,
-  });
-});
+    setup() {
+      return putTransaction({
+        userId,
+        uuid: "transaction_uuid",
+        date: new Date(2021, 0, 1),
+        name: "McDonalds",
+        amount: 12.5,
+        type: "expenditure",
+      });
+    },
+  },
+]);

@@ -1,43 +1,56 @@
 import { handler } from "../../lib/lambda/transaction-create";
-import { apiGatewayProxyEventFactory, lambdaContextFactory } from "./factory";
+import {
+  apiGatewayProxyEventFactory,
+  lambdaContextFactory,
+} from "../factories/api-gateway";
+import randomUserId from "../factories/user-id";
+import { func } from "../function-test";
 
-test.each([
+const userId = randomUserId();
+
+func(handler, [
   {
     name: "throw when invalid payload",
-    event: apiGatewayProxyEventFactory.build(),
-    expected: {
+    input: [apiGatewayProxyEventFactory.build(), lambdaContextFactory.build()],
+    expectedOutput: {
       statusCode: 400,
     },
   },
   {
     name: "throw when partial payload",
-    event: apiGatewayProxyEventFactory.build({
-      body: JSON.stringify({
-        date: new Date(2021, 1, 1),
-        name: "McDonalds",
+    input: [
+      apiGatewayProxyEventFactory.build({
+        body: JSON.stringify({
+          date: new Date(2021, 1, 1),
+          name: "McDonalds",
+        }),
       }),
-    }),
-    expected: {
+      lambdaContextFactory.build(),
+    ],
+    expectedOutput: {
       statusCode: 400,
     },
   },
   {
     name: "not throw when valid payload",
-    event: apiGatewayProxyEventFactory.build({
-      body: JSON.stringify({
-        date: new Date(2021, 1, 1),
-        name: "McDonalds",
-        amount: 12.5,
-        type: "expenditure",
+    input: [
+      apiGatewayProxyEventFactory.build({
+        body: JSON.stringify({
+          date: new Date(2021, 1, 1),
+          name: "McDonalds",
+          amount: 12.5,
+          type: "expenditure",
+        }),
+        pathParameters: {
+          userId,
+        },
       }),
-      pathParameters: {
-        userId: "a_user_id",
-      },
-    }),
-    expected: {
+      lambdaContextFactory.build(),
+    ],
+    expectedOutput: {
       statusCode: 200,
       body: expect.jsonMatching({
-        userId: "a_user_id",
+        userId,
         name: "McDonalds",
         amount: 12.5,
         type: "expenditure",
@@ -46,7 +59,4 @@ test.each([
       }),
     },
   },
-])("$name", async ({ event, expected }) => {
-  const response = await handler(event, lambdaContextFactory.build());
-  expect(response).toMatchObject(expected);
-});
+]);
