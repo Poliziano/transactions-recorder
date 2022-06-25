@@ -5,7 +5,7 @@ import {
 } from "../factories/api-gateway";
 import { batchCreateTransactions } from "../factories/transactions";
 import randomUserId from "../factories/user-id";
-import { untyped } from "./compiler-stfu";
+import untyped from "./compiler-hackery";
 
 const userId = randomUserId();
 

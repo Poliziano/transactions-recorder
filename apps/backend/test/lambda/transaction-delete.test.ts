@@ -5,7 +5,7 @@ import {
   lambdaContextFactory,
 } from "../factories/api-gateway";
 import randomUserId from "../factories/user-id";
-import { untyped } from "./compiler-stfu";
+import untyped from "./compiler-hackery";
 
 const userId = randomUserId();
 
