@@ -1,13 +1,13 @@
 import { ListTablesCommand } from "@aws-sdk/client-dynamodb";
 import { db } from "../../lib/data/dynamo";
+import { deleteTransaction } from "../../lib/data/transactions/delete-transaction";
 import {
   createTransaction,
-  deleteTransaction,
-  listDailyTransactionAggregations,
-  listTransactions,
-  listTransactionsForDate,
   TransactionCreateInput,
-} from "../../lib/data/transaction-repository";
+} from "../../lib/data/transactions/create-transaction";
+import { listDailyTransactionAggregations } from "../../lib/data/transactions/list-transactions-daily-aggregation";
+import { listTransactionsForDate } from "../../lib/data/transactions/list-transactions-for-date";
+import { listTransactions } from "../../lib/data/transactions/list-transactions";
 
 test("should have table named Transactions", async () => {
   const list = new ListTablesCommand({});

@@ -8,7 +8,7 @@ import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import type { APIGatewayProxyEvent } from "aws-lambda";
-import { listDailyTransactionAggregations } from "../data/transaction-repository";
+import { listDailyTransactionAggregations } from "../data/transactions/list-transactions-daily-aggregation";
 import { ApiGatewayLambda } from "./types";
 
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {

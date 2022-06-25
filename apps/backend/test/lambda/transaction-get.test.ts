@@ -1,4 +1,4 @@
-import { putTransaction } from "../../lib/data/transaction-repository";
+import { putTransaction } from "../../lib/data/transactions/create-transaction";
 import { handler } from "../../lib/lambda/transaction-get";
 import {
   apiGatewayProxyEventFactory,
