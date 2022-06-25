@@ -3,11 +3,13 @@ import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import type { APIGatewayProxyEvent } from "aws-lambda";
 import { listTransactions } from "../data/transactions/list-transactions";
+import { listTransactionsForDate } from "../data/transactions/list-transactions-for-date";
 import middleware from "./middlware/common-middleware";
 
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
     userId: string;
+    date: string;
   };
 };
 
@@ -18,8 +20,9 @@ const schema: JSONSchemaType<Pick<TransactionGetEvent, "pathParameters">> = {
       type: "object",
       properties: {
         userId: { type: "string" },
+        date: { type: "string" },
       },
-      required: ["userId"],
+      required: ["userId", "date"],
       additionalProperties: false,
     },
   },
@@ -30,8 +33,9 @@ const ajv = new Ajv();
 const validate = ajv.compile<TransactionGetEvent>(schema);
 
 async function transactionGetHandler(event: TransactionGetEvent) {
-  const transactions = await listTransactions({
+  const transactions = await listTransactionsForDate({
     userId: event.pathParameters.userId,
+    date: event.pathParameters.date,
   });
 
   return {

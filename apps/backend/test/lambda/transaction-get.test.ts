@@ -18,11 +18,26 @@ test.func(untyped(handler), [
     },
   },
   {
+    name: "throw when partial payload",
+    input: [
+      apiGatewayProxyEventFactory.build({
+        pathParameters: {
+          userId,
+        },
+      }),
+      lambdaContextFactory.build(),
+    ],
+    expectedOutput: {
+      statusCode: 400,
+    },
+  },
+  {
     name: "get transactions",
     input: [
       apiGatewayProxyEventFactory.build({
         pathParameters: {
           userId,
+          date: "2021-02-01",
         },
       }),
       lambdaContextFactory.build(),

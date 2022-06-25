@@ -71,10 +71,9 @@ export class TransactionsStack extends Stack {
       .addResource("{userId}")
       .addResource("transactions");
 
-    transactionsResource.addMethod(
-      "GET",
-      new apigateway.LambdaIntegration(lambdaTransactionGet)
-    );
+    transactionsResource
+      .addResource("{date}")
+      .addMethod("GET", new apigateway.LambdaIntegration(lambdaTransactionGet));
     transactionsResource.addMethod(
       "POST",
       new apigateway.LambdaIntegration(lambdaTransactionCreate)
