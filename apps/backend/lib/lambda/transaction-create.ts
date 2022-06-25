@@ -13,6 +13,7 @@ import inputOutputLogger from "@middy/input-output-logger";
 import httpSecurityHeaders from "@middy/http-security-headers";
 import cors from "@middy/http-cors";
 import { ApiGatewayLambda } from "./types";
+import middleware from "./middlware/common-middleware";
 
 type TransactionCreateEvent = Omit<
   APIGatewayProxyEvent,
@@ -67,13 +68,6 @@ async function transactionCreateHandler(event: TransactionCreateEvent) {
   };
 }
 
-export const handler: ApiGatewayLambda<typeof transactionCreateHandler> =
-  middy()
-    .use(httpErrorHandler())
-    .use(errorLogger())
-    .use(cors())
-    .use(httpSecurityHeaders())
-    .use(jsonBodyParser())
-    .use(inputOutputLogger())
-    .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-    .handler(transactionCreateHandler);
+export const handler = middy(transactionCreateHandler)
+  .use(middleware)
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));

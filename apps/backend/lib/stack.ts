@@ -5,6 +5,7 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import path from "path";
+import { ProjectionType } from "aws-cdk-lib/aws-dynamodb";
 
 export class TransactionsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -20,6 +21,19 @@ export class TransactionsStack extends Stack {
         type: dynamodb.AttributeType.STRING,
       },
       tableName: "Transactions",
+    });
+
+    transactionsTable.addGlobalSecondaryIndex({
+      indexName: "GSI1",
+      partitionKey: {
+        name: "GSI1PK",
+        type: dynamodb.AttributeType.STRING,
+      },
+      sortKey: {
+        name: "GSI1SK",
+        type: dynamodb.AttributeType.STRING,
+      },
+      projectionType: ProjectionType.ALL,
     });
 
     const lambdaTransactionGet = new TransactionsNodejsFunction(

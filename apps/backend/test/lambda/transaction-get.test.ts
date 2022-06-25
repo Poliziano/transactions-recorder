@@ -5,10 +5,11 @@ import {
   lambdaContextFactory,
 } from "../factories/api-gateway";
 import randomUserId from "../factories/user-id";
+import { untyped } from "./compiler-stfu";
 
 const userId = randomUserId();
 
-test.func(handler, [
+test.func(untyped(handler), [
   {
     name: "throw when invalid payload",
     input: [apiGatewayProxyEventFactory.build(), lambdaContextFactory.build()],

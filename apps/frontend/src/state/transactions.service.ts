@@ -26,6 +26,9 @@ export async function createTransaction(
 
   const response = await fetch(url, {
     method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
     body: JSON.stringify(event.data),
   });
 

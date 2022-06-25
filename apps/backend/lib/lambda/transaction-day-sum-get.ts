@@ -9,7 +9,7 @@ import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import type { APIGatewayProxyEvent } from "aws-lambda";
 import { listTrainsactionsDailySum } from "../data/transactions/list-transactions-daily-sum";
-import { ApiGatewayLambda } from "./types";
+import middleware from "./middlware/common-middleware";
 
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
@@ -48,13 +48,6 @@ async function transactionDaySumGetHandler(event: TransactionGetEvent) {
   };
 }
 
-export const handler: ApiGatewayLambda<typeof transactionDaySumGetHandler> =
-  middy()
-    .use(httpErrorHandler())
-    .use(errorLogger())
-    .use(cors())
-    .use(httpSecurityHeaders())
-    .use(jsonBodyParser())
-    .use(inputOutputLogger())
-    .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-    .handler(transactionDaySumGetHandler);
+export const handler = middy(transactionDaySumGetHandler)
+  .use(middleware)
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));

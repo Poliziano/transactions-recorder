@@ -1,15 +1,15 @@
-import { deleteTransaction } from "../data/transactions/delete-transaction";
-import type { APIGatewayProxyEvent, Context } from "aws-lambda";
 import middy from "@middy/core";
 import errorLogger from "@middy/error-logger";
+import cors from "@middy/http-cors";
 import httpErrorHandler from "@middy/http-error-handler";
 import jsonBodyParser from "@middy/http-json-body-parser";
 import httpSecurityHeaders from "@middy/http-security-headers";
 import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
-import cors from "@middy/http-cors";
-import { ApiGatewayLambda } from "./types";
+import type { APIGatewayProxyEvent } from "aws-lambda";
+import { deleteTransaction } from "../data/transactions/delete-transaction";
+import middleware from "./middlware/common-middleware";
 
 type TransactionDeleteEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
   pathParameters: {
@@ -48,13 +48,6 @@ async function transactionDeleteHandler(event: TransactionDeleteEvent) {
   };
 }
 
-export const handler: ApiGatewayLambda<typeof transactionDeleteHandler> =
-  middy()
-    .use(httpErrorHandler())
-    .use(errorLogger())
-    .use(cors())
-    .use(httpSecurityHeaders())
-    .use(jsonBodyParser())
-    .use(inputOutputLogger())
-    .use(validator({ inputSchema: validate, ajvInstance: ajv }))
-    .handler(transactionDeleteHandler);
+export const handler = middy(transactionDeleteHandler)
+  .use(middleware)
+  .use(validator({ inputSchema: validate, ajvInstance: ajv }));

@@ -3,15 +3,13 @@ import {
   apiGatewayProxyEventFactory,
   lambdaContextFactory,
 } from "../factories/api-gateway";
-import {
-  batchCreateTransactions,
-  batchPutTransactions,
-} from "../factories/transactions";
+import { batchCreateTransactions } from "../factories/transactions";
 import randomUserId from "../factories/user-id";
+import { untyped } from "./compiler-stfu";
 
 const userId = randomUserId();
 
-test.func(handler, [
+test.func(untyped(handler), [
   {
     name: "return list of transactions on date",
     input: [
