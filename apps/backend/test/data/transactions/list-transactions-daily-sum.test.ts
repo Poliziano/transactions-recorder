@@ -1,10 +1,10 @@
-import { listDailyTransactionAggregations } from "../../../lib/data/transactions/list-transactions-daily-aggregation";
+import { listTrainsactionsDailySum } from "../../../lib/data/transactions/list-transactions-daily-sum";
 import { batchCreateTransactions } from "../../factories/transactions";
 import randomUserId from "../../factories/user-id";
 
 const userId = randomUserId();
 
-test.func(listDailyTransactionAggregations, [
+test.func(listTrainsactionsDailySum, [
   {
     name: "return empty aggregations",
     input: [{ userId }],

@@ -8,7 +8,7 @@ import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import type { APIGatewayProxyEvent } from "aws-lambda";
-import { listDailyTransactionAggregations } from "../data/transactions/list-transactions-daily-aggregation";
+import { listTrainsactionsDailySum } from "../data/transactions/list-transactions-daily-sum";
 import { ApiGatewayLambda } from "./types";
 
 type TransactionGetEvent = Omit<APIGatewayProxyEvent, "pathParameters"> & {
@@ -36,7 +36,7 @@ const ajv = new Ajv();
 const validate = ajv.compile<TransactionGetEvent>(schema);
 
 async function transactionDaySumGetHandler(event: TransactionGetEvent) {
-  const aggregations = await listDailyTransactionAggregations({
+  const aggregations = await listTrainsactionsDailySum({
     userId: event.pathParameters.userId,
   });
 

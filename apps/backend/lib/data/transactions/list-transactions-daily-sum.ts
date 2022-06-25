@@ -6,7 +6,7 @@ export type ListDailyTransactionAggregationsInput = {
   userId: string;
 };
 
-export async function listDailyTransactionAggregations({
+export async function listTrainsactionsDailySum({
   userId,
 }: ListDailyTransactionAggregationsInput): Promise<Record<string, number>> {
   const command = new QueryCommand({
