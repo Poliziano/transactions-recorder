@@ -72,6 +72,7 @@ export class TransactionsStack extends Stack {
       .addResource("transactions");
 
     transactionsResource
+      .addResource("date")
       .addResource("{date}")
       .addMethod("GET", new apigateway.LambdaIntegration(lambdaTransactionGet));
     transactionsResource.addMethod(
