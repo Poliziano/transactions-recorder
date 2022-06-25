@@ -2,7 +2,6 @@ import middy from "@middy/core";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
 import type { APIGatewayProxyEvent } from "aws-lambda";
-import { listTransactions } from "../data/transactions/list-transactions";
 import { listTransactionsForDate } from "../data/transactions/list-transactions-for-date";
 import middleware from "./middlware/common-middleware";
 

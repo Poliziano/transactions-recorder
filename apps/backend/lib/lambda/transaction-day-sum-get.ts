@@ -1,13 +1,7 @@
 import middy from "@middy/core";
-import errorLogger from "@middy/error-logger";
-import cors from "@middy/http-cors";
-import httpErrorHandler from "@middy/http-error-handler";
-import jsonBodyParser from "@middy/http-json-body-parser";
-import httpSecurityHeaders from "@middy/http-security-headers";
-import inputOutputLogger from "@middy/input-output-logger";
 import validator from "@middy/validator";
 import Ajv, { JSONSchemaType } from "ajv";
-import type { APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { listTrainsactionsDailySum } from "../data/transactions/list-transactions-daily-sum";
 import middleware from "./middlware/common-middleware";
 
@@ -35,7 +29,9 @@ const schema: JSONSchemaType<Pick<TransactionGetEvent, "pathParameters">> = {
 const ajv = new Ajv();
 const validate = ajv.compile<TransactionGetEvent>(schema);
 
-async function transactionDaySumGetHandler(event: TransactionGetEvent) {
+async function transactionDaySumGetHandler(
+  event: TransactionGetEvent
+): Promise<APIGatewayProxyResult> {
   const aggregations = await listTrainsactionsDailySum({
     userId: event.pathParameters.userId,
   });
