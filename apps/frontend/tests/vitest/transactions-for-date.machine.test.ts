@@ -31,7 +31,7 @@ test("updates start when fetching transactions", async () => {
   const service = interpret(machine).start();
   service.send("FETCH_TRANSACTIONS");
   await waitForState(service, "displayingTransactions");
-  expect(service.state.context).toMatchObject({
+  expect(service.state.context).toStrictEqual({
     date: "2022-01-01",
     transactions: [
       {
