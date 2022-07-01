@@ -1,7 +1,14 @@
-import { assign, createMachine } from "xstate";
+import { assign, createMachine, spawn } from "xstate";
+import createTransactionsForDateMachine from "./transactions-for-date.machine";
 
 export type Context = {
-  dates: Record<string, number>;
+  dates: Record<
+    string,
+    {
+      amount: number;
+      service: ReturnType<typeof createTransactionsForDateMachine>;
+    }
+  >;
 };
 
 export type Events = FetchTransactionsEvent | FetchTransactionsDoneEvent;
@@ -65,7 +72,14 @@ export default function createAggregatedDailyTransactionsMachine({
             Object.entries(event.data).reduce(
               (previous, [key, value]) => ({
                 ...previous,
-                [key]: value,
+                [key]: {
+                  value,
+                  service: spawn(
+                    createTransactionsForDateMachine({
+                      date: key,
+                    })
+                  ),
+                },
               }),
               {}
             ),
