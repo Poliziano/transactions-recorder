@@ -11,3 +11,7 @@ export type TransactionEntityCreateParams = Omit<
   TransactionEntity,
   "userId" | "uuid"
 >;
+
+export type TransactionsForDateResponse = {
+  transactions: TransactionEntity[];
+};

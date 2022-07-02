@@ -1,17 +1,19 @@
-import { assign, createMachine, spawn } from "xstate";
+import type { TransactionFormParams } from "$lib/transaction-form";
+import { assign, createMachine, spawn, type ActorRefFrom } from "xstate";
 import createTransactionsForDateMachine from "./transactions-for-date.machine";
+import { fetchTransactionsForDate } from "./transactions.service";
 
 export type Context = {
   dates: Record<
     string,
-    {
-      amount: number;
-      service: ReturnType<typeof createTransactionsForDateMachine>;
-    }
+    ActorRefFrom<ReturnType<typeof createTransactionsForDateMachine>>
   >;
 };
 
-export type Events = FetchTransactionsEvent | FetchTransactionsDoneEvent;
+export type Events =
+  | FetchTransactionsEvent
+  | FetchTransactionsDoneEvent
+  | OpenTransactionFormEvent;
 
 export type FetchTransactionsEvent = {
   type: "FETCH_TRANSACTIONS";
@@ -20,6 +22,11 @@ export type FetchTransactionsEvent = {
 export type FetchTransactionsDoneEvent = {
   type: "done.invoke.fetchingTransactions:invocation[0]";
   data: Record<string, number>;
+};
+
+export type OpenTransactionFormEvent = {
+  type: "OPEN_TRANSACTION_FORM";
+  data: TransactionFormParams;
 };
 
 export type CreateAggregatedDailyTransactionsMachineParams = {
@@ -61,6 +68,11 @@ export default function createAggregatedDailyTransactionsMachine({
           },
         },
       },
+      on: {
+        OPEN_TRANSACTION_FORM: {
+          actions: (_, event) => console.log(JSON.stringify(event)),
+        },
+      },
     },
     {
       services: {
@@ -72,14 +84,15 @@ export default function createAggregatedDailyTransactionsMachine({
             Object.entries(event.data).reduce(
               (previous, [key, value]) => ({
                 ...previous,
-                [key]: {
-                  value,
-                  service: spawn(
-                    createTransactionsForDateMachine({
-                      date: key,
-                    })
-                  ),
-                },
+                [key]: spawn(
+                  createTransactionsForDateMachine({
+                    date: key,
+                    total: value,
+                    fetchTransactions(context, event) {
+                      return fetchTransactionsForDate(key);
+                    },
+                  })
+                ),
               }),
               {}
             ),

@@ -23,16 +23,10 @@ test("updates start when fetching dates", async () => {
   const service = interpret(machine).start();
   service.send("FETCH_TRANSACTIONS");
   await waitForState(service, "waiting");
-  expect(service.state.context).toMatchObject({
+  expect(service.state.context).toStrictEqual({
     dates: {
-      "2022-01-01": {
-        value: 42,
-        service: expect.any(Interpreter),
-      },
-      "2022-06-02": {
-        value: 53,
-        service: expect.any(Interpreter),
-      },
+      "2022-01-01": expect.any(Interpreter),
+      "2022-06-02": expect.any(Interpreter),
     },
   });
 });

@@ -1,23 +1,20 @@
 <script lang="ts">
-  import type { TransactionEntity } from "src/api/transaction";
+  import type { ActorRefFrom } from "xstate";
+  import type createAggregatedDailyTransactionsMachine from "../state/aggregated-daily-transactions.machine";
   import TransactionGroup from "./transaction-group.svelte";
 
-  export let transactions: TransactionEntity[] = [];
-  $: transactionsByDate = transactions.reduce(function (
-    previousValue,
-    currentValue
-  ) {
-    const groupedTransactions = previousValue[currentValue.date] ?? [];
-    previousValue[currentValue.date] = [...groupedTransactions, currentValue];
-    return previousValue;
-  },
-  {} as Record<string, TransactionEntity[]>);
+  export let service: ActorRefFrom<
+    ReturnType<typeof createAggregatedDailyTransactionsMachine>
+  >;
+
+  $: context = $service.context;
+  service.send("FETCH_TRANSACTIONS");
 </script>
 
 <div class="content-scroll-wrap">
   <div class="container">
-    {#each Object.entries(transactionsByDate) as [date, records] (date)}
-      <TransactionGroup {date} {records} on:openTransactionForm on:delete />
+    {#each Object.entries(context.dates) as [date, service] (date)}
+      <TransactionGroup {service} on:openTransactionForm on:delete />
     {/each}
   </div>
 </div>

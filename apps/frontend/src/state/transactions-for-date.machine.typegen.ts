@@ -3,6 +3,7 @@
 export interface Typegen0 {
   "@@xstate/typegen": true;
   eventsCausingActions: {
+    sendOpenTransactionForm: "OPEN_TRANSACTION_FORM";
     assignTransactions: "done.invoke.fetchingTransactions:invocation[0]";
   };
   internalEvents: {

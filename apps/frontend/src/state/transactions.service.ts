@@ -4,9 +4,16 @@ import type {
   CreateTransactionEvent,
   DeleteTransactionEvent,
 } from "./transactions.machine";
-import type { ListTransactionsDailySumResponse } from "transactions-schema";
+import type {
+  ListTransactionsDailySum,
+  ListTransactionsDailySumResponse,
+} from "transactions-schema";
+import type {
+  TransactionEntity,
+  TransactionsForDateResponse,
+} from "src/api/transaction";
 
-export async function fetchTransactions(): Promise<ListTransactionsDailySumResponse> {
+export async function fetchTransactionsDailySum(): Promise<ListTransactionsDailySum> {
   const url = `${endpoint}/users/abc/transactions/aggregations`;
   const response = await fetch(url, {
     method: "GET",
@@ -14,7 +21,22 @@ export async function fetchTransactions(): Promise<ListTransactionsDailySumRespo
   if (!response.ok) {
     throw new Error();
   }
-  return await response.json();
+  const responseBody: ListTransactionsDailySumResponse = await response.json();
+  return responseBody.aggregations;
+}
+
+export async function fetchTransactionsForDate(
+  date: string
+): Promise<TransactionEntity[]> {
+  const url = `${endpoint}/users/abc/transactions/date/${date}`;
+  const response = await fetch(url, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error();
+  }
+  const responseBody: TransactionsForDateResponse = await response.json();
+  return responseBody.transactions;
 }
 
 export async function createTransaction(

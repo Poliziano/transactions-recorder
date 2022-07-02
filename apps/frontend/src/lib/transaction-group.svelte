@@ -1,43 +1,49 @@
 <script lang="ts">
-  import type { TransactionEntity } from "src/api/transaction";
-  import Transaction from "./transaction.svelte";
+  import type createTransactionsForDateMachine from "src/state/transactions-for-date.machine";
   import { slide } from "svelte/transition";
-  import { createEventDispatcher } from "svelte";
+  import type { ActorRefFrom } from "xstate";
   import IconButton from "./components/icon-button.svelte";
-  import type { TransactionFormParams } from "./transaction-form";
-  import { aggregateTransactions } from "./transactions";
+  import Transaction from "./transaction.svelte";
 
-  export let date: string;
-  export let records: TransactionEntity[];
+  export let service: ActorRefFrom<
+    ReturnType<typeof createTransactionsForDateMachine>
+  >;
 
-  const dispatch = createEventDispatcher<{
-    openTransactionForm: TransactionFormParams;
-  }>();
+  $: context = $service.context;
 
-  let expanded = true;
+  $: icon = $service.matches("displayingTransactions")
+    ? "expand_less.svg"
+    : "expand_more.svg";
+
+  function handleClick() {
+    const event = $service.matches("displayingTransactions")
+      ? "CLOSE_TRANSACTIONS"
+      : "FETCH_TRANSACTIONS";
+
+    service.send(event);
+  }
+
+  function handleFormOpen() {
+    console.log("send open event");
+    service.send({
+      type: "OPEN_TRANSACTION_FORM",
+      data: {
+        date: new Date(context.date).toISOString().split("T")[0],
+      },
+    });
+  }
 </script>
 
 <div class="card">
-  <IconButton
-    src={expanded ? "expand_less.svg" : "expand_more.svg"}
-    alt="Expand transactions"
-    on:click={() => (expanded = !expanded)}
-  />
-  <h2>{new Date(date).toLocaleDateString()}</h2>
-  <div class="amount">£{aggregateTransactions(records)}</div>
-  <IconButton
-    src="add.svg"
-    alt="Add transaction"
-    on:click={() =>
-      dispatch("openTransactionForm", {
-        date: new Date(date).toISOString().split("T")[0],
-      })}
-  />
+  <IconButton src={icon} alt="Expand transactions" on:click={handleClick} />
+  <h2>{new Date(context.date).toLocaleDateString()}</h2>
+  <div class="amount">£{context.total}</div>
+  <IconButton src="add.svg" alt="Add transaction" on:click={handleFormOpen} />
 </div>
 
-{#if expanded}
+{#if $service.matches("displayingTransactions")}
   <div transition:slide|local>
-    {#each records as transaction (transaction.uuid)}
+    {#each context.transactions as transaction (transaction.uuid)}
       <div class="transaction" transition:slide|local>
         <Transaction on:delete {transaction} />
       </div>
