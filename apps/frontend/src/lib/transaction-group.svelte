@@ -24,7 +24,6 @@
   }
 
   function handleFormOpen() {
-    console.log("send open event");
     service.send({
       type: "OPEN_TRANSACTION_FORM",
       data: {

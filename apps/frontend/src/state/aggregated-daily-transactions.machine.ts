@@ -1,4 +1,8 @@
 import type { TransactionFormParams } from "$lib/transaction-form";
+import type {
+  TransactionEntity,
+  TransactionEntityCreateParams,
+} from "src/api/transaction";
 import { assign, createMachine, spawn, type ActorRefFrom } from "xstate";
 import createTransactionsForDateMachine from "./transactions-for-date.machine";
 import { fetchTransactionsForDate } from "./transactions.service";
@@ -8,17 +12,22 @@ export type Context = {
     string,
     ActorRefFrom<ReturnType<typeof createTransactionsForDateMachine>>
   >;
+  form?: TransactionFormParams;
 };
 
 export type Events =
   | FetchTransactionsEvent
   | FetchTransactionsDoneEvent
-  | OpenTransactionFormEvent;
+  | OpenTransactionFormEvent
+  | CloseTransactionFormEvent
+  | SubmitTransactionFormEvent
+  | SubmitTransactionFormDoneEvent;
 
 export type FetchTransactionsEvent = {
   type: "FETCH_TRANSACTIONS";
   userId: string;
 };
+
 export type FetchTransactionsDoneEvent = {
   type: "done.invoke.fetchingTransactions:invocation[0]";
   data: Record<string, number>;
@@ -29,15 +38,35 @@ export type OpenTransactionFormEvent = {
   data: TransactionFormParams;
 };
 
+export type CloseTransactionFormEvent = {
+  type: "CLOSE_TRANSACTION_FORM";
+};
+
+export type SubmitTransactionFormEvent = {
+  type: "SUBMIT_TRANSACTION_FORM";
+  data: TransactionEntityCreateParams;
+};
+
+export type SubmitTransactionFormDoneEvent = {
+  type: "done.invoke.submittingTransaction:invocation[0]";
+  data: TransactionEntity;
+};
+
 export type CreateAggregatedDailyTransactionsMachineParams = {
   fetchTransactions: (
     context: Context,
     event: FetchTransactionsEvent
   ) => Promise<FetchTransactionsDoneEvent["data"]>;
+
+  createTransaction: (
+    context: Context,
+    event: SubmitTransactionFormEvent
+  ) => Promise<SubmitTransactionFormDoneEvent["data"]>;
 };
 
 export default function createAggregatedDailyTransactionsMachine({
   fetchTransactions,
+  createTransaction,
 }: CreateAggregatedDailyTransactionsMachineParams) {
   return createMachine(
     {
@@ -47,36 +76,64 @@ export default function createAggregatedDailyTransactionsMachine({
         context: {} as Context,
         events: {} as Events,
       },
-      initial: "waiting",
       context: {
         dates: {},
       },
+      type: "parallel",
       states: {
-        waiting: {
-          on: {
-            FETCH_TRANSACTIONS: "fetchingTransactions",
-          },
-        },
-        fetchingTransactions: {
-          id: "fetchingTransactions",
-          invoke: {
-            src: "fetchTransactions",
-            onDone: {
-              target: "waiting",
-              actions: ["assignTransactions"],
+        transactions: {
+          initial: "waiting",
+          states: {
+            waiting: {
+              on: {
+                FETCH_TRANSACTIONS: "fetchingTransactions",
+              },
+            },
+            fetchingTransactions: {
+              id: "fetchingTransactions",
+              invoke: {
+                src: "fetchTransactions",
+                onDone: {
+                  target: "waiting",
+                  actions: ["assignTransactions"],
+                },
+              },
             },
           },
         },
-      },
-      on: {
-        OPEN_TRANSACTION_FORM: {
-          actions: (_, event) => console.log(JSON.stringify(event)),
+        form: {
+          initial: "closed",
+          states: {
+            closed: {
+              on: {
+                OPEN_TRANSACTION_FORM: "opened",
+              },
+            },
+            opened: {
+              entry: "assignFormFields",
+              exit: "removeFormFields",
+              on: {
+                CLOSE_TRANSACTION_FORM: "closed",
+                SUBMIT_TRANSACTION_FORM: "submitting",
+              },
+            },
+            submitting: {
+              id: "submittingTransaction",
+              invoke: {
+                src: "createTransaction",
+                onDone: {
+                  target: "closed",
+                },
+              },
+            },
+          },
         },
       },
     },
     {
       services: {
         fetchTransactions,
+        createTransaction,
       },
       actions: {
         assignTransactions: assign({
@@ -96,6 +153,12 @@ export default function createAggregatedDailyTransactionsMachine({
               }),
               {}
             ),
+        }),
+        assignFormFields: assign({
+          form: (_, event) => event.data,
+        }),
+        removeFormFields: assign({
+          form: (_context, _event) => undefined,
         }),
       },
     }

@@ -1,9 +1,5 @@
 import { endpoint } from "../api/api";
-import type {
-  Context,
-  CreateTransactionEvent,
-  DeleteTransactionEvent,
-} from "./transactions.machine";
+import type { DeleteTransactionEvent } from "./transactions.machine";
 import type {
   ListTransactionsDailySum,
   ListTransactionsDailySumResponse,
@@ -12,6 +8,10 @@ import type {
   TransactionEntity,
   TransactionsForDateResponse,
 } from "src/api/transaction";
+import type {
+  Context,
+  SubmitTransactionFormEvent,
+} from "./aggregated-daily-transactions.machine";
 
 export async function fetchTransactionsDailySum(): Promise<ListTransactionsDailySum> {
   const url = `${endpoint}/users/abc/transactions/aggregations`;
@@ -41,8 +41,8 @@ export async function fetchTransactionsForDate(
 
 export async function createTransaction(
   _: Context,
-  event: CreateTransactionEvent
-) {
+  event: SubmitTransactionFormEvent
+): Promise<TransactionEntity> {
   const url = `${endpoint}/users/abc/transactions`;
 
   const response = await fetch(url, {
