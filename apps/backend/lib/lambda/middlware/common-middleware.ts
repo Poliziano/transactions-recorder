@@ -6,10 +6,8 @@ import inputOutputLogger from "@middy/input-output-logger";
 import cors from "@middy/http-cors";
 
 const middleware = [
+  cors(),
   errorLogger(),
-  cors({
-    methods: "GET,POST,DELETE",
-  }),
   httpErrorHandler(),
   httpSecurityHeaders(),
   jsonBodyParser(),

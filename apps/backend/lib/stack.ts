@@ -65,7 +65,11 @@ export class TransactionsStack extends Stack {
     transactionsTable.grantWriteData(lambdaTransactionCreate);
     transactionsTable.grantWriteData(lambdaTransactionDelete);
 
-    const api = new apigateway.RestApi(this, "transactions");
+    const api = new apigateway.RestApi(this, "transactions", {
+      defaultCorsPreflightOptions: {
+        allowOrigins: ["*"],
+      },
+    });
     const transactionsResource = api.root
       .addResource("users")
       .addResource("{userId}")
