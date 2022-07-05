@@ -7,7 +7,9 @@ import cors from "@middy/http-cors";
 
 const middleware = [
   errorLogger(),
-  cors(),
+  cors({
+    methods: "GET,POST,DELETE",
+  }),
   httpErrorHandler(),
   httpSecurityHeaders(),
   jsonBodyParser(),
