@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TransactionEntity } from "src/api/transaction";
+  import type { TransactionEntity } from "$lib/api/transaction";
   import { createEventDispatcher } from "svelte";
   import IconMenu from "./components/icon-menu.svelte";
 

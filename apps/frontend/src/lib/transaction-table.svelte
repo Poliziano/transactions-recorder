@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ActorRefFrom } from "xstate";
-  import type createAggregatedDailyTransactionsMachine from "../state/aggregated-daily-transactions.machine";
+  import type createAggregatedDailyTransactionsMachine from "./state/aggregated-daily-transactions.machine";
   import TransactionGroup from "./transaction-group.svelte";
 
   export let service: ActorRefFrom<

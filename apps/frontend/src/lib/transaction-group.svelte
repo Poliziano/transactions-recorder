@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type createTransactionsForDateMachine from "src/state/transactions-for-date.machine";
+  import type createTransactionsForDateMachine from "$lib/state/transactions-for-date.machine";
   import { slide } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import IconButton from "./components/icon-button.svelte";

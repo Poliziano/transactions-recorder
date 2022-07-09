@@ -2,7 +2,7 @@
   import type { TransactionFormParams } from "./transaction-form";
 
   import { createEventDispatcher } from "svelte";
-  import type { TransactionEntityCreateParams } from "../api/transaction";
+  import type { TransactionEntityCreateParams } from "./api/transaction";
   import Block from "./components/block.svelte";
   import FormField from "./components/form-field.svelte";
   import { fly } from "svelte/transition";

@@ -7,7 +7,7 @@ import type {
 import type {
   TransactionEntity,
   TransactionsForDateResponse,
-} from "src/api/transaction";
+} from "$lib/api/transaction";
 import type {
   Context,
   SubmitTransactionFormEvent,

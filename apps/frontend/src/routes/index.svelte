@@ -3,8 +3,8 @@
   import {
     createTransaction,
     fetchTransactionsDailySum,
-  } from "../state/transactions.service";
-  import createAggregatedDailyTransactionsMachine from "../state/aggregated-daily-transactions.machine";
+  } from "../lib/state/transactions.service";
+  import createAggregatedDailyTransactionsMachine from "../lib/state/aggregated-daily-transactions.machine";
   import { useMachine } from "@xstate/svelte";
   import TransactionForm from "$lib/transaction-form.svelte";
 

@@ -2,7 +2,7 @@ import type { TransactionFormParams } from "$lib/transaction-form";
 import type {
   TransactionEntity,
   TransactionEntityCreateParams,
-} from "src/api/transaction";
+} from "$lib/api/transaction";
 import { assign, createMachine, send, spawn, type ActorRefFrom } from "xstate";
 import createTransactionsForDateMachine from "./transactions-for-date.machine";
 import { fetchTransactionsForDate } from "./transactions.service";
