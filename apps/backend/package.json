@@ -19,7 +19,7 @@
     "@jest/types": "^28.1.1",
     "@swc-node/register": "^1.5.1",
     "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.210",
+    "@swc/core": "^1.2.211",
     "@swc/jest": "^0.2.21",
     "@tsconfig/node16": "^1.0.3",
     "@types/aws-lambda": "^8.10.101",
