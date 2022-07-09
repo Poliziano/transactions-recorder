@@ -1,7 +1,6 @@
 import type { TransactionFormParams } from "$lib/transaction-form";
 import type { TransactionEntity } from "src/api/transaction";
-import { assign, createMachine } from "xstate";
-import { sendParent } from "xstate/lib/actions";
+import { assign, createMachine, sendParent } from "xstate";
 
 export type Context = {
   date: string;
