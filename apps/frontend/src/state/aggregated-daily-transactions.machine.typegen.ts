@@ -4,12 +4,18 @@ export interface Typegen0 {
   "@@xstate/typegen": true;
   eventsCausingActions: {
     assignTransactions: "done.invoke.fetchingTransactions:invocation[0]";
+    sendTransactionUpdatedEvent: "done.invoke.submittingTransaction:invocation[0]";
     removeFormFields: "xstate.init";
     assignFormFields: "OPEN_TRANSACTION_FORM";
   };
   internalEvents: {
     "done.invoke.fetchingTransactions:invocation[0]": {
       type: "done.invoke.fetchingTransactions:invocation[0]";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
+    "done.invoke.submittingTransaction:invocation[0]": {
+      type: "done.invoke.submittingTransaction:invocation[0]";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };

@@ -12,7 +12,8 @@ export type Events =
   | FetchTransactionsEvent
   | FetchTransactionsDoneEvent
   | CloseTransactionsEvent
-  | OpenTransactionFormEvent;
+  | OpenTransactionFormEvent
+  | TransactionCreatedEvent;
 
 export type FetchTransactionsEvent = {
   type: "FETCH_TRANSACTIONS";
@@ -30,6 +31,11 @@ export type CloseTransactionsEvent = {
 export type OpenTransactionFormEvent = {
   type: "OPEN_TRANSACTION_FORM";
   data: TransactionFormParams;
+};
+
+export type TransactionCreatedEvent = {
+  type: "TRANSACTION_CREATED";
+  data: TransactionEntity;
 };
 
 export type CreateTransactionsForDateMachineParams = {
@@ -85,6 +91,9 @@ export default function createTransactionsForDateMachine({
         OPEN_TRANSACTION_FORM: {
           actions: "sendOpenTransactionForm",
         },
+        TRANSACTION_CREATED: {
+          actions: ["appendTransaction"],
+        },
       },
     },
     {
@@ -96,6 +105,13 @@ export default function createTransactionsForDateMachine({
           transactions: (_, event) => event.data,
         }),
         sendOpenTransactionForm: sendParent((_, event) => event),
+        appendTransaction: assign({
+          transactions: (context, event) => [
+            ...context.transactions,
+            event.data,
+          ],
+          total: (context, event) => context.total + event.data.amount,
+        }),
       },
     }
   );

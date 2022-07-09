@@ -3,7 +3,7 @@ import type {
   TransactionEntity,
   TransactionEntityCreateParams,
 } from "src/api/transaction";
-import { assign, createMachine, spawn, type ActorRefFrom } from "xstate";
+import { assign, createMachine, send, spawn, type ActorRefFrom } from "xstate";
 import createTransactionsForDateMachine from "./transactions-for-date.machine";
 import { fetchTransactionsForDate } from "./transactions.service";
 
@@ -123,6 +123,7 @@ export default function createAggregatedDailyTransactionsMachine({
                 src: "createTransaction",
                 onDone: {
                   target: "closed",
+                  actions: ["sendTransactionUpdatedEvent"],
                 },
               },
             },
@@ -160,6 +161,16 @@ export default function createAggregatedDailyTransactionsMachine({
         removeFormFields: assign({
           form: (_context, _event) => undefined,
         }),
+        sendTransactionUpdatedEvent: send(
+          (_, event) => ({
+            type: "TRANSACTION_CREATED",
+            data: event.data,
+          }),
+          {
+            to: (context, event) =>
+              context.dates[event.data.date.split("T")[0]],
+          }
+        ),
       },
     }
   );
