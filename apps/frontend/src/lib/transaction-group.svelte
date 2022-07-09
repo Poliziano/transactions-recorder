@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type createTransactionsForDateMachine from "$lib/state/transactions-for-date.machine";
+  import type createTransactionDateMachine from "$lib/state/transaction-date.machine";
   import { slide } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import IconButton from "./components/icon-button.svelte";
   import Transaction from "./transaction.svelte";
 
   export let service: ActorRefFrom<
-    ReturnType<typeof createTransactionsForDateMachine>
+    ReturnType<typeof createTransactionDateMachine>
   >;
 
   $: context = $service.context;

@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { ActorRefFrom } from "xstate";
-  import type createAggregatedDailyTransactionsMachine from "./state/aggregated-daily-transactions.machine";
+  import type createTransactionPageMachine from "./state/transaction-page.machine";
   import TransactionGroup from "./transaction-group.svelte";
 
   export let service: ActorRefFrom<
-    ReturnType<typeof createAggregatedDailyTransactionsMachine>
+    ReturnType<typeof createTransactionPageMachine>
   >;
 
   $: context = $service.context;

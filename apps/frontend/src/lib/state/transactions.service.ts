@@ -11,7 +11,7 @@ import type {
 import type {
   Context,
   SubmitTransactionFormEvent,
-} from "./aggregated-daily-transactions.machine";
+} from "./transaction-page.machine";
 
 export async function fetchTransactionsDailySum(): Promise<ListTransactionsDailySum> {
   const url = `${endpoint}/users/abc/transactions/aggregations`;

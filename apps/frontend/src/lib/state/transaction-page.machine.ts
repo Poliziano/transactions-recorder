@@ -4,13 +4,13 @@ import type {
   TransactionEntityCreateParams,
 } from "$lib/api/transaction";
 import { assign, createMachine, send, spawn, type ActorRefFrom } from "xstate";
-import createTransactionsForDateMachine from "./transactions-for-date.machine";
+import createTransactionDateMachine from "./transaction-date.machine";
 import { fetchTransactionsForDate } from "./transactions.service";
 
 export type Context = {
   dates: Record<
     string,
-    ActorRefFrom<ReturnType<typeof createTransactionsForDateMachine>>
+    ActorRefFrom<ReturnType<typeof createTransactionDateMachine>>
   >;
   form?: TransactionFormParams;
 };
@@ -64,14 +64,13 @@ export type CreateAggregatedDailyTransactionsMachineParams = {
   ) => Promise<SubmitTransactionFormDoneEvent["data"]>;
 };
 
-export default function createAggregatedDailyTransactionsMachine({
+export default function createTransactionPageMachine({
   fetchTransactions,
   createTransaction,
 }: CreateAggregatedDailyTransactionsMachineParams) {
   return createMachine(
     {
-      tsTypes:
-        {} as import("./aggregated-daily-transactions.machine.typegen").Typegen0,
+      tsTypes: {} as import("./transaction-page.machine.typegen").Typegen0,
       schema: {
         context: {} as Context,
         events: {} as Events,
@@ -143,7 +142,7 @@ export default function createAggregatedDailyTransactionsMachine({
               (previous, [key, value]) => ({
                 ...previous,
                 [key]: spawn(
-                  createTransactionsForDateMachine({
+                  createTransactionDateMachine({
                     date: key,
                     total: value,
                     fetchTransactions(context, event) {

@@ -47,14 +47,14 @@ export type CreateTransactionsForDateMachineParams = {
   ) => Promise<FetchTransactionsDoneEvent["data"]>;
 };
 
-export default function createTransactionsForDateMachine({
+export default function createTransactionDateMachine({
   date,
   total,
   fetchTransactions,
 }: CreateTransactionsForDateMachineParams) {
   return createMachine(
     {
-      tsTypes: {} as import("./transactions-for-date.machine.typegen").Typegen0,
+      tsTypes: {} as import("./transaction-date.machine.typegen").Typegen0,
       schema: {
         context: {} as Context,
         events: {} as Events,

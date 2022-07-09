@@ -4,11 +4,11 @@
     createTransaction,
     fetchTransactionsDailySum,
   } from "../lib/state/transactions.service";
-  import createAggregatedDailyTransactionsMachine from "../lib/state/aggregated-daily-transactions.machine";
+  import createTransactionPageMachine from "../lib/state/transaction-page.machine";
   import { useMachine } from "@xstate/svelte";
   import TransactionForm from "$lib/transaction-form.svelte";
 
-  const machine = createAggregatedDailyTransactionsMachine({
+  const machine = createTransactionPageMachine({
     fetchTransactions: fetchTransactionsDailySum,
     createTransaction,
   });
