@@ -30,7 +30,7 @@
     "aws-cdk-lib": "^2.31.1",
     "aws-sdk": "^2.1171.0",
     "constructs": "^10.1.43",
-    "esbuild": "^0.14.48",
+    "esbuild": "^0.14.49",
     "fishery": "^2.2.2",
     "jest": "^28.1.2",
     "transactions-schema": "workspace:0.0.0"
@@ -52,6 +52,6 @@
     "ajv": "^8.11.0",
     "ksuid": "^3.0.0",
     "source-map-support": "^0.5.21",
-    "testcontainers": "^8.11.0"
+    "testcontainers": "^8.11.1"
   }
 }
