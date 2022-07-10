@@ -56,15 +56,10 @@ export async function createTransaction(
   return response.json();
 }
 
-export async function deleteTransaction(
-  _: Context,
-  event: DeleteTransactionEvent
-) {
-  const url = `${endpoint}/users/abc/transactions/${event.data.uuid}`;
+export async function deleteTransaction(uuid: string) {
+  const url = `${endpoint}/users/abc/transactions/${uuid}`;
 
   await fetch(url, {
     method: "DELETE",
   });
-
-  return event.data;
 }

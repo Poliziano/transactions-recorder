@@ -1,28 +1,30 @@
 import { expect, test } from "vitest";
 import { interpret, Interpreter } from "xstate";
-import createAggregatedDailyTransactionsMachine from "../../src/state/aggregated-daily-transactions.machine";
-import waitForState from "./wait-for-state";
+import { waitFor } from "xstate/lib/waitFor";
+import createTransactionPageMachine from "../../src/lib/state/transaction-page.machine";
 
 test("start in 'waiting' state", () => {
-  const machine = createAggregatedDailyTransactionsMachine({
+  const machine = createTransactionPageMachine({
     fetchTransactions: () => Promise.resolve({}),
+    createTransaction: () => Promise.resolve(),
   });
   const service = interpret(machine).start();
-  expect(service.state.matches("waiting")).toBeTruthy();
+  expect(service.state.matches("transactions.waiting")).toBeTruthy();
 });
 
 test("updates start when fetching dates", async () => {
-  const machine = createAggregatedDailyTransactionsMachine({
+  const machine = createTransactionPageMachine({
     fetchTransactions: () =>
       Promise.resolve({
         "2022-01-01": 42,
         "2022-06-02": 53,
       }),
+    createTransaction: () => Promise.resolve(),
   });
 
   const service = interpret(machine).start();
   service.send("FETCH_TRANSACTIONS");
-  await waitForState(service, "waiting");
+  await waitFor(service, (state) => state.matches("transactions.waiting"));
   expect(service.state.context).toStrictEqual({
     dates: {
       "2022-01-01": expect.any(Interpreter),

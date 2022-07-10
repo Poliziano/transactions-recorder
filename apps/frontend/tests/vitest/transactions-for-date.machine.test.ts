@@ -1,12 +1,12 @@
-import { test, expect } from "vitest";
+import { expect, test } from "vitest";
 import { interpret } from "xstate";
-import createTransactionsForDateMachine, {
+import { waitFor } from "xstate/lib/waitFor";
+import createTransactionDateMachine, {
   Context,
-} from "../../src/state/transactions-for-date.machine";
-import waitForState from "./wait-for-state";
+} from "../../src/lib/state/transaction-date.machine";
 
 test("start in 'closed' state", () => {
-  const machine = createTransactionsForDateMachine({
+  const machine = createTransactionDateMachine({
     date: "2022-01-01",
     total: 0,
     fetchTransactions: () => Promise.resolve([]),
@@ -16,7 +16,7 @@ test("start in 'closed' state", () => {
 });
 
 test("updates start when fetching transactions", async () => {
-  const machine = createTransactionsForDateMachine({
+  const machine = createTransactionDateMachine({
     date: "2022-01-01",
     total: 100,
     fetchTransactions: () =>
@@ -34,7 +34,7 @@ test("updates start when fetching transactions", async () => {
 
   const service = interpret(machine).start();
   service.send("FETCH_TRANSACTIONS");
-  await waitForState(service, "displayingTransactions");
+  await waitFor(service, (state) => state.matches("displayingTransactions"));
   expect(service.state.context).toStrictEqual<Context>({
     date: "2022-01-01",
     total: 100,
