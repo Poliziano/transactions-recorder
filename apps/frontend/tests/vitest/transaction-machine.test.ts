@@ -12,9 +12,9 @@ const machine = createTransactionMachine({
   uuid: "uuid",
 });
 
-test("initialises to 'default' state", () => {
+test("initialises to 'active' state", () => {
   const service = interpret(machine).start();
-  expect(service.state.matches("default")).toBeTruthy();
+  expect(service.state.matches("active")).toBeTruthy();
 });
 
 test("toggle options menu", () => {

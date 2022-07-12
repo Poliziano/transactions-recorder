@@ -1,26 +1,29 @@
 import type { TransactionEntity } from "$lib/api/transaction";
-import { assign, createMachine, sendParent } from "xstate";
+import { sendParent } from "xstate";
+import { createModel } from "xstate/lib/model";
 import { deleteTransaction } from "./transactions.service";
 
-type Context = {
-  optionsOpen: boolean;
-  transaction: TransactionEntity;
-};
-
-type Events =
-  | { type: "OPEN_OPTIONS" }
-  | { type: "CLOSE_OPTIONS" }
-  | { type: "DELETE" };
-
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPaYB0EYAZugK4A2yAxACICiAMqwCquKgAORWAUIk+IAB6IAjAE4ADKQDMSgCwAmdaoCs8+dO0aANCACeiWQHZSq2XdkAOB9IBst9Q6UBfLybRYcfGIyCmp6JgB5AAVWADkAfWiuAEkI2IBlcUFhUUxxKQQAWmkla1dtJS1ZVWkdORcTcwR65RdPNssXDu1ZHz8MbDxc8ipaBkYAYXYI9NZEqJS0zKQQbJFg-Jk1Uk11O1VLJXkXS1kDRsR1PRsrxwdT+T3taT6Qf0GgkhG6MEJMKEYEBIYFIBEwADciABrEEUH7IMBcAaBXJZITrMQrAouWTqHb2VS2AwnaoXBBWUi6PTyJwuJSeEqqHy+ECYIgUeArd4o4IjMIMNE5DZYxDGMwWRT2RyWAzyWxqdSvblDXlw35gqCCjF5EUIFRKUiyFxUyzHSw6BzqMkHGxSnQ4pylJks5WfEJgeGQLWo3VG6yySpOY5GjRKWRk42U6mPRzPfSnJXIlWYgTon2gArFFzSUjlSq2Gp1I1kwrqbS2+xlhzHeRGhzMrxAA */
-const transactionMachine = createMachine(
+const model = createModel(
   {
-    tsTypes: {} as import("./transaction-machine.typegen").Typegen0,
-    schema: { context: {} as Context, events: {} as Events },
+    optionsOpen: false,
+    transaction: {} as TransactionEntity,
+  },
+  {
+    events: {
+      DELETE: () => ({}),
+      OPEN_OPTIONS: () => ({}),
+      CLOSE_OPTIONS: () => ({}),
+    },
+  }
+);
+
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPaYB0ehAbmAMQAiAogDIMAqDioADkbAYSU4gAHogBMAVgCcpKQDYADFIDMAdjEAOKVrliANCACeiACwBGCbKnX1UixIli5ygL4uDaLDnzEyFAtQ0APIACgwAcgD6oawAkkHhAMpCPHwCmEKiCCb6RuImGqQKxcWqZcoaJkqu7iCe2P4k5D6BAMJMQYkM0SFxCclIIKn8vpmmcrISymaSCo7zKiYGxgh2RSVmcmZl1spiNR4YDT5NEGAANmCEmFA0ECRgpASYlEQA1o9nl8hgrEfe6RSvBGgkGWTkGlUpGU0mUugUqg0WwkGmWpgsVhsYjsDkczjctUwRDO8EG9QBvmaVDAQLSozBiA0lkUFjksLEqmKZiWeWySkx1hUcnkGkhbkOXkaZC+V2eUFpIIyDIQcJkqhMgrk6uUyikSlUaJVcgmGsFuskKmUJhM4rq-ylpBlPwgCsByrsJlIqitVqqSghGlyKwqntN2jMZn9CgjElt5KlrvpoCyZlRvNTBJcQA */
+const machine = model.createMachine(
+  {
     id: "transaction",
-    initial: "default",
+    initial: "active",
     states: {
-      default: {
+      active: {
         on: {
           DELETE: {
             target: "deleting",
@@ -59,11 +62,11 @@ const transactionMachine = createMachine(
         type: "TRANSACTION_DELETE",
         transaction: context.transaction,
       })),
-      showOptions: assign({
-        optionsOpen: (_) => true,
+      showOptions: model.assign({
+        optionsOpen: true,
       }),
-      hideOptions: assign({
-        optionsOpen: (_) => false,
+      hideOptions: model.assign({
+        optionsOpen: false,
       }),
     },
     services: {
@@ -77,7 +80,7 @@ const transactionMachine = createMachine(
 );
 
 export function createTransactionMachine(transaction: TransactionEntity) {
-  return transactionMachine.withContext({
+  return machine.withContext({
     transaction,
     optionsOpen: false,
   });
