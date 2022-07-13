@@ -72,3 +72,21 @@ it("adds new transactions", async () => {
     },
   });
 });
+
+it("removes transactions", async () => {
+  const service = interpret(machine).start();
+  service.send("FETCH_TRANSACTIONS");
+  await waitFor(service, (state) => state.matches("displayingTransactions"));
+  service.send({
+    type: "REMOVE_TRANSACTION",
+    data: "uuid_2",
+  });
+
+  expect(service.state.context).toEqual({
+    date: "2022-01-01",
+    total: 15,
+    transactions: {
+      uuid_1: expect.any(Interpreter),
+    },
+  });
+});

@@ -19,7 +19,7 @@ const machine = createMachine(
       events: {} as
         | { type: "OPEN_TRANSACTIONS_FORM" }
         | { type: "APPEND_TRANSACTION"; data: TransactionEntity }
-        | { type: "REMOVE_TRANSACTION" }
+        | { type: "REMOVE_TRANSACTION"; data: TransactionEntity["uuid"] }
         | { type: "FETCH_TRANSACTIONS" }
         | { type: "done.invoke.fetchTransactions"; data: TransactionEntity[] }
         | { type: "CLOSE_TRANSACTIONS" },
@@ -95,8 +95,30 @@ const machine = createMachine(
         },
         total: (context, event) => context.total + event.data.amount,
       }),
+      remove: assign({
+        transactions: (context, event) => {
+          const actor = context.transactions[event.data];
+          actor.stop?.();
+          delete context.transactions[event.data];
+          return context.transactions;
+        },
+        total: (context, event) => {
+          return Object.values(context.transactions).reduce(
+            (previous, current) => {
+              const snapshot = current.getSnapshot()?.context;
+              if (
+                snapshot?.transaction == null ||
+                snapshot.transaction.uuid === event.data
+              ) {
+                return previous;
+              }
+              return previous + snapshot.transaction.amount;
+            },
+            0
+          );
+        },
+      }),
       notifyOpenForm: () => {},
-      remove: () => {},
     },
   }
 );
