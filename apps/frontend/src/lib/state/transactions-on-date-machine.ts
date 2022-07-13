@@ -83,7 +83,9 @@ const machine = createMachine(
           event.data.reduce(
             (previous, current) => ({
               ...previous,
-              [current.uuid]: spawn(createTransactionMachine(current)),
+              [current.uuid]: spawn(
+                createTransactionMachine({ transaction: current })
+              ),
             }),
             {}
           ),
@@ -96,7 +98,7 @@ const machine = createMachine(
       append: assign({
         transactions: (context, event) => {
           context.transactions[event.data.uuid] = spawn(
-            createTransactionMachine(event.data)
+            createTransactionMachine({ transaction: event.data })
           );
           return context.transactions;
         },
@@ -130,13 +132,14 @@ const machine = createMachine(
   }
 );
 
+type CreateTransactionsOnDateMachineInput = {
+  date: string;
+  total: number;
+};
 export function createTransactionsOnDateMachine({
   date,
   total,
-}: {
-  date: string;
-  total: number;
-}) {
+}: CreateTransactionsOnDateMachineInput) {
   return machine.withContext({
     date,
     total,

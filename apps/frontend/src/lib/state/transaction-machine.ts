@@ -75,7 +75,12 @@ const machine = createMachine(
   }
 );
 
-export function createTransactionMachine(transaction: TransactionEntity) {
+type CreateTransactionMachineInput = {
+  transaction: TransactionEntity;
+};
+export function createTransactionMachine({
+  transaction,
+}: CreateTransactionMachineInput) {
   return machine.withContext({
     transaction,
     optionsOpen: false,
