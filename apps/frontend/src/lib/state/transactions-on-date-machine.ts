@@ -1,5 +1,5 @@
 import type { TransactionEntity } from "$lib/api/transaction";
-import { assign, createMachine, spawn } from "xstate";
+import { assign, createMachine, spawn, type ActorRefFrom } from "xstate";
 import { createTransactionMachine } from "./transaction-machine";
 import { fetchTransactionsForDate } from "./transactions.service";
 
@@ -11,7 +11,10 @@ const machine = createMachine(
       context: {} as {
         date: string;
         total: number;
-        transactions: Record<string, any>;
+        transactions: Record<
+          string,
+          ActorRefFrom<typeof createTransactionMachine>
+        >;
       },
       events: {} as
         | { type: "OPEN_TRANSACTIONS_FORM" }
