@@ -3,10 +3,10 @@ import { assign, createMachine, spawn, type ActorRefFrom } from "xstate";
 import { createTransactionMachine } from "./transaction-machine";
 import { fetchTransactionsForDate } from "./transactions.service";
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0JpE6yYAdABYEQGZQAqG2ehJsAxADEAomwDCACQD6bAEoBBAHIBlOaLYBJAPLLEoAA5FYBHpl0gAHogBMAdgAMtAMwBWAJyObrgCx2AjM5sPRwAaEABPRGdbWi9XOJc3O0c7LwBfVNC0LBx8YjIKKhpaADMwZFxGVg5s7jz+CBI6FgA3IgBrOlLy+mquXN4zAyMTM0sET1daZ0dfKwAORy9nX1cANjs50IiEZzsbWjj41ZtVnwD0zM4ck1hyTEpqOmZYPQAbdDCWdiva3j5RAAymiUQmk8mUqg02iUg0Mxjyo0QcxSBysa1Wq1cbkcVisqy2iBcqwOhzmXnJNkp8wuICyfRudweND4mgACkIFGDFCo1FplJIBJoZABZWHDBFICyRZK0eauPb+NbOOZuAkIXwqklxFU45FzGzOGl0651RmFMB8OSs9kKAAiXIhvO0YvhJERO1iqI1yysM12vhsatccy1cTxpxSHlWRp+-Xy93NfBkQmFmgAaqDZNzIXyXSNJWNnF4Q3ZXCdnM4MTNfc41bN0hkQJgiBA4GZjb940y6IxmFVYzc8xLQGMvIHwoTKbQFo4ZitVrMx4bGx247cCo8SmUKl9eiaBpKhq7TAXELEHK40fZ-Cqkgu1bFnKHkZSy95jjGamuzZvnm8PruA51EObqnuqdhWE+cxzPMvjrFYszYmqjirI4Tizskl64ueY6fvSpobjQIEniO1ghBOCDzGhhxlhMCHVg2qRAA */
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0JpE6yYAdABYEQGZQAqG2ehJsAxADEAomwDCACQD6bAEoBBAHIBlOaLYBJAPLLEoAA5FYBHpl0gAHogBMAdgAMtAMwBWAJyOALI6vuPV5y4ANCAAnojOdja0rjGukY4AHAlWAIwekQC+GcFoWDj4xGQUVDS0AGZgyLiMrBx53IX8ECR0LABuRADWdBVV9HVcBbxmBkYmZpYINjG0ASlWAGyLyUsxwWEIHkm0HrELNguOkXYLWTmc+Saw5JiU1HTMsHoANughLOwXDbx8ogAymiUQmk8mUqg02iUI0MxkKE0QCTsHmiPhsbisPiWNgS60QLgW0ViNg8hw8xLsjjOIFygyuNzuND4mgACkIFCDFCo1FplJIBJoZABZaFjOFICzhI60KwJVwpTx2VI2FILXEIFIJZyE2I6nU2Kk0y6NeklMB8OTM1kKAAiHLB3O0IthJHhCGcuxRKVcVi8thS8psatcCW1ut1+uy1K+QyKt1NfBkQkFmgAasDZJzwTyneNxZN3SG7K4DgkFs45gtXGr5llI5giBA4GZDd9Ywy6IxmLVo1cc2LQJMyWqXCHHGP-GXiQlPAcDT3jcV7uVKtUPgMjcNxaNnaY84hdg5va5K-Z-cWfWqyQTdjF9odjm5nHP6jHrovSo8Xm81-PN-oYbmA6ICkipakkPjyseIGJFWoR4gsDjTmORaHM49h2KWz60gucb3H2Lp7ggViOGqMoeLWGRAA */
 const machine = createMachine(
   {
-    id: "transactions-on-date",
+    tsTypes: {} as import("./transactions-on-date-machine.typegen").Typegen0,
     schema: {
       context: {} as {
         date: string;
@@ -18,13 +18,13 @@ const machine = createMachine(
       },
       events: {} as
         | { type: "OPEN_TRANSACTIONS_FORM" }
-        | { type: "APPEND_TRANSACTION" }
+        | { type: "APPEND_TRANSACTION"; data: TransactionEntity }
         | { type: "REMOVE_TRANSACTION" }
         | { type: "FETCH_TRANSACTIONS" }
         | { type: "done.invoke.fetchTransactions"; data: TransactionEntity[] }
         | { type: "CLOSE_TRANSACTIONS" },
     },
-    tsTypes: {} as import("./transactions-on-date-machine.typegen").Typegen0,
+    id: "transactions-on-date",
     initial: "hidingTransactions",
     states: {
       hidingTransactions: {
@@ -47,10 +47,8 @@ const machine = createMachine(
         },
       },
       displayingTransactions: {
-        entry: "display",
         on: {
           CLOSE_TRANSACTIONS: {
-            actions: "hide",
             target: "hidingTransactions",
           },
         },
@@ -82,12 +80,23 @@ const machine = createMachine(
             }),
             {}
           ),
+        total: (_, event) =>
+          event.data.reduce(
+            (previous, current) => previous + current.amount,
+            0
+          ),
       }),
-      append: () => {},
+      append: assign({
+        transactions: (context, event) => {
+          context.transactions[event.data.uuid] = spawn(
+            createTransactionMachine(event.data)
+          );
+          return context.transactions;
+        },
+        total: (context, event) => context.total + event.data.amount,
+      }),
       notifyOpenForm: () => {},
       remove: () => {},
-      display: () => {},
-      hide: () => {},
     },
   }
 );

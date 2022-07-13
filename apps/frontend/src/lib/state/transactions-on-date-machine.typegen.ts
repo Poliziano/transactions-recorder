@@ -7,8 +7,6 @@ export interface Typegen0 {
     append: "APPEND_TRANSACTION";
     remove: "REMOVE_TRANSACTION";
     set: "done.invoke.fetchTransactions";
-    hide: "CLOSE_TRANSACTIONS";
-    display: "done.invoke.fetchTransactions";
   };
   internalEvents: {
     "done.invoke.fetchTransactions": {
