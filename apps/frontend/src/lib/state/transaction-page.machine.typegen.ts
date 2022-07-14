@@ -3,27 +3,35 @@
 export interface Typegen0 {
   "@@xstate/typegen": true;
   eventsCausingActions: {
-    assignTransactions: "done.invoke.fetchingTransactions:invocation[0]";
-    sendTransactionUpdatedEvent: "done.invoke.submittingTransaction:invocation[0]";
+    assignTransactions: "done.invoke.fetchingTransactions";
+    sendTransactionUpdatedEvent: "done.invoke.submittingTransaction";
     removeFormFields: "xstate.init";
     assignFormFields: "OPEN_TRANSACTIONS_FORM";
   };
   internalEvents: {
-    "done.invoke.fetchingTransactions:invocation[0]": {
-      type: "done.invoke.fetchingTransactions:invocation[0]";
+    "done.invoke.fetchingTransactions": {
+      type: "done.invoke.fetchingTransactions";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
-    "done.invoke.submittingTransaction:invocation[0]": {
-      type: "done.invoke.submittingTransaction:invocation[0]";
+    "done.invoke.submittingTransaction": {
+      type: "done.invoke.submittingTransaction";
       data: unknown;
       __tip: "See the XState TS docs to learn how to strongly type this.";
     };
     "xstate.init": { type: "xstate.init" };
+    "error.platform.fetchingTransactions": {
+      type: "error.platform.fetchingTransactions";
+      data: unknown;
+    };
+    "error.platform.submittingTransaction": {
+      type: "error.platform.submittingTransaction";
+      data: unknown;
+    };
   };
   invokeSrcNameMap: {
-    fetchTransactions: "done.invoke.fetchingTransactions:invocation[0]";
-    createTransaction: "done.invoke.submittingTransaction:invocation[0]";
+    fetchTransactions: "done.invoke.fetchingTransactions";
+    createTransaction: "done.invoke.submittingTransaction";
   };
   missingImplementations: {
     actions: never;

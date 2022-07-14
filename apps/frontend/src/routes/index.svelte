@@ -8,10 +8,7 @@
   import { useMachine } from "@xstate/svelte";
   import TransactionForm from "$lib/transaction-form.svelte";
 
-  const machine = createTransactionPageMachine({
-    fetchTransactions: fetchTransactionsDailySum,
-    createTransaction,
-  });
+  const machine = createTransactionPageMachine();
   const { send, service } = useMachine(machine);
 </script>
 

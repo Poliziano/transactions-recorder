@@ -3,7 +3,7 @@ import { interpret, Interpreter } from "xstate";
 import { waitFor } from "xstate/lib/waitFor";
 import createTransactionPageMachine from "../../src/lib/state/transaction-page.machine";
 
-test("start in 'waiting' state", () => {
+test.skip("start in 'waiting' state", () => {
   const machine = createTransactionPageMachine({
     fetchTransactions: () => Promise.resolve({}),
     createTransaction: () => Promise.resolve(),
@@ -12,7 +12,7 @@ test("start in 'waiting' state", () => {
   expect(service.state.matches("transactions.waiting")).toBeTruthy();
 });
 
-test("updates start when fetching dates", async () => {
+test.skip("updates start when fetching dates", async () => {
   const machine = createTransactionPageMachine({
     fetchTransactions: () =>
       Promise.resolve({
