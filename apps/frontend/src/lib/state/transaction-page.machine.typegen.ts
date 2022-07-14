@@ -6,7 +6,7 @@ export interface Typegen0 {
     assignTransactions: "done.invoke.fetchingTransactions:invocation[0]";
     sendTransactionUpdatedEvent: "done.invoke.submittingTransaction:invocation[0]";
     removeFormFields: "xstate.init";
-    assignFormFields: "OPEN_TRANSACTION_FORM";
+    assignFormFields: "OPEN_TRANSACTIONS_FORM";
   };
   internalEvents: {
     "done.invoke.fetchingTransactions:invocation[0]": {

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type createTransactionDateMachine from "$lib/state/transaction-date.machine";
+  import type { createTransactionsOnDateMachine } from "$lib/state/transactions-on-date.machine";
   import { slide } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import IconButton from "./components/icon-button.svelte";
   import Transaction from "./transaction.svelte";
 
   export let service: ActorRefFrom<
-    ReturnType<typeof createTransactionDateMachine>
+    ReturnType<typeof createTransactionsOnDateMachine>
   >;
 
   $: context = $service.context;
@@ -25,7 +25,7 @@
 
   function handleFormOpen() {
     service.send({
-      type: "OPEN_TRANSACTION_FORM",
+      type: "OPEN_TRANSACTIONS_FORM",
       data: {
         date: new Date(context.date).toISOString().split("T")[0],
       },
@@ -42,9 +42,9 @@
 
 {#if $service.matches("displayingTransactions")}
   <div transition:slide|local>
-    {#each context.transactions as transaction (transaction.uuid)}
+    {#each Object.entries(context.transactions) as [uuid, service] (uuid)}
       <div class="transaction" transition:slide|local>
-        <Transaction on:delete {transaction} />
+        <Transaction on:delete {service} />
       </div>
     {/each}
   </div>

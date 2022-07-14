@@ -6,7 +6,7 @@ import { deleteTransaction } from "./transactions.service";
 const machine = createMachine(
   {
     id: "transaction",
-    tsTypes: {} as import("./transaction-machine.typegen").Typegen0,
+    tsTypes: {} as import("./transaction.machine.typegen").Typegen0,
     schema: {
       context: {} as {
         optionsOpen: boolean;

@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { TransactionEntity } from "$lib/api/transaction";
   import { createEventDispatcher } from "svelte";
+  import type { ActorRefFrom } from "xstate";
   import IconMenu from "./components/icon-menu.svelte";
+  import type { createTransactionMachine } from "./state/transaction.machine";
 
-  export let transaction: TransactionEntity;
+  export let service: ActorRefFrom<ReturnType<typeof createTransactionMachine>>;
+
+  $: context = $service.context;
+  $: transaction = context.transaction;
 
   const dispatch = createEventDispatcher<{ delete: TransactionEntity }>();
   const actions = [

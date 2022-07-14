@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 import { interpret, Interpreter } from "xstate";
 import { waitFor } from "xstate/lib/waitFor";
-import { createTransactionsOnDateMachine } from "../../src/lib/state/transactions-on-date-machine";
+import { createTransactionsOnDateMachine } from "../../src/lib/state/transactions-on-date.machine";
 
 const machine = createTransactionsOnDateMachine({
   date: "2022-01-01",

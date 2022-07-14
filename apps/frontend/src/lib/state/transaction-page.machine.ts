@@ -1,16 +1,15 @@
-import type { TransactionFormParams } from "$lib/transaction-form";
 import type {
   TransactionEntity,
   TransactionEntityCreateParams,
 } from "$lib/api/transaction";
+import type { TransactionFormParams } from "$lib/transaction-form";
 import { assign, createMachine, send, spawn, type ActorRefFrom } from "xstate";
-import createTransactionDateMachine from "./transaction-date.machine";
-import { fetchTransactionsForDate } from "./transactions.service";
+import { createTransactionsOnDateMachine } from "./transactions-on-date.machine";
 
 export type Context = {
   dates: Record<
     string,
-    ActorRefFrom<ReturnType<typeof createTransactionDateMachine>>
+    ActorRefFrom<ReturnType<typeof createTransactionsOnDateMachine>>
   >;
   form?: TransactionFormParams;
 };
@@ -34,7 +33,7 @@ export type FetchTransactionsDoneEvent = {
 };
 
 export type OpenTransactionFormEvent = {
-  type: "OPEN_TRANSACTION_FORM";
+  type: "OPEN_TRANSACTIONS_FORM";
   data: TransactionFormParams;
 };
 
@@ -105,7 +104,7 @@ export default function createTransactionPageMachine({
           states: {
             closed: {
               on: {
-                OPEN_TRANSACTION_FORM: "opened",
+                OPEN_TRANSACTIONS_FORM: "opened",
               },
             },
             opened: {
@@ -142,12 +141,9 @@ export default function createTransactionPageMachine({
               (previous, [key, value]) => ({
                 ...previous,
                 [key]: spawn(
-                  createTransactionDateMachine({
+                  createTransactionsOnDateMachine({
                     date: key,
                     total: value,
-                    fetchTransactions(context, event) {
-                      return fetchTransactionsForDate(key);
-                    },
                   })
                 ),
               }),
@@ -162,7 +158,7 @@ export default function createTransactionPageMachine({
         }),
         sendTransactionUpdatedEvent: send(
           (_, event) => ({
-            type: "TRANSACTION_CREATED",
+            type: "APPEND_TRANSACTION",
             data: event.data,
           }),
           {

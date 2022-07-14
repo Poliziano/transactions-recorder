@@ -1,7 +1,7 @@
 import { expect, test, vi } from "vitest";
 import { interpret } from "xstate";
 import { waitFor } from "xstate/lib/waitFor";
-import { createTransactionMachine } from "../../src/lib/state/transaction-machine";
+import { createTransactionMachine } from "../../src/lib/state/transaction.machine";
 
 const machine = createTransactionMachine({
   userId: "user_id",

@@ -7,20 +7,20 @@ import {
   spawn,
   type ActorRefFrom,
 } from "xstate";
-import { createTransactionMachine } from "./transaction-machine";
+import { createTransactionMachine } from "./transaction.machine";
 import { fetchTransactionsForDate } from "./transactions.service";
 
 /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0JpE6yYAdABYEQGZQAqG2ehJsAxADEAomwDCACQD6bAEoBBAHIBlOaLYBJAPLLEoAA5FYBHpl0gAHogBMAdgAMtAMwBWAJyOALI6vuPV5y4ANCAAnojOdja0rjGukY4AHAlWAIwekQC+GcFoWDj4xGQUVDS0AGZgyLiMrBx53IX8ECR0LABuRADWdBVV9HVcBbxmBkYmZpYINjG0ASlWAGyLyUsxwWEIHkm0HrELNguOkXYLWTmc+Saw5JiU1HTMsHoANughLOwXDbx8ogAymiUQmk8mUqg02iUI0MxkKE0QCTsHmiPhsbisPiWNgS60QLgW0ViNg8hw8xLsjjOIFygyuNzuND4mgACkIFCDFCo1FplJIBJoZABZaFjOFICzhI60KwJVwpTx2VI2FILXEIFIJZyE2I6nU2Kk0y6NeklMB8OTM1kKAAiHLB3O0IthJHhCGcuxRKVcVi8thS8psatcCW1ut1+uy1K+QyKt1NfBkQkFmgAasDZJzwTyneNxZN3SG7K4DgkFs45gtXGr5llI5giBA4GZDd9Ywy6IxmLVo1cc2LQJMyWqXCHHGP-GXiQlPAcDT3jcV7uVKtUPgMjcNxaNnaY84hdg5va5K-Z-cWfWqyQTdjF9odjm5nHP6jHrovSo8Xm81-PN-oYbmA6ICkipakkPjyseIGJFWoR4gsDjTmORaHM49h2KWz60gucb3H2Lp7ggViOGqMoeLWGRAA */
 const machine = createMachine(
   {
     id: "transactions-on-date",
-    tsTypes: {} as import("./transactions-on-date-machine.typegen").Typegen0,
+    tsTypes: {} as import("./transactions-on-date.machine.typegen").Typegen0,
     schema: {
       context: {} as {
         date: string;
         total: number;
         transactions: Record<
-          string,
+          TransactionEntity["uuid"],
           ActorRefFrom<typeof createTransactionMachine>
         >;
       },
