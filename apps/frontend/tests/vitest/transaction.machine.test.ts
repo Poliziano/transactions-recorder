@@ -4,12 +4,14 @@ import { waitFor } from "xstate/lib/waitFor";
 import { createTransactionMachine } from "../../src/lib/state/transaction.machine";
 
 const machine = createTransactionMachine({
-  userId: "user_id",
-  name: "McDonalds",
-  amount: 24.99,
-  type: "expenditure",
-  date: "2022-01-01",
-  uuid: "uuid",
+  transaction: {
+    userId: "user_id",
+    name: "McDonalds",
+    amount: 24.99,
+    type: "expenditure",
+    date: "2022-01-01",
+    uuid: "uuid",
+  },
 });
 
 test("initialises to 'active' state", () => {
