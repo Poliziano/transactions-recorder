@@ -3,27 +3,36 @@
 export interface Typegen0 {
   "@@xstate/typegen": true;
   eventsCausingActions: {
-    notifySubmit: "SUBMIT";
     assignAmount: "UPDATE_AMOUNT";
     assignDate: "UPDATE_DATE";
     assignName: "UPDATE_NAME";
-    notifyClose: "CLOSE";
+    assignDefaults: "OPEN";
   };
   internalEvents: {
     "xstate.init": { type: "xstate.init" };
+    "done.invoke.submit": {
+      type: "done.invoke.submit";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
+    "error.platform.submit": { type: "error.platform.submit"; data: unknown };
   };
-  invokeSrcNameMap: {};
+  invokeSrcNameMap: {
+    submit: "done.invoke.submit";
+  };
   missingImplementations: {
     actions: never;
     services: never;
     guards: never;
     delays: never;
   };
-  eventsCausingServices: {};
+  eventsCausingServices: {
+    submit: "SUBMIT";
+  };
   eventsCausingGuards: {
     canSubmit: "SUBMIT";
   };
   eventsCausingDelays: {};
-  matchesStates: "displaying";
+  matchesStates: "displaying" | "closed" | "submitting";
   tags: never;
 }

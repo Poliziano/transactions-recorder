@@ -8,15 +8,11 @@ const machine = createTransactionsFormMachine({
     date: "2020-01-01",
     userId: "abc",
   },
-}).withConfig({
-  actions: {
-    notifySubmit,
-  },
 });
 
-it("starts in 'displaying' state", () => {
+it("starts in 'closed' state", () => {
   const service = interpret(machine).start();
-  expect(service.state.matches("displaying")).toBeTruthy();
+  expect(service.state.matches("closed")).toBeTruthy();
 });
 
 it("does not submit if transaction is not fully formed", () => {
