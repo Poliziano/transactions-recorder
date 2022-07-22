@@ -10,8 +10,8 @@ const machine = createMachine(
   {
     tsTypes: {} as import("./transactions-form.machine.typegen").Typegen0,
     schema: {
-      context: {} as Pick<TransactionEntity, "date"> &
-        Omit<Partial<TransactionEntity>, "date">,
+      context: {} as Pick<TransactionEntity, "date" | "userId"> &
+        Omit<Partial<TransactionEntity>, "date" | "userId">,
       events: {} as
         | { type: "SUBMIT" }
         | { type: "UPDATE_AMOUNT"; data: number }
@@ -77,8 +77,8 @@ const validation: z.ZodType<TransactionEntityCreateParams> = z.object({
 });
 
 type CreateTransactionsOnDateMachineInput = {
-  transaction: Pick<TransactionEntity, "date"> &
-    Omit<Partial<TransactionEntity>, "date">;
+  transaction: Pick<TransactionEntity, "date" | "userId"> &
+    Omit<Partial<TransactionEntity>, "date" | "userId">;
 };
 export function createTransactionsFormMachine({
   transaction,

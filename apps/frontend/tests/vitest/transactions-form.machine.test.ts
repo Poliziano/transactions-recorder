@@ -6,6 +6,7 @@ const notifySubmit = vi.fn();
 const machine = createTransactionsFormMachine({
   transaction: {
     date: "2020-01-01",
+    userId: "abc",
   },
 }).withConfig({
   actions: {
