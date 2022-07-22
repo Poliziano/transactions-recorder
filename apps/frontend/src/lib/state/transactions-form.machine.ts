@@ -2,17 +2,8 @@ import type {
   TransactionEntity,
   TransactionEntityCreateParams,
 } from "$lib/api/transaction";
-import { createMachine, sendParent } from "xstate";
+import { assign, createMachine, sendParent } from "xstate";
 import { z } from "zod";
-
-const validation: z.ZodType<TransactionEntityCreateParams> = z.object({
-  date: z.string(),
-  userId: z.string(),
-  name: z.string(),
-  amount: z.number(),
-  type: z.enum(["income", "expenditure"]),
-  uuid: z.optional(z.string()),
-});
 
 /** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogAsAJloAGPfoP6AjOoA0IdhoDMATl36rAVnVGbVgGyOrAX2-m0WDj4xGSUNPSMrBxcvAIACgAiAIISAKIA+kkiAPICAHJSSCCy8oqYymoI6nYAHJo1Rpqa6gDseupe7uaWCE7aBk4ubp4+fiAB2HhlsBRUdAzMbJzcPPHJaenrqcolCiEViO7quq6OZ-Ud7m6a3YianvZ6g64eXr7+GJPBJDNh85FLGKrRIpDJ5LLbIq7MoHBDuHS0FpWOruJF9apWFqOW4IIwtGqPJ4tGwYzTvcafILTWbhBZRZa8ADCABlsnxITI5HslEVKi0jLR7nj1DpNM53CZ3F0LIgbALDJiSddfGNMEQIHBlBMqSFfnMIototwdlyYbzEI4CUi6i1qmKjEYrB4cfD5fomi0ro4bJojOTtVNdTTqCbSvtzbiCYZo3oTDijDUVd4gA */
 const machine = createMachine(
@@ -59,12 +50,31 @@ const machine = createMachine(
         type: "SUBMIT",
         data: context,
       })),
+      notifyClose: sendParent("CLOSE"),
+      assignAmount: assign({
+        amount: (_context, event) => event.data,
+      }),
+      assignDate: assign({
+        date: (_context, event) => event.data,
+      }),
+      assignName: assign({
+        name: (_context, event) => event.data,
+      }),
     },
     guards: {
       canSubmit: (context) => validation.safeParse(context).success,
     },
   }
 );
+
+const validation: z.ZodType<TransactionEntityCreateParams> = z.object({
+  date: z.string(),
+  userId: z.string(),
+  name: z.string(),
+  amount: z.number(),
+  type: z.enum(["income", "expenditure"]),
+  uuid: z.optional(z.string()),
+});
 
 type CreateTransactionsOnDateMachineInput = {
   transaction: Pick<TransactionEntity, "date"> &

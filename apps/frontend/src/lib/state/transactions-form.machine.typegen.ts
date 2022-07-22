@@ -14,7 +14,7 @@ export interface Typegen0 {
   };
   invokeSrcNameMap: {};
   missingImplementations: {
-    actions: "assignAmount" | "assignDate" | "assignName" | "notifyClose";
+    actions: never;
     services: never;
     guards: never;
     delays: never;

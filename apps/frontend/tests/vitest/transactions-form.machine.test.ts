@@ -2,9 +2,14 @@ import { expect, it, vi } from "vitest";
 import { interpret } from "xstate";
 import { createTransactionsFormMachine } from "../../src/lib/state/transactions-form.machine";
 
+const notifySubmit = vi.fn();
 const machine = createTransactionsFormMachine({
   transaction: {
     date: "2020-01-01",
+  },
+}).withConfig({
+  actions: {
+    notifySubmit,
   },
 });
 
@@ -14,33 +19,20 @@ it("starts in 'displaying' state", () => {
 });
 
 it("does not submit if transaction is not fully formed", () => {
-  const notifySubmitMock = vi.fn();
-  const mockedMachine = machine.withConfig({
-    actions: {
-      notifySubmit: notifySubmitMock,
-    },
-  });
-  const service = interpret(mockedMachine).start();
+  const service = interpret(machine).start();
   service.send("SUBMIT");
-  expect(notifySubmitMock).to.not.toHaveBeenCalled();
+  expect(notifySubmit).to.not.toHaveBeenCalled();
 });
 
-it("does not submit if transaction is not fully formed", () => {
-  const notifySubmitMock = vi.fn();
-  const mockedMachine = machine
-    .withContext({
-      date: "2022-01-01",
-      amount: 42,
-      name: "McDonalds",
-      userId: "abc",
-      type: "expenditure",
-    })
-    .withConfig({
-      actions: {
-        notifySubmit: notifySubmitMock,
-      },
-    });
-  const service = interpret(mockedMachine).start();
+it("submits if transaction is fully formed", () => {
+  const machineWithContext = machine.withContext({
+    date: "2022-01-01",
+    amount: 42,
+    name: "McDonalds",
+    userId: "abc",
+    type: "expenditure",
+  });
+  const service = interpret(machineWithContext).start();
   service.send("SUBMIT");
-  expect(notifySubmitMock).to.toHaveBeenCalled();
+  expect(notifySubmit).to.toHaveBeenCalled();
 });
