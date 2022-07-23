@@ -27,6 +27,7 @@
     service.send({
       type: "OPEN_TRANSACTIONS_FORM",
       data: {
+        userId: "abc",
         date: new Date(context.date).toISOString().split("T")[0],
       },
     });

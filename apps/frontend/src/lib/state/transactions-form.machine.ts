@@ -1,64 +1,96 @@
-import type {
-  TransactionEntity,
-  TransactionEntityCreateParams,
-} from "$lib/api/transaction";
+import type { TransactionEntity } from "$lib/api/transaction";
 import { assign, createMachine } from "xstate";
+import { log } from "xstate/lib/actions";
 import { z } from "zod";
 import { createTransaction } from "./transactions.service";
 
-type FormDefaults = Pick<TransactionEntity, "date" | "userId"> &
-  Omit<Partial<TransactionEntity>, "date" | "userId">;
+type OptionalFields<TObject, TKey extends keyof TObject> = {
+  [Property in keyof TObject as Property extends TKey
+    ? never
+    : Property]-?: TObject[Property];
+} & {
+  [Property in keyof TObject as Property extends TKey
+    ? Property
+    : never]+?: TObject[Property];
+};
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBM6gBy0ArAGYAjOt2GtATgDsAFgBstgDQh2G9edrnP5rZe-rLhgaWAL7BTmhYOPjEZJQ09IysHFy8AgAKACIAghIAogD6WSIA8gIAclJIILLyipjKagjW6k4uCPoADPp6Hb2G+tqatuqh4RjYeHWwFFR0DMxsnNw86dl5+Wu5yjUKMQ2Iura0huaG1h3mF7Ynl4atGoZHur0d-YPq1+ajIBET0STTOJzRKLFIrTI5AplIpbKo7Or7BC6dQeQyvWwdWyWGzqTGOZyIYzuZ59AZaIYnb6-KJTGbxeZJJa8ADCABlinxYTI5LslFVGpodAZjKYLDZ7PcmmcPF4tI9dJZyT4qeMaTFAbNaLgWHJIDximlcmVtjyEfzEFiOrRmmYbPosaZjJLLjLPD4-AEDNYVZFJuq6XRYABXABG1AUhGWEBIYFoXAAbkQANax4NhhQm2p7c0IS3W9S26z2yyOloEhAfayuzw2Sy9ay6b3fTBECBwZTUv0AgMJBbJbiZ3n1HPPVHorrXQyWWz6ayS-TmXQ9UnvYY+v60oFanWwSCDs2gRrkyy0cldayWbS2Hy2XSSj6Ga1eS6mD4hMI-VVd2KatPh5CRlA+7ZoeiDNEuAQ3g2F7qAu+j3vo3TWM+6jWGi-S2OuardkCwF8qBCBmJKU7Vs+ZHmPooShEAA */
+type RequiredFields<TObject, TKey extends keyof TObject> = {
+  [Property in keyof TObject as Property extends TKey
+    ? Property
+    : never]-?: TObject[Property];
+} & {
+  [Property in keyof TObject as Property extends TKey
+    ? never
+    : Property]+?: TObject[Property];
+};
+
+type FormDefaults = RequiredFields<TransactionEntity, "date" | "userId">;
+export type FormContext = OptionalFields<TransactionEntity, "uuid">;
+
+export type FormEvents =
+  | { type: "SUBMIT" }
+  | { type: "OPEN"; data: FormDefaults }
+  | { type: "UPDATE_AMOUNT"; data: number | string }
+  | { type: "UPDATE_DATE"; data: string }
+  | { type: "UPDATE_NAME"; data: string }
+  | { type: "UPDATE_TYPE"; data: FormContext["type"] }
+  | { type: "CLOSE" };
+
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBMAVgAstAByaAnAGYA7GeOaADOvUA2UwBoQ7DacO0tVq3e2aAjMZ62saGAL5hzmhYOPjEZJQ09IysHFy8AgAKACIAghIAogD6uSIA8gIAclJIILLyipjKagiamrT+vj56euraPXZ2bc6uCMbqxrTe3saDwcba9hFRGNh4jbAUVHQMzGyc3DxZeYVFJwXK9QrxzYh2HpY6Br2m-iaGTi4aVqZT0+o2UJ2CzLEDRNZxEibRI7FL7dJHHL5YqVUoXWpXRq3BCDKamRaBe7eQw+T6jQz+P7TMyGbQmN56UHg2IbLZJXapA68ADCABkynx0TI5NclLUWlpdAYTOZzNZbA4Roh+upPNYrJpjP51CTtO47EzViz4tDtrRcCw5JAeGVMgVKpcRVjxXdDHZaPjDF67ADrHY9P4lQhte1TOrTOp-FYzD8eoaYusTWy6LAAK4AI2oCkIhwgJDAtC4ADciABrAtpzMKR0NG4unFuj1072+7qBr5jfy6Lw-bTefz+cx6A2gzBECBwZTMxNQ5PJPZpbg10VNet6oPaTdUjVanVWPXBeMQ1kw82W2CQZfO0AtAy6Lt6Bb2eymbzqIPGfce9WLMwOPuaKYR7GrOp6VlmyA5lAV51jeyqaKq+7+sOQR6m6+5BuowRqt4wJ9AMgzATOCTbDBYpwQgExBv4jIRGEQA */
 const machine = createMachine(
   {
+    context: {} as FormContext,
     tsTypes: {} as import("./transactions-form.machine.typegen").Typegen0,
     schema: {
-      context: {} as FormDefaults,
-      events: {} as
-        | { type: "SUBMIT" }
-        | { type: "OPEN"; data: FormDefaults }
-        | { type: "UPDATE_AMOUNT"; data: number }
-        | { type: "UPDATE_DATE"; data: string }
-        | { type: "UPDATE_NAME"; data: string }
-        | { type: "CLOSE" },
+      context: {} as FormContext,
+      events: {} as FormEvents,
     },
     initial: "closed",
     states: {
       displaying: {
+        entry: "logEvent",
         on: {
           SUBMIT: {
+            actions: "logEvent",
             cond: "canSubmit",
             target: "submitting",
           },
           UPDATE_AMOUNT: {
-            actions: "assignAmount",
+            cond: "isNumber",
+            actions: ["assignAmount", "logEvent"],
           },
           UPDATE_DATE: {
-            actions: "assignDate",
+            actions: ["assignDate", "logEvent"],
           },
           UPDATE_NAME: {
-            actions: "assignName",
+            actions: ["assignName", "logEvent"],
+          },
+          UPDATE_TYPE: {
+            actions: ["assignType", "logEvent"],
           },
           CLOSE: {
+            actions: "logEvent",
             target: "closed",
           },
         },
       },
       closed: {
+        entry: "logEvent",
         on: {
           OPEN: {
-            actions: "assignDefaults",
+            actions: ["assignDefaults", "logEvent"],
             target: "displaying",
           },
         },
       },
       submitting: {
+        entry: "logEvent",
         invoke: {
           src: "submit",
           id: "submit",
           onDone: [
             {
+              actions: "logEvent",
               target: "closed",
             },
           ],
@@ -69,9 +101,14 @@ const machine = createMachine(
   },
   {
     actions: {
-      assignDefaults: assign((_context, event) => event.data),
+      assignDefaults: assign((_context, event) => ({
+        name: "",
+        amount: 42,
+        type: "expenditure" as FormDefaults["type"],
+        ...event.data,
+      })),
       assignAmount: assign({
-        amount: (_context, event) => event.data,
+        amount: (_context, event) => Number(event.data),
       }),
       assignDate: assign({
         date: (_context, event) => event.data,
@@ -79,9 +116,17 @@ const machine = createMachine(
       assignName: assign({
         name: (_context, event) => event.data,
       }),
+      assignType: assign({
+        type: (_context, event) => event.data,
+      }),
+      logEvent: log((context, event) => ({
+        context,
+        event,
+      })),
     },
     guards: {
       canSubmit: (context) => validation.safeParse(context).success,
+      isNumber: (_context, event) => !Number.isNaN(Number(event.data)),
     },
     services: {
       submit: createTransaction,
@@ -89,7 +134,7 @@ const machine = createMachine(
   }
 );
 
-const validation: z.ZodType<TransactionEntityCreateParams> = z.object({
+const validation: z.ZodType<FormContext> = z.object({
   date: z.string(),
   userId: z.string(),
   name: z.string(),
@@ -98,11 +143,6 @@ const validation: z.ZodType<TransactionEntityCreateParams> = z.object({
   uuid: z.optional(z.string()),
 });
 
-type CreateTransactionsOnDateMachineInput = {
-  transaction: FormDefaults;
-};
-export function createTransactionsFormMachine({
-  transaction,
-}: CreateTransactionsOnDateMachineInput) {
-  return machine.withContext(transaction);
+export function createTransactionsFormMachine() {
+  return machine;
 }

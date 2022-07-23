@@ -1,70 +1,71 @@
 <script lang="ts">
-  import type { TransactionFormParams } from "./transaction-form";
-
-  import { createEventDispatcher } from "svelte";
-  import type { TransactionEntityCreateParams } from "./api/transaction";
-  import Block from "./components/block.svelte";
-  import FormField from "./components/form-field.svelte";
+  import { actor } from "$lib/actor";
+  import "$lib/components/form-field.css";
   import { fly } from "svelte/transition";
+  import type { ActorRefFrom } from "xstate";
+  import Block from "./components/block.svelte";
+  import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
-  export let transaction: TransactionFormParams;
-  const dispatch = createEventDispatcher<{
-    create: TransactionEntityCreateParams;
-    close: void;
-  }>();
+  export let service: ActorRefFrom<
+    ReturnType<typeof createTransactionsFormMachine>
+  >;
 
-  function handleSubmit(event: SubmitEvent) {
-    const formData = new FormData(event.target as HTMLFormElement);
+  $: transaction = $service.context;
 
-    dispatch("create", {
-      name: formData.get("name") as string,
-      amount: +(formData.get("amount") as string),
-      date: new Date(formData.get("date") as string).toISOString(),
-      type: formData.get("type") as "income" | "expenditure",
-    });
+  function handleSubmit() {
+    service.send("SUBMIT");
   }
 
   function handleClose() {
-    dispatch("close");
+    service.send("CLOSE");
   }
 </script>
 
-<Block on:click={handleClose}>
-  <form
-    class="new-transaction-form"
-    on:click|stopPropagation
-    on:submit|preventDefault={handleSubmit}
-    transition:fly={{ y: 25 }}
-  >
-    <FormField
-      name="name"
-      type="text"
-      placeholder="Name"
-      value={transaction?.name}
-    />
-    <FormField
-      name="amount"
-      type="number"
-      placeholder="Amount"
-      value={transaction?.amount}
-    />
-    <FormField name="date" type="date" value={transaction.date} />
-    <select name="type" required>
-      <option
-        value="expenditure"
-        default
-        selected={transaction?.type === "expenditure"}>Expenditure</option
-      >
-      <option value="income" selected={transaction?.type === "income"}
-        >Income</option
-      >
-    </select>
-    <div class="new-transaction-form-buttons">
-      <FormField type="submit" value="Submit" />
-      <FormField type="button" value="Cancel" on:click={handleClose} />
-    </div>
-  </form>
-</Block>
+{#if !$service.matches("closed")}
+  <Block on:click={handleClose}>
+    <form
+      class="new-transaction-form"
+      on:click|stopPropagation
+      on:submit|preventDefault={handleSubmit}
+      transition:fly={{ y: 25 }}
+    >
+      <input
+        name="name"
+        type="text"
+        placeholder="Name"
+        required
+        use:actor={{ service, type: "UPDATE_NAME" }}
+      />
+      <input
+        name="amount"
+        type="number"
+        placeholder="Amount"
+        required
+        use:actor={{ service, type: "UPDATE_AMOUNT" }}
+      />
+      <input
+        name="date"
+        type="date"
+        required
+        use:actor={{ service, type: "UPDATE_DATE" }}
+      />
+      <select name="type" use:actor={{ service, type: "UPDATE_TYPE" }} required>
+        <option
+          value="expenditure"
+          default
+          selected={transaction.type === "expenditure"}>Expenditure</option
+        >
+        <option value="income" selected={transaction.type === "income"}
+          >Income</option
+        >
+      </select>
+      <div class="new-transaction-form-buttons">
+        <input type="submit" value="Submit" />
+        <input type="button" value="Cancel" on:click={handleClose} />
+      </div>
+    </form>
+  </Block>
+{/if}
 
 <style>
   select {
