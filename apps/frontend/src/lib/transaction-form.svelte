@@ -1,6 +1,7 @@
 <script lang="ts">
   import { actor } from "$lib/actor";
   import "$lib/components/form-field.css";
+  import { useSelector } from "@xstate/svelte";
   import { fly } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import Block from "./components/block.svelte";
@@ -10,7 +11,7 @@
     ReturnType<typeof createTransactionsFormMachine>
   >;
 
-  $: transaction = $service.context;
+  const transaction = useSelector(service, (state) => state.context);
 
   function handleSubmit() {
     service.send("SUBMIT");
@@ -39,9 +40,9 @@
       <input
         name="amount"
         type="number"
+        value="0"
         placeholder="Amount"
         required
-        use:actor={{ service, type: "UPDATE_AMOUNT" }}
       />
       <input
         name="date"
@@ -53,9 +54,9 @@
         <option
           value="expenditure"
           default
-          selected={transaction.type === "expenditure"}>Expenditure</option
+          selected={$transaction.type === "expenditure"}>Expenditure</option
         >
-        <option value="income" selected={transaction.type === "income"}
+        <option value="income" selected={$transaction.type === "income"}
           >Income</option
         >
       </select>
