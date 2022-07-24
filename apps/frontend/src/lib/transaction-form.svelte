@@ -7,10 +7,7 @@
   import Block from "./components/block.svelte";
   import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
-  export let service: ActorRefFrom<
-    ReturnType<typeof createTransactionsFormMachine>
-  >;
-
+  export let service: ActorRefFrom<typeof createTransactionsFormMachine>;
   const transaction = useSelector(service, (state) => state.context);
 
   function handleSubmit() {
@@ -35,22 +32,27 @@
         type="text"
         placeholder="Name"
         required
-        use:actor={{ service, type: "UPDATE_NAME" }}
+        use:actor={{ actor: service, type: "UPDATE_NAME" }}
       />
       <input
         name="amount"
         type="number"
-        value="0"
+        inputmode="numeric"
         placeholder="Amount"
         required
+        use:actor={{ actor: service, type: "UPDATE_AMOUNT" }}
       />
       <input
         name="date"
         type="date"
         required
-        use:actor={{ service, type: "UPDATE_DATE" }}
+        use:actor={{ actor: service, type: "UPDATE_DATE" }}
       />
-      <select name="type" use:actor={{ service, type: "UPDATE_TYPE" }} required>
+      <select
+        name="type"
+        use:actor={{ actor: service, type: "UPDATE_TYPE" }}
+        required
+      >
         <option
           value="expenditure"
           default

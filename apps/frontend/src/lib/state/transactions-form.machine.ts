@@ -24,13 +24,17 @@ type RequiredFields<TObject, TKey extends keyof TObject> = {
     : Property]+?: TObject[Property];
 };
 
-type FormDefaults = RequiredFields<TransactionEntity, "date" | "userId">;
-export type FormContext = OptionalFields<TransactionEntity, "uuid">;
+type FormFields = Omit<TransactionEntity, "amount"> & {
+  amount: string;
+};
+
+type FormDefaults = RequiredFields<FormFields, "date" | "userId">;
+export type FormContext = OptionalFields<FormFields, "uuid">;
 
 export type FormEvents =
   | { type: "SUBMIT" }
   | { type: "OPEN"; data: FormDefaults }
-  | { type: "UPDATE_AMOUNT"; data: number | string }
+  | { type: "UPDATE_AMOUNT"; data: string }
   | { type: "UPDATE_DATE"; data: string }
   | { type: "UPDATE_NAME"; data: string }
   | { type: "UPDATE_TYPE"; data: FormContext["type"] }
@@ -56,7 +60,7 @@ const machine = createMachine(
             target: "submitting",
           },
           UPDATE_AMOUNT: {
-            cond: "isNumber",
+            // cond: "isNumber",
             actions: ["assignAmount", "logEvent"],
           },
           UPDATE_DATE: {
@@ -103,12 +107,13 @@ const machine = createMachine(
     actions: {
       assignDefaults: assign((_context, event) => ({
         name: "",
-        amount: 42,
+        amount: "",
         type: "expenditure" as FormDefaults["type"],
         ...event.data,
       })),
       assignAmount: assign({
-        amount: (_context, event) => Number(event.data),
+        amount: (context, event) =>
+          isNumeric(event.data) ? event.data : context.amount,
       }),
       assignDate: assign({
         date: (_context, event) => event.data,
@@ -126,7 +131,7 @@ const machine = createMachine(
     },
     guards: {
       canSubmit: (context) => validation.safeParse(context).success,
-      isNumber: (_context, event) => !Number.isNaN(Number(event.data)),
+      isNumber: (_context, event) => isNumeric(event.data),
     },
     services: {
       submit: createTransaction,
@@ -134,11 +139,22 @@ const machine = createMachine(
   }
 );
 
+function isNumeric(value: unknown) {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const output =
+    // @ts-expect-error isNan is wrong
+    !isNaN(value) && !isNaN(parseFloat(value));
+  return output;
+}
+
 const validation: z.ZodType<FormContext> = z.object({
   date: z.string(),
   userId: z.string(),
   name: z.string(),
-  amount: z.number(),
+  amount: z.string(),
   type: z.enum(["income", "expenditure"]),
   uuid: z.optional(z.string()),
 });

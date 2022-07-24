@@ -18,7 +18,7 @@ const machine = createMachine(
           string,
           ActorRefFrom<ReturnType<typeof createTransactionsOnDateMachine>>
         >;
-        form: ActorRefFrom<ReturnType<typeof createTransactionsFormMachine>>;
+        form: ActorRefFrom<typeof createTransactionsFormMachine>;
       },
       events: {} as
         | {

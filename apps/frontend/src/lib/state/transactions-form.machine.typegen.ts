@@ -41,7 +41,6 @@ export interface Typegen0 {
   };
   eventsCausingGuards: {
     canSubmit: "SUBMIT";
-    isNumber: "UPDATE_AMOUNT";
   };
   eventsCausingDelays: {};
   matchesStates: "displaying" | "closed" | "submitting";

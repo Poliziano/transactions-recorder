@@ -2,25 +2,33 @@ import type { AnyActorRef } from "xstate";
 
 export function actor(
   node: HTMLInputElement | HTMLSelectElement,
-  { service, type }: { service: AnyActorRef; type: string }
+  { actor, type }: { actor: AnyActorRef; type: string }
 ) {
-  const sync = service.subscribe(({ context }) => {
+  const syncNodeToState = ({ context }: { context: any }) => {
+    console.log("NEXT STATE", context);
     const newInputValue = context[node.name]?.toString();
 
     if (newInputValue && newInputValue != node.value) {
       node.value = newInputValue;
     }
-  });
+  };
 
-  node.addEventListener("input", (event) => {
+  const sendInputEvent = (event: Event) => {
     if (event.target == null) {
       return;
     }
     const inputEvent = event.target as HTMLInputElement;
-    service.send({ type, data: inputEvent.value });
-  });
+    console.log(event);
+    actor.send({ type, data: inputEvent.value } as any);
+  };
+
+  const sync = actor.subscribe(syncNodeToState);
+  node.addEventListener("input", sendInputEvent);
 
   return {
-    destroy: sync.unsubscribe,
+    destroy() {
+      sync.unsubscribe();
+      node.removeEventListener("input", sendInputEvent);
+    },
   };
 }
