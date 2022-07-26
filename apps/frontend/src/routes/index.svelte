@@ -11,7 +11,7 @@
 
 <div class="layout">
   <TransactionTable {service} on:delete={() => {}} />
-  <TransactionForm service={$context.form} />
+  <TransactionForm actor={$context.form} />
 </div>
 
 <style>

@@ -1,6 +1,6 @@
 import type { AnyActorRef } from "xstate";
 
-export function actor(
+export function actorController(
   node: HTMLInputElement | HTMLSelectElement,
   { actor, send }: { actor: AnyActorRef; send: string }
 ) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { actor } from "$lib/actor";
+  import { actorController } from "$lib/actions/actor-controller";
   import "$lib/components/form-field.css";
   import { useSelector } from "@xstate/svelte";
   import { fly } from "svelte/transition";
@@ -7,19 +7,19 @@
   import Block from "./components/block.svelte";
   import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
-  export let service: ActorRefFrom<typeof createTransactionsFormMachine>;
-  const transaction = useSelector(service, (state) => state.context);
+  export let actor: ActorRefFrom<typeof createTransactionsFormMachine>;
+  const transaction = useSelector(actor, (state) => state.context);
 
   function handleSubmit() {
-    service.send("SUBMIT");
+    actor.send("SUBMIT");
   }
 
   function handleClose() {
-    service.send("CLOSE");
+    actor.send("CLOSE");
   }
 </script>
 
-{#if !$service.matches("closed")}
+{#if !$actor.matches("closed")}
   <Block on:click={handleClose}>
     <form
       class="new-transaction-form"
@@ -32,7 +32,7 @@
         type="text"
         placeholder="Name"
         required
-        use:actor={{ actor: service, send: "UPDATE_NAME" }}
+        use:actorController={{ actor, send: "UPDATE_NAME" }}
       />
       <input
         name="amount"
@@ -40,17 +40,17 @@
         inputmode="numeric"
         placeholder="Amount"
         required
-        use:actor={{ actor: service, send: "UPDATE_AMOUNT" }}
+        use:actorController={{ actor, send: "UPDATE_AMOUNT" }}
       />
       <input
         name="date"
         type="date"
         required
-        use:actor={{ actor: service, send: "UPDATE_DATE" }}
+        use:actorController={{ actor, send: "UPDATE_DATE" }}
       />
       <select
         name="type"
-        use:actor={{ actor: service, send: "UPDATE_TYPE" }}
+        use:actorController={{ actor, send: "UPDATE_TYPE" }}
         required
       >
         <option
