@@ -60,7 +60,7 @@ const machine = createMachine(
             target: "submitting",
           },
           UPDATE_AMOUNT: {
-            // cond: "isNumber",
+            cond: "isNumber",
             actions: ["assignAmount", "logEvent"],
           },
           UPDATE_DATE: {
@@ -112,8 +112,7 @@ const machine = createMachine(
         ...event.data,
       })),
       assignAmount: assign({
-        amount: (context, event) =>
-          isNumeric(event.data) ? event.data : context.amount,
+        amount: (_context, event) => removeLeadingZeros(event.data),
       }),
       assignDate: assign({
         date: (_context, event) => event.data,
@@ -131,7 +130,7 @@ const machine = createMachine(
     },
     guards: {
       canSubmit: (context) => validation.safeParse(context).success,
-      isNumber: (_context, event) => isNumeric(event.data),
+      isNumber: (_context, event) => isNumericString(event.data),
     },
     services: {
       submit: createTransaction,
@@ -139,15 +138,15 @@ const machine = createMachine(
   }
 );
 
-function isNumeric(value: unknown) {
-  if (typeof value !== "string") {
-    return false;
-  }
+function isNumericString(value: string) {
+  return value === "" || !isNaN(parseFloat(value));
+}
 
-  const output =
-    // @ts-expect-error isNan is wrong
-    !isNaN(value) && !isNaN(parseFloat(value));
-  return output;
+function removeLeadingZeros(value: string) {
+  const regex = /^0*([0-9]+\.?[0-9]*)$/;
+  const result = value.match(regex);
+
+  return result == null ? value : result[1];
 }
 
 const validation: z.ZodType<FormContext> = z.object({

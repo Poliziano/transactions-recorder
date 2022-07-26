@@ -32,7 +32,7 @@
         type="text"
         placeholder="Name"
         required
-        use:actor={{ actor: service, type: "UPDATE_NAME" }}
+        use:actor={{ actor: service, send: "UPDATE_NAME" }}
       />
       <input
         name="amount"
@@ -40,17 +40,17 @@
         inputmode="numeric"
         placeholder="Amount"
         required
-        use:actor={{ actor: service, type: "UPDATE_AMOUNT" }}
+        use:actor={{ actor: service, send: "UPDATE_AMOUNT" }}
       />
       <input
         name="date"
         type="date"
         required
-        use:actor={{ actor: service, type: "UPDATE_DATE" }}
+        use:actor={{ actor: service, send: "UPDATE_DATE" }}
       />
       <select
         name="type"
-        use:actor={{ actor: service, type: "UPDATE_TYPE" }}
+        use:actor={{ actor: service, send: "UPDATE_TYPE" }}
         required
       >
         <option
