@@ -7,22 +7,14 @@
   import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
   export let actor: ActorRefFrom<typeof createTransactionsFormMachine>;
-
-  function handleSubmit() {
-    actor.send("SUBMIT");
-  }
-
-  function handleClose() {
-    actor.send("CLOSE");
-  }
 </script>
 
 {#if !$actor.matches("closed")}
-  <Block on:click={handleClose}>
+  <Block on:click={() => actor.send("CLOSE")}>
     <form
       class="new-transaction-form"
       on:click|stopPropagation
-      on:submit|preventDefault={handleSubmit}
+      on:submit|preventDefault={() => actor.send("SUBMIT")}
       transition:fly={{ y: 25 }}
     >
       <input
@@ -58,7 +50,11 @@
       </select>
       <div class="new-transaction-form-buttons">
         <input type="submit" value="Submit" />
-        <input type="button" value="Cancel" on:click={handleClose} />
+        <input
+          type="button"
+          value="Cancel"
+          on:click={() => actor.send("CLOSE")}
+        />
       </div>
     </form>
   </Block>
