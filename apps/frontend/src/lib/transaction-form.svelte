@@ -1,14 +1,12 @@
 <script lang="ts">
   import { actorController } from "$lib/actions/actor-controller";
   import "$lib/components/form-field.css";
-  import { useSelector } from "@xstate/svelte";
   import { fly } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import Block from "./components/block.svelte";
   import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
   export let actor: ActorRefFrom<typeof createTransactionsFormMachine>;
-  const transaction = useSelector(actor, (state) => state.context);
 
   function handleSubmit() {
     actor.send("SUBMIT");
@@ -53,14 +51,8 @@
         use:actorController={{ actor, send: "UPDATE_TYPE" }}
         required
       >
-        <option
-          value="expenditure"
-          default
-          selected={$transaction.type === "expenditure"}>Expenditure</option
-        >
-        <option value="income" selected={$transaction.type === "income"}
-          >Income</option
-        >
+        <option value="expenditure" default>Expenditure</option>
+        <option value="income">Income</option>
       </select>
       <div class="new-transaction-form-buttons">
         <input type="submit" value="Submit" />
