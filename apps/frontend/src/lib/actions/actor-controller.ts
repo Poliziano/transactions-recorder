@@ -4,24 +4,13 @@ export function actorController(
   node: HTMLInputElement | HTMLSelectElement,
   { actor, send }: { actor: AnyActorRef; send: string }
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const syncNodeToState = ({ context }: { context: any }) => {
-    const newInputValue = context[node.name]?.toString();
-
-    if (newInputValue != null) {
-      node.value = newInputValue;
-    }
+    node.value = context[node.name]?.toString();
   };
 
   const sendInputEvent = (event: Event) => {
-    console.log(event);
-    const data = extractInputValue(event);
-
-    if (data != null) {
-      actor.send({ type: send, data });
-    } else {
-      // No event is sent, resulting in the input becoming out of sync with the state.
-      syncNodeToState(actor.getSnapshot());
-    }
+    actor.send({ type: send, data: extractInputValue(event) });
   };
 
   const sync = actor.subscribe(syncNodeToState);

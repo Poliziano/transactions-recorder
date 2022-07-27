@@ -143,8 +143,8 @@ function isNumericString(value: string) {
 }
 
 function removeLeadingZeros(value: string) {
-  const regex = /^0*([0-9]+\.?[0-9]*)$/;
-  const result = value.match(regex);
+  const numberRegex = /^0*([0-9]+\.?[0-9]*)$/;
+  const result = value.match(numberRegex);
 
   return result == null ? value : result[1];
 }

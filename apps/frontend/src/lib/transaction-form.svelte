@@ -37,6 +37,8 @@
         type="number"
         inputmode="numeric"
         placeholder="Amount"
+        min="0"
+        step="0.01"
         required
         use:actorController={{ actor, send: "UPDATE_AMOUNT" }}
       />
