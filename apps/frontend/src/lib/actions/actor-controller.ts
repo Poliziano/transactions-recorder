@@ -13,10 +13,11 @@ export function actorController(
   };
 
   const sendInputEvent = (event: Event) => {
-    const data = extractEventData(event);
+    console.log(event);
+    const data = extractInputValue(event);
 
     if (data != null) {
-      actor.send({ type: send, data } as any);
+      actor.send({ type: send, data });
     } else {
       // No event is sent, resulting in the input becoming out of sync with the state.
       syncNodeToState(actor.getSnapshot());
@@ -34,34 +35,25 @@ export function actorController(
   };
 }
 
-function extractEventData(event: Event): null | any {
-  if (event.target == null) {
-    return null;
+function extractInputValue(event: Event) {
+  if (!(event instanceof InputEvent)) {
+    return extractRawTargetValue(event);
   }
 
-  if (event instanceof InputEvent) {
-    return extractInputEventData(event);
-  }
-
-  if (event.target instanceof HTMLSelectElement) {
-    return extractSelectEventData(event);
-  }
-
-  return null;
-}
-
-function extractInputEventData(event: InputEvent) {
   const { target, data, inputType } = event;
   const { type, value, valueAsNumber } = target as HTMLInputElement;
 
-  const isNumberInput = type === "number";
-  const isValidNumber = isNumberInput && !isNaN(valueAsNumber);
-  const isDelete = data == null && inputType === "deleteContentBackward";
+  if (type !== "number") {
+    return value;
+  }
 
-  return !isNumberInput || isValidNumber || isDelete ? value : null;
+  const isDelete = data == null && inputType === "deleteContentBackward";
+  return !isNaN(valueAsNumber) || isDelete ? value : null;
 }
 
-function extractSelectEventData(event: Event) {
-  const { value } = event.target as HTMLSelectElement;
-  return value;
+function extractRawTargetValue(event: Event) {
+  return event.target instanceof HTMLSelectElement ||
+    event.target instanceof HTMLInputElement
+    ? event.target.value
+    : null;
 }
