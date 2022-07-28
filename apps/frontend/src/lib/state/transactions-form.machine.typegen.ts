@@ -38,6 +38,7 @@ export interface Typegen0 {
     assignName: "UPDATE_NAME";
     assignType: "UPDATE_TYPE";
     assignDefaults: "OPEN";
+    sendTransaction: "done.invoke.submit";
     assignError: "error.platform.submit";
   };
   eventsCausingServices: {

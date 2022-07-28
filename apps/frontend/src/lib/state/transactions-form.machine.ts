@@ -2,7 +2,7 @@ import type {
   TransactionEntity,
   TransactionEntityCreateParams,
 } from "$lib/api/transaction";
-import { assign, createMachine } from "xstate";
+import { assign, createMachine, sendParent } from "xstate";
 import { log } from "xstate/lib/actions";
 import { z } from "zod";
 import { createTransaction } from "./transactions.service";
@@ -43,6 +43,7 @@ export type FormContext = OptionalFields<FormFields, "uuid">;
 export type FormEvents =
   | { type: "SUBMIT" }
   | { type: "error.platform.submit"; data: Error }
+  | { type: "done.invoke.submit"; data: TransactionEntity }
   | { type: "OPEN"; data: FormDefaults }
   | { type: "UPDATE_AMOUNT"; data: string }
   | { type: "UPDATE_DATE"; data: string }
@@ -50,7 +51,7 @@ export type FormEvents =
   | { type: "UPDATE_TYPE"; data: FormContext["type"] }
   | { type: "CLOSE" };
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBsAVgBMtAAwAOTQE4AzKb0B2bZstmANCHYartACzHPBy5vUBGPV9TAF9gxzQsHHxiMkoaekZWDi5eAQAFABEAQQkAUQB9LJEAeQEAOSkkEFl5RUxlNQRvXT9TdWs-Yz9tNzdTN0dnBD7LWk9PS0sDdW0DY3a3UPCMbDw62AoqOgZmNk5uHnTsvPzj3OUahRiGxDm3Wk09U2Mek20-S1bBxFN3sfGzHo3NoZm5LEsQBFVtESBs4ttEnsUodMjkCmUiucqpc6jcml1aD1-HpOtZTDp1N8ENpAv9xj0Aq11E8IVCoutNvEdkl9qlUScJABNNJYmRyK5KKqNO5jdTeDqmT5PUxUuZ08ZyxWaXwGVkrdkxOFbBK7ZIHADCABlinxRdVxbipYhrOpaP1FZZDB0QVS-AZ7o89EH3oZtMYgnrImtDZy6LgWHJIDxiiKyhcHdcnQgtLpDCZzFYbHYVU5ENpPg8g8GAgYwxGwpD9dHYbHaLAAK4AI2oCkIBwgJDAtC4ADciABrIcd7sKdO1TOgRph11zf2PKbaEE0zRU2a6czmTozYxubptSPQjnwttdnvIPu8MCoVBUWhJZDX6d3ucS+pZ5e0KubjrrWW6BFSwGmOqxamN4TzghCmBEBAcDKGyzaxMa3JItwP6OoutwVpoRjhlYoEzFSMwGOqBh+FoG4GLqDboTCmHxPGiYQHhC6qIgwF+PoVh2LMLxGH4AyltSnqAQeNjqLBgRuFoF4Gi2n63r2KTcZKBHDNoEGnu44yWB4fjdAYITMU2rFGjQ2l-rpfq+tRVauW5QYIaEQA */
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBsAdgAMtAIwBOAKwBmEwCZNJg+pNWANCHYbtm2gBYDXgByaj6vW1-EwBfEMc0LBx8YjJKGnpGVg4uXgEABQARAEEJAFEAfWyRAHkBADkpJBBZeUVMZTUEbwNdc3cA8z0jTWNtPXdHZwR3O1ovL01Nb3VzFvVvMIiMbDx62AoqOgZmNk5uHgyc-ILjvOVahVjGxAM9c1oAs3bzIwNzczuhxAs9cYmDCZtO5zLN3Jp3EsQJFVjESBt4tskntUocsrlCuViudqpd6jcEK0DLQTEYyf1bAZ3IF1N8EOYgv8Ju1AnoTAEoTDoutNgkdsl9ml0ScJABNdI4mRyK5KapNO4mWiubx6TR6bzAvSdOktJkTBZ2MkLTkrbmxBFbRK7FIHADCABkSnxJTVpfi5YgIe4PKZVUFrOrrHT1d7PD5ZjZXK1IeFoaa1ubeXRcCw5JAeCUJeULm7rh6EFpdIZTBYrDY7CY6ZY-mGDDNPuooyaogn4UnaLAAK4AI2oCkIBwgJDAtC4ADciABrEdd3sKHN1POgJoN2gtbyjTw6YFGQZORCgtzeMwmAbAl53IzN2E8xEdnt95AD3hgVCoKi0ZLIO+zx8LmUNPmq7rpuBjbu4u50hBioAr0Zi+No7KaGEsaYEQEBwMoXKtnElr8ii3D-u6y6IN4urqMYpLAp4p5eHSszeHqKrqD03hzIssbYXCuEJCmaYQERS6qIgHTEnoqqGK8bxEnYVY6GuJ5zJYJggu42jqNeZptj+D79qkgmyiRIzmFB1IeBMEJ3Pcx6aThFo0AZgFGeqwaMdo7keZ5nnIShQA */
 const machine = createMachine(
   {
     context: {} as FormContext,
@@ -101,7 +102,7 @@ const machine = createMachine(
           id: "submit",
           onDone: [
             {
-              actions: "logEvent",
+              actions: ["logEvent", "sendTransaction"],
               target: "closed",
             },
           ],
@@ -142,6 +143,10 @@ const machine = createMachine(
       removeError: assign({
         error: (_context, _event) => null,
       }),
+      sendTransaction: sendParent((_context, event) => ({
+        type: "NEW_TRANSACTION",
+        data: event.data,
+      })),
       logEvent: log((context, event) => ({
         context,
         event,

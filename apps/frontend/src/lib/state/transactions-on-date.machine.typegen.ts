@@ -2,12 +2,6 @@
 
 export interface Typegen0 {
   "@@xstate/typegen": true;
-  eventsCausingActions: {
-    notifyOpenForm: "OPEN_TRANSACTIONS_FORM";
-    append: "APPEND_TRANSACTION";
-    remove: "REMOVE_TRANSACTION";
-    set: "done.invoke.fetchTransactions";
-  };
   internalEvents: {
     "done.invoke.fetchTransactions": {
       type: "done.invoke.fetchTransactions";
@@ -28,6 +22,12 @@ export interface Typegen0 {
     services: never;
     guards: never;
     delays: never;
+  };
+  eventsCausingActions: {
+    notifyOpenForm: "OPEN_TRANSACTIONS_FORM";
+    append: "APPEND_TRANSACTION";
+    remove: "REMOVE_TRANSACTION";
+    set: "done.invoke.fetchTransactions";
   };
   eventsCausingServices: {
     fetch: "FETCH_TRANSACTIONS";

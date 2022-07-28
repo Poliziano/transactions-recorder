@@ -1,59 +1,50 @@
-import type {
-  TransactionEntity,
-  TransactionEntityCreateParams,
-} from "$lib/api/transaction";
+import type { TransactionEntity } from "$lib/api/transaction";
 import type { TransactionFormParams } from "$lib/transaction-form";
 import { assign, createMachine, send, spawn, type ActorRefFrom } from "xstate";
 import { createTransactionsFormMachine } from "./transactions-form.machine";
 import { createTransactionsOnDateMachine } from "./transactions-on-date.machine";
 import { fetchTransactionsDailySum } from "./transactions.service";
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0ADujAHRpY77HbUDu6BhmUAxAGICiAFQDCACQD6ggEoBBAHIBlGcMEBJAPKLEockVgcm2kAA9EAJgCMAVmpmA7AGYALGYBsADjNPXTgJxP3ABoQAE9zK3dqV2iPKysnC18vAAYnAF804LpsPEISWAoqMFoMHMZ86gAzMGRcAAsCLkFShjzsbggSYsaANyIAa2Lq2oamltymeCQQXX02o1MESxt7ZzdPbz8A4LCECzsLKJjXMwdnH2TnDKzx8rJKGkqiVABbalwAGz1IbnUABX4ckkskUyjUmgU4l46ikAFkjLMDCQFuYzGZqN5kr4HK4LMk7FYTr5XDtEK4HDZfFSqU4nA5kmYrBZ3NcQNlWpNCo9nm8iOQwJgfsIADLqBT8YHyJQqDRA6FwhF6JGYFFLU7UYnuA5nBxeXwWaKkhARSLJM2pHFmYnYhys9kTfJcoY86h8gU-BQAVQAQrDVIJJaCZZooTD4dNEfNpotHCtHAlfO4TpsnEbcU5qAbolY7K5scyKXbbm0Cg9na9qLAAK4AIxeHE4PE6guovQGxWrdYbjSgzXoDpVEaVUdAMacNiZhOSPmc+wcRpcNmOFgs9iTBosGUyIEwRAgcCM9rupaKJX7x9Y7EbirmhmjiDsZiNiXRVnN1hOJwcuZZ26PJadM8yhLKoanqHs+2AyYb2VVVvHROxNUcCw6QSRxnzsZJqHNM07HcXxUlzJw7CLc8ALLICOXyGCRxMRBtlCRBfDsbDzV1Xx4jWbFSKgx0KKeCtPm+CAaLvUcHyfRiEFxFY-ETJMzHcOksR4qj7lPATeX5QURKHW9kXvBAAgzFDkisbE6XcLEEnnKTCQzY40XcTxGV-G4yM5fiXU7etkGvPTYMMvFkkOJJmRQ6I8S-I04iw9wdTNKk8KZMxVIHE9uVeUSDPEoygikil0WOHE1gCRkrDS48nWywdcq8I0vFYnDmvNEityAA */
+type PageContext = {
+  dates: Record<
+    string,
+    ActorRefFrom<ReturnType<typeof createTransactionsOnDateMachine>>
+  >;
+  form: ActorRefFrom<typeof createTransactionsFormMachine>;
+};
+
+type PageEvents =
+  | {
+      type: "FETCH_TRANSACTIONS";
+      userId: string;
+    }
+  | {
+      type: "done.invoke.fetchingTransactions";
+      data: Record<string, number>;
+    }
+  | {
+      type: "OPEN_TRANSACTIONS_FORM";
+      data: TransactionFormParams;
+    }
+  | {
+      type: "NEW_TRANSACTION";
+      data: TransactionEntity;
+    };
+
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0ADujAHQDu6BhmUAxAGICiAKgMIASAfS4AlAIIA5AMqieXAJIB5KYlDkisRsUwqQAD0QBGAKwA2agYAsADgsWATEaMBOJwAYnAZgA0IAJ6ILVytqD1CPAHYDOys7EyMwgF8EnzQsHHwtWAoqMGoAMzBkXAALAmYuDGw8QhJYFggSXLKANyIAa1yCotLyyvSa7B01DQGdfQRjM0sbe0cXd28-RA87AxCwyOjY+NCklL7qzOyYFgUABQ5xITEpGXklSQE2BWEAWSH1TRIxxDsncOoTgsBg8ThMINcBisIJ8-gQLmoriRyJRyIMexAqSqGVqxzALHEHAA6tcJNJZIpxB8RlofghQq5qBYTO4LB4DE47KDwmDYYY7ElkiBMEQIHAdFj+kdKDR6JpmNSvtokHoAuE+fT7NQjMjTDquXYgh4MZLDriZZ1CiUylAKmkzYMVcMlXTAk4mX8TCZwrFXB4THZ1Ut6YbEciPEZgZ44sahaacWQLYrRirxlyNRzwoKEkA */
 const machine = createMachine(
   {
     tsTypes: {} as import("./transaction-page.machine.typegen").Typegen0,
-    schema: {
-      context: {} as {
-        dates: Record<
-          string,
-          ActorRefFrom<ReturnType<typeof createTransactionsOnDateMachine>>
-        >;
-        form: ActorRefFrom<typeof createTransactionsFormMachine>;
-      },
-      events: {} as
-        | {
-            type: "FETCH_TRANSACTIONS";
-            userId: string;
-          }
-        | {
-            type: "done.invoke.fetchingTransactions";
-            data: Record<string, number>;
-          }
-        | {
-            type: "OPEN_TRANSACTIONS_FORM";
-            data: TransactionFormParams;
-          }
-        | {
-            type: "CLOSE_TRANSACTION_FORM";
-          }
-        | {
-            type: "SUBMIT_TRANSACTION_FORM";
-            data: TransactionEntityCreateParams;
-          }
-        | {
-            type: "done.invoke.submittingTransaction";
-            data: TransactionEntity;
-          },
-    },
+    schema: { context: {} as PageContext, events: {} as PageEvents },
+    entry: "setupContext",
     id: "transactions-page",
     initial: "waiting",
-    entry: assign({
-      form: () => spawn(createTransactionsFormMachine()),
-      dates: {},
-    }),
     on: {
       OPEN_TRANSACTIONS_FORM: {
-        actions: ["openForm"],
+        actions: "openForm",
+      },
+      NEW_TRANSACTION: {
+        actions: "sendTransaction",
       },
     },
     states: {
@@ -83,6 +74,10 @@ const machine = createMachine(
       fetchTransactions: fetchTransactionsDailySum,
     },
     actions: {
+      setupContext: assign({
+        form: () => spawn(createTransactionsFormMachine()),
+        dates: {},
+      }),
       assignTransactions: assign({
         dates: (_, event) =>
           Object.entries(event.data).reduce(
@@ -101,6 +96,15 @@ const machine = createMachine(
       openForm: send(
         (_context, event) => ({ type: "OPEN", data: event.data }),
         { to: (context) => context.form }
+      ),
+      sendTransaction: send(
+        (_context, event) => ({
+          type: "APPEND_TRANSACTION",
+          data: event.data,
+        }),
+        {
+          to: (context, event) => context.dates[event.data.date.split("T")[0]],
+        }
       ),
     },
   }

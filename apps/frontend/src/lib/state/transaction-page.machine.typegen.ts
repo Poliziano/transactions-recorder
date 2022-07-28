@@ -2,10 +2,6 @@
 
 export interface Typegen0 {
   "@@xstate/typegen": true;
-  eventsCausingActions: {
-    openForm: "OPEN_TRANSACTIONS_FORM";
-    assignTransactions: "done.invoke.fetchingTransactions";
-  };
   internalEvents: {
     "done.invoke.fetchingTransactions": {
       type: "done.invoke.fetchingTransactions";
@@ -26,6 +22,12 @@ export interface Typegen0 {
     services: never;
     guards: never;
     delays: never;
+  };
+  eventsCausingActions: {
+    openForm: "OPEN_TRANSACTIONS_FORM";
+    sendTransaction: "NEW_TRANSACTION";
+    assignTransactions: "done.invoke.fetchingTransactions";
+    setupContext: "xstate.init";
   };
   eventsCausingServices: {
     fetchTransactions: "FETCH_TRANSACTIONS";
