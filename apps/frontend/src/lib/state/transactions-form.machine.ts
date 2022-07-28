@@ -47,7 +47,7 @@ export type FormEvents =
   | { type: "UPDATE_TYPE"; data: FormContext["type"] }
   | { type: "CLOSE" };
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBsAVgBMtAAwAOTQE4AjAHZt6vQGZ128wBoQ7DXvO1Ne76bNGALAbG5gC+Ic5oWDj4xGSUNPSMrBxcvAIACgAiAIISAKIA+tkiAPICAHJSSCCy8oqYymoIBpa0pnbmeuqm3tpWBs6uCP42HsbjweYG9kHqBmERGNh49bAUVHQMzGyc3DwZOfkFh3nKtQqxjYhB-p62xobm5uOa-uqDiDbaprQT4zZ6fxWbT+cz+BYgSLLGIkNbxTZJHapfZZXKFcrFU7Vc71K7NMy0EHWaamaztd4uRDaPSaX5-EE9cmmCFQ6KrdYJLbJXZpVFHCQATXSWJkcguSmqTRuvzm5k06i+gWmTkp+Lpfzmo008vm4UhSzZsThG0S2xSewAwgAZEp8EU1MW4yWISzqWg2EZyrwmB7GfwfBDfGx3bweuw6CzqFkGlZGjl0XAsOSQHglYXlM6Oy7OhBaXSGEwWKy2ewqoYAvQh2wjPORmzRqKx2Hx2iwACuACNqApCHsICQwLQuAA3IgAa0H7a7CkzdWzoCa2mMbqCBhG-mC3n8rwDS5XNgPJlB3WMBnretZTbiJqn3eQvd4YFQqCotGSyHhrc7d9n4oaOb3WhV3XTdAR3VVt1ubxenUJ5NBseD1CjCFMCICA4GUS8YWvTlEXNKBfydBdrnMH5NCMYwPVAyCAxmdVT1JTQpm0AxdUWRtsONBJE2TCBCPnVREG3H5vCmR4aS6AxAV3Ix3QPBC5SmcwvnPdjoXZT9bx7VJ+IlYjhm0AN-H8MjoJsAxST0UwN2QtTDWbeFdP-fTTAGVVXP0aCvO89wwjCIA */
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBsAVgBMtAAwAOTQE4AzKb0B2bZstmANCHYartACzHPBy5vUBGPV9TAF9gxzQsHHxiMkoaekZWDi5eAQAFABEAQQkAUQB9LJEAeQEAOSkkEFl5RUxlNQRvXT9TdWs-Yz9tNzdTN0dnBD7LWk9PS0sDdW0DY3a3UPCMbDw62AoqOgZmNk5uHnTsvPzj3OUahRiGxDm3Wk09U2Mek20-S1bBxFN3sfGzHo3NoZm5LEsQBFVtESBs4ttEnsUodMjkCmUiucqpc6jcml1aD1-HpOtZTDp1N8ENpAv9xj0Aq11E8IVCoutNvEdkl9qlUScJABNNJYmRyK5KKqNO5jdTeDqmT5PUxUuZ08ZyxWaXwGVkrdkxOFbBK7ZIHADCABlinxRdVxbipYhrOpaP1FZZDB0QVS-AZ7o89EH3oZtMYgnrImtDZy6LgWHJIDxiiKyhcHdcnQgtLpDCZzFYbHYVU5ENpPg8g8GAgYwxGwpD9dHYbHaLAAK4AI2oCkIBwgJDAtC4ADciABrIcd7sKdO1TOgRph11zf2PKbaEE0zRU2a6czmTozYxubptSPQjnwttdnvIPu8MCoVBUWhJZDX6d3ucS+pZ5e0KubjrrWW6BFSwGmOqxamN4TzghCmBEBAcDKGyzaxMa3JItwP6OoutwVpoRjhlYoEzFSMwGOqBh+FoG4GLqDboTCmHxPGiYQHhC6qIgwF+PoVh2LMLxGH4AyltSnqAQeNjqLBgRuFoF4Gi2n63r2KTcZKBHDNoEGnu44yWB4fjdAYITMU2rFGjQ2l-rpfq+tRVauW5QYIaEQA */
 const machine = createMachine(
   {
     context: {} as FormContext,
@@ -86,7 +86,7 @@ const machine = createMachine(
         entry: "logEvent",
         on: {
           OPEN: {
-            actions: ["assignDefaults", "logEvent"],
+            actions: ["assignDefaults", "logEvent", "removeError"],
             target: "displaying",
           },
         },

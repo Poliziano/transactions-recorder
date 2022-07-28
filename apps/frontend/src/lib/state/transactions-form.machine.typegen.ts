@@ -32,7 +32,7 @@ export interface Typegen0 {
       | "done.invoke.submit"
       | "error.platform.submit"
       | "xstate.init";
-    removeError: "SUBMIT";
+    removeError: "SUBMIT" | "OPEN";
     assignAmount: "UPDATE_AMOUNT";
     assignDate: "UPDATE_DATE";
     assignName: "UPDATE_NAME";

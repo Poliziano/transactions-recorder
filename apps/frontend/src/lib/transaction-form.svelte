@@ -10,6 +10,7 @@
 
   export let actor: ActorRefFrom<typeof createTransactionsFormMachine>;
   const formError = useSelector(actor, (state) => state.context.error);
+  const submitting = useSelector(actor, (state) => state.matches("submitting"));
 </script>
 
 {#if !$actor.matches("closed")}
@@ -52,10 +53,11 @@
         <option value="income">Income</option>
       </select>
       <div class="new-transaction-form-buttons">
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" disabled={$submitting} />
         <input
           type="button"
           value="Cancel"
+          disabled={$submitting}
           on:click={() => actor.send("CLOSE")}
         />
       </div>
