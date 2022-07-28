@@ -1,5 +1,6 @@
 import type {
   TransactionEntity,
+  TransactionEntityCreateParams,
   TransactionsForDateResponse,
 } from "$lib/api/transaction";
 import type {
@@ -7,10 +8,6 @@ import type {
   ListTransactionsDailySumResponse,
 } from "transactions-schema";
 import { endpoint } from "../api/api";
-import type {
-  Context,
-  SubmitTransactionFormEvent,
-} from "./transaction-page.machine";
 
 export async function fetchTransactionsDailySum(): Promise<ListTransactionsDailySum> {
   const url = `${endpoint}/users/abc/transactions/aggregations`;
@@ -39,17 +36,20 @@ export async function fetchTransactionsForDate(
 }
 
 export async function createTransaction(
-  _: Context,
-  event: SubmitTransactionFormEvent
+  transaction: TransactionEntityCreateParams
 ): Promise<TransactionEntity> {
-  const url = `${endpoint}/users/abc/transactions`;
-
-  const response = await fetch(url, {
+  const { userId, name, amount, date, type } = transaction;
+  const response = await fetch(`${endpoint}/users/${userId}/transactions`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(event.data),
+    body: JSON.stringify({
+      name,
+      amount,
+      date,
+      type,
+    }),
   });
 
   return response.json();

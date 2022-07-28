@@ -7,10 +7,7 @@ export type TransactionEntity = {
   uuid: string;
 };
 
-export type TransactionEntityCreateParams = Omit<
-  TransactionEntity,
-  "userId" | "uuid"
->;
+export type TransactionEntityCreateParams = Omit<TransactionEntity, "uuid">;
 
 export type TransactionsForDateResponse = {
   transactions: TransactionEntity[];

@@ -1,4 +1,7 @@
-import type { TransactionEntity } from "$lib/api/transaction";
+import type {
+  TransactionEntity,
+  TransactionEntityCreateParams,
+} from "$lib/api/transaction";
 import { assign, createMachine } from "xstate";
 import { log } from "xstate/lib/actions";
 import { z } from "zod";
@@ -149,7 +152,7 @@ const machine = createMachine(
       isNumber: (_context, event) => isNumericString(event.data),
     },
     services: {
-      submit: createTransaction,
+      submit: (context) => createTransaction(convertToEntity(context)),
     },
   }
 );
@@ -163,6 +166,17 @@ function removeLeadingZeros(value: string) {
   const result = value.match(numberRegex);
 
   return result == null ? value : result[1];
+}
+
+function convertToEntity(context: FormContext): TransactionEntityCreateParams {
+  const { userId, name, amount, date, type } = context;
+  return {
+    userId,
+    name,
+    date,
+    type,
+    amount: parseFloat(amount),
+  };
 }
 
 const validation: z.ZodType<Omit<FormContext, "error">> = z.object({
