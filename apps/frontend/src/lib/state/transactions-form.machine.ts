@@ -24,8 +24,14 @@ type RequiredFields<TObject, TKey extends keyof TObject> = {
     : Property]+?: TObject[Property];
 };
 
-type FormFields = Omit<TransactionEntity, "amount"> & {
+type FormFields = {
+  uuid?: string;
+  userId: string;
+  name: string;
   amount: string;
+  date: string;
+  type: TransactionEntity["type"];
+  error?: string | null;
 };
 
 type FormDefaults = RequiredFields<FormFields, "date" | "userId">;
@@ -33,6 +39,7 @@ export type FormContext = OptionalFields<FormFields, "uuid">;
 
 export type FormEvents =
   | { type: "SUBMIT" }
+  | { type: "error.platform.submit"; data: Error }
   | { type: "OPEN"; data: FormDefaults }
   | { type: "UPDATE_AMOUNT"; data: string }
   | { type: "UPDATE_DATE"; data: string }
@@ -40,28 +47,25 @@ export type FormEvents =
   | { type: "UPDATE_TYPE"; data: FormContext["type"] }
   | { type: "CLOSE" };
 
-/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBMAVgAstAByaAnAGYA7GeOaADOvUA2UwBoQ7DacO0tVq3e2aAjMZ62saGAL5hzmhYOPjEZJQ09IysHFy8AgAKACIAghIAogD6uSIA8gIAclJIILLyipjKagiamrT+vj56euraPXZ2bc6uCMbqxrTe3saDwcba9hFRGNh4jbAUVHQMzGyc3DxZeYVFJwXK9QrxzYh2HpY6Br2m-iaGTi4aVqZT0+o2UJ2CzLEDRNZxEibRI7FL7dJHHL5YqVUoXWpXRq3BCDKamRaBe7eQw+T6jQz+P7TMyGbQmN56UHg2IbLZJXapA68ADCABkynx0TI5NclLUWlpdAYTOZzNZbA4Roh+upPNYrJpjP51CTtO47EzViz4tDtrRcCw5JAeGVMgVKpcRVjxXdDHZaPjDF67ADrHY9P4lQhte1TOrTOp-FYzD8eoaYusTWy6LAAK4AI2oCkIhwgJDAtC4ADciABrAtpzMKR0NG4unFuj1072+7qBr5jfy6Lw-bTefz+cx6A2gzBECBwZTMxNQ5PJPZpbg10VNet6oPaTdUjVanVWPXBeMQ1kw82W2CQZfO0AtAy6Lt6Bb2eymbzqIPGfce9WLMwOPuaKYR7GrOp6VlmyA5lAV51jeyqaKq+7+sOQR6m6+5BuowRqt4wJ9AMgzATOCTbDBYpwQgExBv4jIRGEQA */
+/** @xstate-layout N4IgpgJg5mDOIC5QBcBOBDAdrdBjZAlgPbYC0AZkagLYB0EBsADgDboCeBmUAxAMoBVAEIBZAJIAVRKCZFYBQiWkgAHogBsAVgBMtAAwAOTQE4AjAHZt6vQGZ128wBoQ7DXvO1Ne76bNGALAbG5gC+Ic5oWDj4xGSUNPSMrBxcvAIACgAiAIISAKIA+tkiAPICAHJSSCCy8oqYymoIBpa0pnbmeuqm3tpWBs6uCP42HsbjweYG9kHqBmERGNh49bAUVHQMzGyc3DwZOfkFh3nKtQqxjYhB-p62xobm5uOa-uqDiDbaprQT4zZ6fxWbT+cz+BYgSLLGIkNbxTZJHapfZZXKFcrFU7Vc71K7NMy0EHWaamaztd4uRDaPSaX5-EE9cmmCFQ6KrdYJLbJXZpVFHCQATXSWJkcguSmqTRuvzm5k06i+gWmTkp+Lpfzmo008vm4UhSzZsThG0S2xSewAwgAZEp8EU1MW4yWISzqWg2EZyrwmB7GfwfBDfGx3bweuw6CzqFkGlZGjl0XAsOSQHglYXlM6Oy7OhBaXSGEwWKy2ewqoYAvQh2wjPORmzRqKx2Hx2iwACuACNqApCHsICQwLQuAA3IgAa0H7a7CkzdWzoCa2mMbqCBhG-mC3n8rwDS5XNgPJlB3WMBnretZTbiJqn3eQvd4YFQqCotGSyHhrc7d9n4oaOb3WhV3XTdAR3VVt1ubxenUJ5NBseD1CjCFMCICA4GUS8YWvTlEXNKBfydBdrnMH5NCMYwPVAyCAxmdVT1JTQpm0AxdUWRtsONBJE2TCBCPnVREG3H5vCmR4aS6AxAV3Ix3QPBC5SmcwvnPdjoXZT9bx7VJ+IlYjhm0AN-H8MjoJsAxST0UwN2QtTDWbeFdP-fTTAGVVXP0aCvO89wwjCIA */
 const machine = createMachine(
   {
     context: {} as FormContext,
     tsTypes: {} as import("./transactions-form.machine.typegen").Typegen0,
-    schema: {
-      context: {} as FormContext,
-      events: {} as FormEvents,
-    },
+    schema: { context: {} as FormContext, events: {} as FormEvents },
     initial: "closed",
     states: {
       displaying: {
         entry: "logEvent",
         on: {
           SUBMIT: {
-            actions: "logEvent",
+            actions: ["logEvent", "removeError"],
             cond: "canSubmit",
             target: "submitting",
           },
           UPDATE_AMOUNT: {
-            cond: "isNumber",
             actions: ["assignAmount", "logEvent"],
+            cond: "isNumber",
           },
           UPDATE_DATE: {
             actions: ["assignDate", "logEvent"],
@@ -98,6 +102,12 @@ const machine = createMachine(
               target: "closed",
             },
           ],
+          onError: [
+            {
+              actions: ["logEvent", "assignError"],
+              target: "displaying",
+            },
+          ],
         },
       },
     },
@@ -122,6 +132,12 @@ const machine = createMachine(
       }),
       assignType: assign({
         type: (_context, event) => event.data,
+      }),
+      assignError: assign({
+        error: (_context, event) => event.data.message,
+      }),
+      removeError: assign({
+        error: (_context, _event) => null,
       }),
       logEvent: log((context, event) => ({
         context,
@@ -149,7 +165,7 @@ function removeLeadingZeros(value: string) {
   return result == null ? value : result[1];
 }
 
-const validation: z.ZodType<FormContext> = z.object({
+const validation: z.ZodType<Omit<FormContext, "error">> = z.object({
   date: z.string(),
   userId: z.string(),
   name: z.string(),

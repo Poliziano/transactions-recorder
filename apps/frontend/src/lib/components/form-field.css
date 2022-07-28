@@ -4,7 +4,7 @@ input {
   margin: 2px;
   padding: 10px;
   border: 1px solid rgb(215, 215, 215);
-  border-radius: 5px;
+  border-radius: var(--border-radius-0);
 }
 
 input[type="submit"],
@@ -15,4 +15,13 @@ input[type="button"] {
 input[type="submit"]:hover,
 input[type="button"]:hover {
   background-color: rgb(235, 235, 235);
+}
+
+select {
+  font: inherit;
+  appearance: none;
+  margin: 2px;
+  padding: 10px;
+  border: 1px solid rgb(215, 215, 215);
+  border-radius: var(--border-radius-0);
 }

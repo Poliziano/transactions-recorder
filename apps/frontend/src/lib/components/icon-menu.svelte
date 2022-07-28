@@ -30,7 +30,7 @@
     background-color: white;
     box-shadow: 2px 2px 10px rgb(225, 225, 225);
     border: 1px solid rgb(215, 215, 215);
-    border-radius: 5px;
+    border-radius: var(--border-radius-0);
   }
 
   button {

@@ -14,7 +14,7 @@
     margin: 0;
     padding: 0;
     border: none;
-    border-radius: 5px;
+    border-radius: var(--border-radius-0);
     background-color: unset;
     height: 24px;
     width: 24px;

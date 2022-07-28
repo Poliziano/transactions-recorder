@@ -7,6 +7,8 @@
 
   --grid-gap-0: 1.5em;
   --grid-transaction-column-template: 24px auto min-content 24px;
+
+  --border-radius-0: 5px;
 }
 
 html,

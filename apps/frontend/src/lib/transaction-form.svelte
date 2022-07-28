@@ -1,12 +1,15 @@
 <script lang="ts">
   import { actorController } from "$lib/actions/actor-controller";
   import "$lib/components/form-field.css";
+  import { useSelector } from "@xstate/svelte";
   import { fly } from "svelte/transition";
   import type { ActorRefFrom } from "xstate";
   import Block from "./components/block.svelte";
+  import ErrorMessage from "./components/error-message.svelte";
   import type { createTransactionsFormMachine } from "./state/transactions-form.machine";
 
   export let actor: ActorRefFrom<typeof createTransactionsFormMachine>;
+  const formError = useSelector(actor, (state) => state.context.error);
 </script>
 
 {#if !$actor.matches("closed")}
@@ -56,20 +59,13 @@
           on:click={() => actor.send("CLOSE")}
         />
       </div>
+
+      <ErrorMessage message={$formError} />
     </form>
   </Block>
 {/if}
 
 <style>
-  select {
-    font: inherit;
-    appearance: none;
-    margin: 2px;
-    padding: 10px;
-    border: 1px solid rgb(215, 215, 215);
-    border-radius: 5px;
-  }
-
   .new-transaction-form {
     position: absolute;
     display: flex;
@@ -85,7 +81,7 @@
     margin: auto;
     box-shadow: 2px 2px 10px rgb(225, 225, 225);
     border: 1px solid rgb(215, 215, 215);
-    border-radius: 5px;
+    border-radius: var(--border-radius-0);
     z-index: 1000;
   }
 
